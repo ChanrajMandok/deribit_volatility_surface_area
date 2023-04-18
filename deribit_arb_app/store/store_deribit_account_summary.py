@@ -1,8 +1,11 @@
 from typing import Optional
-from singleton_pattern_decorator.decorator import singleton
+from singleton_decorator import singleton
 
 from deribit_arb_app.model.model_account_summary import ModelAccountSummary
 
+    ####################################################
+    # Store retrieves & stores Derebit Account Summary #
+    ####################################################
 
 @singleton
 class StoreDeribitAccountSummary:

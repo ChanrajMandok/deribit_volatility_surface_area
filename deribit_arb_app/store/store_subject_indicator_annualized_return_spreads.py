@@ -1,9 +1,9 @@
 import sys
 import traceback
-from singleton_pattern_decorator.decorator import singleton
+from singleton_decorator import singleton
 
-from deribit_arb_app.subjects.subject_indicator_annualised_return_spread import SubjectIndicatorAnnualisedReturnSpread
 from deribit_arb_app.store.store_subjectable_interface import StoreSubjectableInterface
+from deribit_arb_app.subjects.subject_indicator_annualised_return_spread import SubjectIndicatorAnnualisedReturnSpread
 from deribit_arb_app.model.model_indicator_annualised_return_spread import ModelIndicatorAnnualisedReturnSpread
 
 

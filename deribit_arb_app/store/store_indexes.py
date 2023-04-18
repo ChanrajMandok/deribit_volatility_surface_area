@@ -1,10 +1,10 @@
 from typing import List, Optional
-from singleton_pattern_decorator.decorator import Singleton
+from singleton_decorator import singleton
 
 from deribit_arb_app.model.model_index import ModelIndex
 
 
-@Singleton
+@singleton
 class StoreIndexes:
 
     def __init__(self):

@@ -1,9 +1,11 @@
 from abc import ABC, abstractmethod
 from typing import Generic, TypeVar
 
+    ######################
+    # Observer Interface #
+    ######################
 
 T=TypeVar('T')
-
 class ObserverInterface(ABC, Generic[T]):
     """
     The Observer interface declares the update method, used by subjects.

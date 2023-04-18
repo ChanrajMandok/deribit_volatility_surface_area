@@ -1,12 +1,11 @@
-from singleton_pattern_decorator.decorator import Singleton
+from singleton_decorator import singleton
 
-
-from deribit_arb_app.subjects.subject_order_book import SubjectOrderBook
 from deribit_arb_app.model.model_order_book import ModelOrderBook
 from deribit_arb_app.model.model_instrument import ModelInstrument
+from deribit_arb_app.subjects.subject_order_book import SubjectOrderBook
 
 
-@Singleton
+@singleton
 class StoreSubjectOrderBooks:
 
     def __init__(self):

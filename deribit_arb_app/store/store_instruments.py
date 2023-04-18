@@ -1,10 +1,10 @@
 from typing import Dict, List, Optional
-from singleton_pattern_decorator.decorator import Singleton
+from singleton_decorator import singleton
 
 from deribit_arb_app.model.model_instrument import ModelInstrument
 
 
-@Singleton
+@singleton
 class StoreInstruments:
 
     def __init__(self):

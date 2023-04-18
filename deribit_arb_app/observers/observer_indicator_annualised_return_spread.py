@@ -1,10 +1,19 @@
-from deribit_arb_app.store.store_subject_indicator_annualized_return_spreads import StoreSubjectIndicatorAnnualizedReturnSpreads
+
+
+
 from deribit_arb_app.model.model_indicator_annualised_return_spread import ModelIndicatorAnnualisedReturnSpread
+
 from deribit_arb_app.store.store_subject_order_books import StoreSubjectOrderBooks
 from deribit_arb_app.store.store_subject_index_prices import StoreSubjectIndexPrices
-from deribit_arb_app.services.indicator_annualised_return_spread_builder import IndicatorAnnualisedReturnSpreadBuilder
 from deribit_arb_app.observers.observer_interface import ObserverInterface
 
+from deribit_arb_app.store.store_subject_indicator_annualized_return_spreads import StoreSubjectIndicatorAnnualizedReturnSpreads
+
+from deribit_arb_app.services.service_indicator_annualised_return_spread_builder import ServiceIndicatorAnnualisedReturnSpreadBuilder
+
+    #########################################################################
+    # Observer monitors the Annualised Return Spead between two instruments #
+    #########################################################################
 
 class ObserverIndicatorAnnualisedReturnSpread(ObserverInterface):
 
@@ -23,7 +32,7 @@ class ObserverIndicatorAnnualisedReturnSpread(ObserverInterface):
         self.store_subject_indicator_annualized_return_spreads = StoreSubjectIndicatorAnnualizedReturnSpreads()
 
         self.indicator_annualised_return_spread_builder = \
-            IndicatorAnnualisedReturnSpreadBuilder(instance)
+            ServiceIndicatorAnnualisedReturnSpreadBuilder(instance)
         
         # attach this observer to the relevant subjects: the order book and the index price
 

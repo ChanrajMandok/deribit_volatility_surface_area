@@ -1,10 +1,11 @@
 from typing import Dict, List, Optional
 
-from singleton_pattern_decorator.decorator import singleton
+from singleton_decorator import singleton
+
+from deribit_arb_app.model.model_position import ModelPosition
+from deribit_arb_app.model.model_instrument import ModelInstrument
 
 from deribit_arb_app.store.store_instruments import StoreInstruments
-from deribit_arb_app.model.model_instrument import ModelInstrument
-from deribit_arb_app.model.model_position import ModelPosition
 
 
 @singleton

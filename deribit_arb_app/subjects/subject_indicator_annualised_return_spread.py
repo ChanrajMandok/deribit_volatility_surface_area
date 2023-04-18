@@ -1,5 +1,6 @@
-from deribit_arb_app.model.model_indicator_annualised_return_spread import ModelIndicatorAnnualisedReturnSpread
 from deribit_arb_app.subjects.subject_interface import SubjectInterface
+from deribit_arb_app.model.model_indicator_annualised_return_spread import ModelIndicatorAnnualisedReturnSpread
+
 
 
 class SubjectIndicatorAnnualisedReturnSpread(SubjectInterface):

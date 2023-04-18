@@ -1,8 +1,7 @@
 from abc import ABC, abstractmethod
 
-from deribit_arb_app.subjects.subject_interface import SubjectInterface
-from deribit_arb_app.subjects.subject_index_price import SubjectIndexPrice
 from deribit_arb_app.model.model_subjectable import ModelSubjectable
+from deribit_arb_app.subjects.subject_interface import SubjectInterface
 
 
 class StoreSubjectableInterface(ABC):

@@ -1,12 +1,12 @@
-
-from deribit_arb_app.services.api_deribit import ApiDeribit
-from deribit_arb_app.services.deribit_account_summary import DeribitAccountSummary
-from deribit_arb_app.observers.observer_indicator_annualised_return_spread import ObserverIndicatorAnnualisedReturnSpread
 from deribit_arb_app.model.model_index import ModelIndex
 from deribit_arb_app.model.model_instrument import ModelInstrument
 from deribit_arb_app.model.model_indicator_annualised_return_spread import ModelIndicatorAnnualisedReturnSpread
+
+from deribit_arb_app.services.service_api_deribit import ServiceApiDeribit
 from deribit_arb_app.store.store_subject_order_books import StoreSubjectOrderBooks
+from deribit_arb_app.services.service_deribit_account_summary import ServiceDeribitAccountSummary
 from deribit_arb_app.subjects.subject_indicator_annualised_return_spread import SubjectIndicatorAnnualisedReturnSpread
+from deribit_arb_app.observers.observer_indicator_annualised_return_spread import ObserverIndicatorAnnualisedReturnSpread
 
 
 class StrategyCashAndCarryBasic:
@@ -21,7 +21,7 @@ class StrategyCashAndCarryBasic:
         self.index = index
 
         # service dependencies
-        self.api_deribit = ApiDeribit()
+        self.api_deribit = ServiceApiDeribit()
         
         # initiate the relevant order book - get current market prices
         self.store_subject_order_books = StoreSubjectOrderBooks()
