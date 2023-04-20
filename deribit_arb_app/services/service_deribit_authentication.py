@@ -1,6 +1,5 @@
 import os
 import json
-
 from singleton_decorator import singleton
 
 from deribit_arb_app.model.model_message import ModelMessage
@@ -9,7 +8,6 @@ from deribit_arb_app.services.service_deribit_messaging import ServiceDeribitMes
     ##########################################################
     # Service retrieves Deribit Authentication via Websocket #
     ##########################################################
-
 
 @singleton
 class ServiceDeribitAuthentication:

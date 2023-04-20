@@ -1,8 +1,8 @@
 import json
-
 from singleton_decorator import singleton
 
 from deribit_arb_app.model.model_message import ModelMessage
+from deribit_arb_app.model.model_account_summary import ModelAccountSummary
 
 from deribit_arb_app.services.service_deribit_messaging import ServiceDeribitMessaging
 from deribit_arb_app.services.service_deribit_authentication import ServiceDeribitAuthentication
@@ -11,7 +11,6 @@ from deribit_arb_app.services.service_deribit_websocket_connector import Service
     ###########################################################
     # Service retrieves Deribit Account Summary via Websocket #
     ###########################################################
-
 
 @singleton
 class ServiceDeribitAccountSummary:

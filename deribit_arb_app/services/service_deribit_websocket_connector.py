@@ -1,3 +1,4 @@
+import os
 import websockets
 from singleton_decorator import singleton
 
@@ -10,8 +11,8 @@ class ServiceDeribitWebsocketConnector:
 
     def __init__(self):
 
-        self.url = "wss://www.deribit.com/ws/api/v2"
-        self.websocket = websockets.connect(self.url)
+        self.base_ws = os.environ['BASE_WS_URL']
+        self.websocket = websockets.connect(self.base_ws)
 
     def get_websocket(self):
         return self.websocket

@@ -1,12 +1,11 @@
-
 from typing import Optional
 from singleton_decorator import singleton
 
 from deribit_arb_app.model.model_authorization import ModelAuthorization
 
-    ###########################################################
-    # Store retrieves,checks & stores Derebit Account Summary #
-    ###########################################################
+    ##################################################
+    # Store Manages & Stores Derebit Account Summary #
+    ##################################################
 
 @singleton
 class StoreDeribitAuthorization:

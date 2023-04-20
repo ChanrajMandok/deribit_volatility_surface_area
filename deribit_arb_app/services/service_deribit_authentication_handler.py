@@ -1,5 +1,4 @@
 import json
-
 from singleton_decorator import singleton
 
 from deribit_arb_app.store.store_deribit_authorization import StoreDeribitAuthorization
@@ -8,7 +7,6 @@ from deribit_arb_app.converters.converter_json_to_authorization import Converter
     ##########################################
     # Service Handels Deribit Authentication #
     ##########################################
-
 
 @singleton
 class ServiceDeribitAuthenticationHandler:

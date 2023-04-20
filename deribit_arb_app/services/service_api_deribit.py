@@ -1,5 +1,4 @@
 import asyncio
-
 from typing import Dict, List, Optional
 
 from deribit_arb_app.model.model_order import ModelOrder

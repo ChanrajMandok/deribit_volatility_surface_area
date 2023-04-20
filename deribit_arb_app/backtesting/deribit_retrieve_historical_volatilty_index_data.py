@@ -1,3 +1,4 @@
+import os
 import json
 import asyncio
 import websockets
@@ -11,6 +12,7 @@ from datetime import datetime, timedelta
 class DeribitRetrieveHistoricalVolatilityIndexData():
  
     def __init__(self):
+        self.base_ws_url = os.environ['BASE_WS_URL']
         self.msg = {
             "jsonrpc": "2.0",
             "id": 833,
@@ -23,8 +25,8 @@ class DeribitRetrieveHistoricalVolatilityIndexData():
             }
         }
 
-async def call_api(msg):
-    async with websockets.connect("wss://deribit.com/ws/api/v2") as websocket:
+async def call_api(self, msg):
+    async with websockets.connect(f"{self.base_ws_url}") as websocket:
         await websocket.send(msg)
         while websocket.open:
             response = await websocket.recv()

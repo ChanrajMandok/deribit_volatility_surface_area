@@ -1,6 +1,6 @@
-from deribit_arb_app.store.store_subject_indicator_annualized_return_spreads import StoreSubjectIndicatorAnnualizedReturnSpreads
 from deribit_arb_app.observers.observer_interface import ObserverInterface
 from deribit_arb_app.strategies.strategy_cash_and_carry_basic import StrategyCashAndCarryBasic
+from deribit_arb_app.store.store_subject_indicator_annualized_return_spreads import StoreSubjectIndicatorAnnualizedReturnSpreads
 
     ############################################################################
     # Observer monitors Cash & Carry Strategy (Spread between Future and Spot) #
