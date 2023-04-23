@@ -130,7 +130,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SHELL_PLUS = "ipython"
 
 SHELL_PLUS_IMPORTS = [
-    'from deribit_arb_app.backtesting.deribit_pull_historical_funding_rates import DeribitPullHistoricalFundingRates',
+    'from deribit_arb_app.backtesting.deribit_retrieve_historical_funding_rates_http import ServiceDeribitRetrieveHistoricalFundingRatesHttp',
+    'from deribit_arb_app.backtesting.deribit_retrieve_historical_funding_rates_async import ServiceDeribitRetrieveHistoricalFundingRatesAsync',
+    'from deribit_arb_app.backtesting.service_candles_binance_retriever_async import ServiceCandlesBinanceRetrieverAsync'
 
 ]
 

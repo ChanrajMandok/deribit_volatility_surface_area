@@ -1,5 +1,7 @@
+import os
 import json
 import requests
+from typing import List
 
 from datetime import timedelta, datetime
 
@@ -7,10 +9,10 @@ from datetime import timedelta, datetime
     # Backtest Retrieves Historical Funding Rates via https #
     #########################################################
 
-class ServiceDeribitRetrieveHistoricalFundingRates():
+class ServiceDeribitRetrieveHistoricalFundingRatesHttp():
 
     def __init__(self):
-        self.base_url = 'https://test.deribit.com/api/v2/public/'
+        self.base_url = os.environ['BASE_HTTP_URL']
 
     def call_api(self, lookback_period=10000):
             lookback_period=lookback_period + (744 - lookback_period % 744) if lookback_period % 744 > 0 else lookback_period
@@ -23,7 +25,7 @@ class ServiceDeribitRetrieveHistoricalFundingRates():
             response_list = []
             date_from = max(date_to - 2678400000, date_from_0)
             while date_to > date_from_0:
-                response = requests.get(url= f'https://deribit.com/api/v2/public/get_funding_rate_history?end_timestamp={date_to}&instrument_name=BTC-PERPETUAL&start_timestamp={date_from}')
+                response = requests.get(url= f'{self.base_url}/public/get_funding_rate_history?end_timestamp={date_to}&instrument_name=BTC-PERPETUAL&start_timestamp={date_from}')
                 if response.status_code != 200:
                     raise Exception(f'Request failed with status code {response.status_code}')
                 data = json.loads(response.content)['result']

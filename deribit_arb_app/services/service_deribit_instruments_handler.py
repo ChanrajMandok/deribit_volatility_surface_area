@@ -10,7 +10,6 @@ from deribit_arb_app.converters.converter_json_to_instruments import ConverterJs
     # Service handles Deribit instruments #
     #######################################
 
-
 @singleton
 class ServiceDeribitInstrumentsHandler:
 

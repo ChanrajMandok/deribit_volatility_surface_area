@@ -21,7 +21,7 @@ class TestDeribitApiTestCase(unittest.TestCase):
             instrument=self.store_instruments.get_deribit_instrument('BTC-29DEC23'), 
             direction=EnumDirection.BUY, 
             amount=50.0, 
-            price=35000.0)
+            price=30000.0)
 
         open_orders = self.api_deribit.get_open_orders(currency='BTC')
 

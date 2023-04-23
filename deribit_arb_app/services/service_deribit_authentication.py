@@ -10,7 +10,6 @@ from deribit_arb_app.services.service_deribit_messaging import ServiceDeribitMes
     # Service retrieves Deribit Authentication via Websocket #
     ##########################################################
 
-
 @singleton
 class ServiceDeribitAuthentication:
 

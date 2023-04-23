@@ -12,7 +12,6 @@ from deribit_arb_app.services.service_deribit_websocket_connector import Service
     # Service retrieves Deribit Account Summary via Websocket #
     ###########################################################
 
-
 @singleton
 class ServiceDeribitAccountSummary:
 
