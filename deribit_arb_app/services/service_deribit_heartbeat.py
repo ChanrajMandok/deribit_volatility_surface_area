@@ -1,5 +1,4 @@
 import json
-
 from singleton_decorator import singleton
 from deribit_arb_app.model.model_message import ModelMessage
 

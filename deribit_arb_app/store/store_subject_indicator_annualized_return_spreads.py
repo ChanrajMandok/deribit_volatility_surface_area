@@ -6,6 +6,9 @@ from deribit_arb_app.store.store_subjectable_interface import StoreSubjectableIn
 from deribit_arb_app.subjects.subject_indicator_annualised_return_spread import SubjectIndicatorAnnualisedReturnSpread
 from deribit_arb_app.model.model_indicator_annualised_return_spread import ModelIndicatorAnnualisedReturnSpread
 
+    ####################################################
+    # Store Manages & Stores Indicator Spreads objects #
+    ####################################################
 
 @singleton
 class StoreSubjectIndicatorAnnualizedReturnSpreads(StoreSubjectableInterface):

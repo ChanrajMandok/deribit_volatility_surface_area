@@ -28,4 +28,3 @@ class ModelAccountSummary(models.Model):
    
     class Meta:
         managed = False
-        

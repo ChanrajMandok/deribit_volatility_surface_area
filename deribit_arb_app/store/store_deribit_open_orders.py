@@ -4,9 +4,9 @@ from singleton_decorator import singleton
 from deribit_arb_app.model.model_order import ModelOrder
 from deribit_arb_app.model.model_instrument import ModelInstrument
 
-    ###########################################################
-    # Store retrieves, removes & stores Derebit open orders #
-    ###########################################################
+    ##############################################
+    # Store Manages & Stores Derebit Open Orders #
+    ##############################################
 
 @singleton
 class StoreDeribitOpenOrders:

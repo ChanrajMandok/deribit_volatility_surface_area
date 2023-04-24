@@ -7,6 +7,7 @@ from deribit_arb_app.services.service_deribit_account_summary import ServiceDeri
 class TestDeribitAccountSummaryTestCase(asynctest.TestCase):
 
     def setUp(self):
+        super().setUp()
         self.deribit_account_summary = ServiceDeribitAccountSummary(currency="BTC")
         self.store_deribit_account_summary = StoreDeribitAccountSummary()
         self.my_loop = asyncio.new_event_loop()
@@ -23,3 +24,4 @@ class TestDeribitAccountSummaryTestCase(asynctest.TestCase):
 
     def tearDown(self):
        self.my_loop.close()
+       super().tearDown()

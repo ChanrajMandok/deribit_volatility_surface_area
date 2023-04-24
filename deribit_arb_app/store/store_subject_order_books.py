@@ -4,6 +4,9 @@ from deribit_arb_app.model.model_order_book import ModelOrderBook
 from deribit_arb_app.model.model_instrument import ModelInstrument
 from deribit_arb_app.subjects.subject_order_book import SubjectOrderBook
 
+    #########################################################
+    # Store Manages & Stores Deribit ModelOrderBook Objects #
+    #########################################################
 
 @singleton
 class StoreSubjectOrderBooks:

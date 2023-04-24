@@ -5,9 +5,9 @@ from decimal import Decimal
 
 from deribit_arb_app.model.model_instrument import ModelInstrument
 
-    #####################################################
-    # Converter Converts Json object to ModelInstrument #
-    #####################################################
+    #############################################################
+    # Converter Converts Json object to list of ModelInstrument #
+    #############################################################
 
 class ConverterJsonToInstruments:
 

@@ -1,5 +1,4 @@
 import json
-
 from singleton_decorator import singleton
 
 from deribit_arb_app.store.store_deribit_authorization import StoreDeribitAuthorization
