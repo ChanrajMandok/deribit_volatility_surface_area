@@ -19,8 +19,7 @@ class ServiceDeribitInstrumentsHandler:
 
     def set_instruments(self, result) -> Dict[str, ModelInstrument]:
 
-        self.store_instruments\
-            .set_deribit_instruments(ConverterJsonToInstruments(json.dumps(result)).convert())
-
-        return self.store_instruments.get_deribit_instruments()
+        self.instruments = ConverterJsonToInstruments(json.dumps(result)).convert()
+        instruments = self.store_instruments.set_deribit_instruments(self.instruments)
+        return instruments
 

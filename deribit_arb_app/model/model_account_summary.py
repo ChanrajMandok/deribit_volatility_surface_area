@@ -28,3 +28,7 @@ class ModelAccountSummary(models.Model):
    
     class Meta:
         managed = False
+
+    def __repr__(self):
+        return f"<{self.currency} Account Summary>"
+

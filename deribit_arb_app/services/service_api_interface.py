@@ -18,18 +18,18 @@ class ServiceApiInterface(ABC):
         kind: str):
         pass
         
-    @abstractmethod
-    def send_order(
-        self,
-        instrument: ModelInstrument, 
-        direction: EnumDirection, 
-        amount: float, 
-        price: float):
-        pass
+    # @abstractmethod
+    # def send_order(
+    #     self,
+    #     instrument: ModelInstrument, 
+    #     direction: EnumDirection, 
+    #     amount: float, 
+    #     price: float):
+    #     pass
 
-    @abstractmethod
-    def cancel_order(
-        self, 
-        exchange: EnumExchange,
-        order_id: float):
-        pass
+    # @abstractmethod
+    # def cancel_order(
+    #     self, 
+    #     exchange: EnumExchange,
+    #     order_id: float):
+    #     pass

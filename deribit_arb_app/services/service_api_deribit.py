@@ -21,37 +21,28 @@ from deribit_arb_app.services.service_deribit_account_summary import ServiceDeri
 
 class ServiceApiDeribit(ServiceApiInterface):
 
-    def __init__(self):
-        self.my_loop = asyncio.get_event_loop()
-        if self.my_loop is None:
-            self.my_loop = asyncio.new_event_loop()
-        super().__init__()
-
-    def get_instruments(
-        self,
-        currency: str, 
-        kind: str) -> Dict[str, ModelInstrument]:
+    async def get_instruments(
+                              self,
+                              currency: str, 
+                              kind: str) -> Dict[str, ModelInstrument]:
 
         deribit_instruments = ServiceDeribitInstruments(currency=currency, kind=kind)
 
-        instruments = self.my_loop.run_until_complete(
-            asyncio.wait_for(deribit_instruments.get(), timeout=100.0))
+        instruments = await deribit_instruments.get()
 
         return instruments
         
-    def get_open_orders(
-        self,
-        currency: str) -> Dict[str, Dict[str, List[ModelOrder]]]:
+    async def get_open_orders(
+                              self,
+                              currency: str) -> Dict[str, Dict[str, List[ModelOrder]]]:
 
         deribit_orders = ServiceDeribitOrders()
 
-        open_orders = self.my_loop.run_until_complete(
-            asyncio.wait_for(deribit_orders.get_open_orders_by_currency(currency=currency),timeout=100.0)
-        )
+        open_orders = await deribit_orders.get_open_orders_by_currency(currency=currency)
 
         return open_orders
 
-    def send_order(
+    async def send_order(
         self,
         instrument: ModelInstrument, 
         direction: EnumDirection, 
@@ -61,41 +52,38 @@ class ServiceApiDeribit(ServiceApiInterface):
         deribit_orders = ServiceDeribitOrders()
 
         if direction == EnumDirection.BUY:
-            order = self.my_loop.run_until_complete(
-                deribit_orders.buy_async(
+            order = await deribit_orders.buy_async(
                     instrument_name=instrument.instrument_name, 
                     amount=amount, 
                     price=price)
-            )
+            
         elif direction == EnumDirection.SELL:
-            order = self.my_loop.run_until_complete(
-                deribit_orders.sell_async(
+            order = await deribit_orders.sell_async(
                     instrument_name=instrument.instrument_name, 
                     amount=amount, 
                     price=price)
-            )
 
         return order
 
-    def cancel_order(
+    async def cancel_order(
         self, 
         order_id: str) -> ModelOrder:
 
         deribit_orders = ServiceDeribitOrders()
 
-        return self.my_loop.run_until_complete(deribit_orders.cancel(order_id=order_id))
+        return await deribit_orders.cancel(order_id=order_id)
 
-    def get_positions(self, currency) -> Dict[str,Dict[str, ModelPosition]]:
+    async def get_positions(self, currency) -> Dict[str,Dict[str, ModelPosition]]:
 
         deribit_positions = ServiceDeribitPositions(currency=currency)
 
-        return self.my_loop.run_until_complete(deribit_positions.get())
+        return await deribit_positions.get()
 
-    def get_account_summary(self, currency) -> ServiceDeribitAccountSummary:
+    async def get_account_summary(self, currency) -> ServiceDeribitAccountSummary:
 
         deribit_account_summary = ServiceDeribitAccountSummary(currency=currency)
 
-        return self.my_loop.run_until_complete(deribit_account_summary.get())
+        return await deribit_account_summary.get()
 
     async def subscribe(self, subscribables: List[ModelExchangeSubscribable]):
 

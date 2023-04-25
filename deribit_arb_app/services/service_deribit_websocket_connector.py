@@ -14,5 +14,9 @@ class ServiceDeribitWebsocketConnector:
         self.base_ws = os.environ['BASE_WS_URL']
         self.websocket = websockets.connect(self.base_ws)
 
-    def get_websocket(self):
+    async def __aenter__(self):
+        self.websocket = await websockets.connect(self.base_ws)
         return self.websocket
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        await self.websocket.close()

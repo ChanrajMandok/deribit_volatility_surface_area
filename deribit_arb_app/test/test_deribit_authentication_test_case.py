@@ -7,6 +7,9 @@ from deribit_arb_app.services.service_deribit_messaging import ServiceDeribitMes
 from deribit_arb_app.services.service_deribit_authentication import ServiceDeribitAuthentication
 from deribit_arb_app.services.service_deribit_websocket_connector import ServiceDeribitWebsocketConnector
 
+    #######################################################################
+    # TestCase Testing Authentication Object in StoreDeribitAuthorization #
+    #######################################################################
 
 class TestDeribitAuthenticationTestCase(asynctest.TestCase):
 
@@ -15,9 +18,9 @@ class TestDeribitAuthenticationTestCase(asynctest.TestCase):
         self.deribit_messaging = ServiceDeribitMessaging()
         self.store_deribit_authorization = StoreDeribitAuthorization()
 
-        self.my_loop = asyncio.new_event_loop()
-
     async def a_coroutine(self):
+        self.deribit_authentication.get_authorization()
+
         async with ServiceDeribitWebsocketConnector().get_websocket() as websocket:
 
             await self.deribit_authentication.authenticate(websocket)
@@ -28,11 +31,14 @@ class TestDeribitAuthenticationTestCase(asynctest.TestCase):
                 break
 
     def test_authenticate(self):
-        try:
-            self.my_loop.run_until_complete(self.a_coroutine())
-        finally:
-            self.my_loop.close()
-        self.assertTrue(self.store_deribit_authorization.is_authorized())
-
-    def tearDown(self):
-       self.my_loop.close()
+        # If Authentication Object already exists in store then check that it is has Auth Token 
+        auth = self.store_deribit_authorization.get_authorization()
+        # Else Create Auth Object and check that it is has Auth Token
+        if not auth:
+            try:
+                self.loop.run_until_complete(self.a_coroutine())
+            finally:
+                self.loop.close()
+                self.assertTrue(self.store_deribit_authorization.is_authorized())
+        else:
+            self.assertTrue(self.store_deribit_authorization.is_authorized())

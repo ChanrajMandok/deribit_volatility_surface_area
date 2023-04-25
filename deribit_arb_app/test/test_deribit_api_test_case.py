@@ -1,4 +1,5 @@
-import unittest
+import asyncio
+import asynctest
 
 from deribit_arb_app.enums.enum_direction import EnumDirection
 from deribit_arb_app.store.store_instruments import StoreInstruments
@@ -6,22 +7,27 @@ from deribit_arb_app.store.store_instruments import StoreInstruments
 from deribit_arb_app.services.service_api_deribit import ServiceApiDeribit
 
 
-class TestDeribitApiTestCase(unittest.TestCase):
+class TestDeribitApiTestCase(asynctest.TestCase):
 
-    def test_api_deribit_functions(self):
-
+    def setUp(self):
+        super().setUp
         self.api_deribit = ServiceApiDeribit()
         self.store_instruments = StoreInstruments()
+        self.my_loop = asyncio.new_event_loop()
 
-        self.api_deribit.get_instruments(
+    async def test_api_deribit_functions(self):
+
+        await self.api_deribit.get_instruments(
             currency='BTC', 
             kind='future')
-
-        order = self.api_deribit.send_order(
-            instrument=self.store_instruments.get_deribit_instrument('BTC-29DEC23'), 
-            direction=EnumDirection.BUY, 
-            amount=50.0, 
-            price=30000.0)
+        
+        self.assertIsNotNone(self.store_instruments.get_deribit_instruments())
+        
+        order = await self.api_deribit.send_order(
+                        instrument=self.store_instruments.get_deribit_instrument('BTC-29DEC23'), 
+                        direction=EnumDirection.BUY, 
+                        amount=50.0, 
+                        price=30000.0)
 
         open_orders = self.api_deribit.get_open_orders(currency='BTC')
 
