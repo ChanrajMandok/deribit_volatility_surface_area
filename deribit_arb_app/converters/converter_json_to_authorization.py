@@ -17,12 +17,12 @@ class ConverterJsonToAuthorization:
         if 'result' not in self.json_obj:
             return ModelAuthorization()
 
-        json_obj_result = self.json_obj['result']
+        json_obj_result     = self.json_obj['result']
 
         return ModelAuthorization(
-            access_token=json_obj_result['access_token'],
-            expires_in=json_obj_result['expires_in'],
-            refresh_token=json_obj_result['refresh_token'],
-            scope=json_obj_result['scope'],
-            token_type=json_obj_result['token_type']
+            access_token   =json_obj_result['access_token'],
+            expires_in     =json_obj_result['expires_in'],
+            refresh_token  =json_obj_result['refresh_token'],
+            scope          =json_obj_result['scope'],
+            token_type     =json_obj_result['token_type']
         )

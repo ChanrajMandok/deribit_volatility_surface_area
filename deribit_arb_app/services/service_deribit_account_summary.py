@@ -36,7 +36,7 @@ class ServiceDeribitAccountSummary:
 
     async def get(self):
 
-        async with ServiceDeribitWebsocketConnector().get_websocket() as websocket:
+        async with ServiceDeribitWebsocketConnector() as websocket:
 
             await ServiceDeribitAuthentication().authenticate(websocket)
             await websocket.send(json.dumps(self.msg.build_message()))

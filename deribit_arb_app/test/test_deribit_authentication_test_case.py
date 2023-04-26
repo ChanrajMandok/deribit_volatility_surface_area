@@ -21,7 +21,7 @@ class TestDeribitAuthenticationTestCase(asynctest.TestCase):
     async def a_coroutine(self):
         self.deribit_authentication.get_authorization()
 
-        async with ServiceDeribitWebsocketConnector().get_websocket() as websocket:
+        async with ServiceDeribitWebsocketConnector() as websocket:
 
             await self.deribit_authentication.authenticate(websocket)
 
@@ -31,9 +31,9 @@ class TestDeribitAuthenticationTestCase(asynctest.TestCase):
                 break
 
     def test_authenticate(self):
-        # If Authentication Object already exists in store then check that it is has Auth Token 
+        # If Auth object already exists in store then check that it is has Auth Token 
         auth = self.store_deribit_authorization.get_authorization()
-        # Else Create Auth Object and check that it is has Auth Token
+        # Else create Auth object and check that it is has Auth Token
         if not auth:
             try:
                 self.loop.run_until_complete(self.a_coroutine())

@@ -1,5 +1,4 @@
 import json
-
 from typing import Optional
 
 from deribit_arb_app.enums.enum_field_name import EnumFieldName

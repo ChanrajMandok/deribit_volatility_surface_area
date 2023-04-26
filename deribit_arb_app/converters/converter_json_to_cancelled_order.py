@@ -1,5 +1,4 @@
 import json 
-
 from typing import Optional
 
 from deribit_arb_app.model.model_order import ModelOrder

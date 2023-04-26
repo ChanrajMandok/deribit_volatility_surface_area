@@ -37,14 +37,13 @@ class ServiceDeribitPositions:
 
     async def get(self) -> Dict[str, Dict[str, ModelPosition]]:
 
-        async with ServiceDeribitWebsocketConnector().get_websocket() as websocket:
+        async with ServiceDeribitWebsocketConnector() as websocket:
 
             await ServiceDeribitAuthentication().authenticate(websocket)
             await websocket.send(json.dumps(self.msg.build_message()))
 
             while websocket.open:
                 response = await websocket.recv()
-                self.deribit_messaging.message_handle(response)
                 
                 # handle the message and get the id
                 id, positions = self.deribit_messaging.message_handle(response)

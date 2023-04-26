@@ -1,5 +1,4 @@
 import json
-
 from typing import List
 
 from deribit_arb_app.model.model_index import ModelIndex
@@ -19,15 +18,15 @@ class ConverterJsonToIndex:
         if not "params" in self.json_obj:
             return None
 
-        params = self.json_obj["params"]
+        params     = self.json_obj["params"]
 
         if not "data" in params:
             return None
 
-        data = params["data"]
+        data       = params["data"]
 
         index_name = data["index_name"]
 
         return ModelIndex(
-            index_name=index_name
+            index_name  = index_name
         )

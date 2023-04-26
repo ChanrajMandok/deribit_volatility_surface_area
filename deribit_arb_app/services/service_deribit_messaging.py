@@ -5,14 +5,14 @@ import traceback
 
 from typing import Tuple, Union
 
-from deribit_arb_app.services.service_deribit_test_handler import ServiceDeribitTestHandler
-from deribit_arb_app.services.service_deribit_orders_handler import ServiceDeribitOrdersHandler
-from deribit_arb_app.services.service_deribit_positions_handler import ServiceDeribitPositionsHandler
-from deribit_arb_app.services.service_deribit_instruments_handler import ServiceDeribitInstrumentsHandler
-from deribit_arb_app.services.service_deribit_subscription_handler import ServiceDeribitSubscriptionHandler
-from deribit_arb_app.services.service_deribit_subscription_handler import ServiceDeribitSubscriptionHandler
-from deribit_arb_app.services.service_deribit_authentication_handler import ServiceDeribitAuthenticationHandler
-from deribit_arb_app.services.service_deribit_account_summary_handler import ServiceDeribitAccountSummaryHandler
+from deribit_arb_app.services.handlers.service_deribit_test_handler import ServiceDeribitTestHandler
+from deribit_arb_app.services.handlers.service_deribit_orders_handler import ServiceDeribitOrdersHandler
+from deribit_arb_app.services.handlers.service_deribit_positions_handler import ServiceDeribitPositionsHandler
+from deribit_arb_app.services.handlers.service_deribit_instruments_handler import ServiceDeribitInstrumentsHandler
+from deribit_arb_app.services.handlers.service_deribit_subscription_handler import ServiceDeribitSubscriptionHandler
+from deribit_arb_app.services.handlers.service_deribit_subscription_handler import ServiceDeribitSubscriptionHandler
+from deribit_arb_app.services.handlers.service_deribit_authentication_handler import ServiceDeribitAuthenticationHandler
+from deribit_arb_app.services.handlers.service_deribit_account_summary_handler import ServiceDeribitAccountSummaryHandler
 
     ###################################################
     # Service provides Interface for Deribit messages #

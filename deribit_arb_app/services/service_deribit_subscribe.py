@@ -30,7 +30,7 @@ class ServiceDeribitSubscribe(ModelExchangeSubscribable):
             params=params
         )
 
-        async with ServiceDeribitWebsocketConnector().get_websocket() as websocket:
+        async with ServiceDeribitWebsocketConnector() as websocket:
             await websocket.send(json.dumps(msg.build_message()))
             while websocket.open:
                 try:

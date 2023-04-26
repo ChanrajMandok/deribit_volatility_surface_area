@@ -1,4 +1,3 @@
-import asyncio
 import asynctest
 
 from deribit_arb_app.enums.enum_direction import EnumDirection
@@ -6,6 +5,9 @@ from deribit_arb_app.store.store_instruments import StoreInstruments
 
 from deribit_arb_app.services.service_api_deribit import ServiceApiDeribit
 
+    ######################################
+    # TestCase Deribit ApI Functionality #
+    ######################################
 
 class TestDeribitApiTestCase(asynctest.TestCase):
 
@@ -13,42 +15,46 @@ class TestDeribitApiTestCase(asynctest.TestCase):
         super().setUp
         self.api_deribit = ServiceApiDeribit()
         self.store_instruments = StoreInstruments()
-        self.my_loop = asyncio.new_event_loop()
+        
+        self.currency = 'BTC'
+        self.instument_type = 'future'
+        self.instument = 'BTC-29DEC23'
 
     async def test_api_deribit_functions(self):
 
         await self.api_deribit.get_instruments(
-            currency='BTC', 
-            kind='future')
+            currency=self.currency, 
+            kind=self.instument_type)
         
         self.assertIsNotNone(self.store_instruments.get_deribit_instruments())
         
+        #Check price is below the market price, else order will be instantly filled
         order = await self.api_deribit.send_order(
-                        instrument=self.store_instruments.get_deribit_instrument('BTC-29DEC23'), 
+                        instrument=self.store_instruments.get_deribit_instrument(self.instument), 
                         direction=EnumDirection.BUY, 
                         amount=50.0, 
-                        price=30000.0)
+                        price=24000)
 
-        open_orders = self.api_deribit.get_open_orders(currency='BTC')
-
-        self.assertIsNotNone(open_orders)
-        self.assertIsNotNone(open_orders['BTC-29DEC23'])
-        self.assertTrue(len(open_orders['BTC-29DEC23']) > 0)
-
-        order = self.api_deribit.cancel_order(order_id=order.order_id)
-
-        open_orders = self.api_deribit.get_open_orders(currency='BTC')
+        open_orders = await self.api_deribit.get_open_orders(currency=self.currency)
 
         self.assertIsNotNone(open_orders)
-        self.assertIsNotNone(open_orders['BTC-29DEC23'])
-        self.assertFalse(order.order_id in open_orders['BTC-29DEC23'])
+        self.assertIsNotNone(open_orders[self.instument])
+        self.assertTrue(len(open_orders[self.instument]) > 0)
 
-        positions = self.api_deribit.get_positions(currency='BTC')
+        order = await self.api_deribit.cancel_order(order_id=order.order_id)
+
+        open_orders = await self.api_deribit.get_open_orders(currency=self.currency)
+
+        self.assertIsNotNone(open_orders)
+        self.assertIsNotNone(open_orders[self.instument])
+        self.assertFalse(order.order_id in open_orders[self.instument])
+
+        positions = await self.api_deribit.get_positions(currency=self.currency)
 
         self.assertIsNotNone(positions)
-        self.assertIsNotNone(positions['BTC'])
-        self.assertIsNotNone(positions['BTC']['BTC-29DEC23'])
+        self.assertIsNotNone(positions[self.currency])
+        self.assertIsNotNone(positions[self.currency][self.instument])
 
-        account_summary = self.api_deribit.get_account_summary(currency='BTC')
+        account_summary = await self.api_deribit.get_account_summary(currency=self.currency)
 
         self.assertIsNotNone(account_summary)

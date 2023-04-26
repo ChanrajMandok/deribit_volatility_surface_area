@@ -2,11 +2,12 @@ import json
 import uuid
 from typing import Dict
 
+from deribit_arb_app.model.model_order import ModelOrder
 from deribit_arb_app.model.model_message import ModelMessage
+
+from deribit_arb_app.services.service_deribit_messaging import ServiceDeribitMessaging
 from deribit_arb_app.services.service_deribit_authentication import ServiceDeribitAuthentication
 from deribit_arb_app.services.service_deribit_websocket_connector import ServiceDeribitWebsocketConnector
-from deribit_arb_app.services.service_deribit_messaging import ServiceDeribitMessaging
-from deribit_arb_app.model.model_order import ModelOrder
 
     #################################################
     # Service sends orders to Deribit via Websocket #
@@ -28,7 +29,7 @@ class ServiceDeribitOrders:
             params=params
         )
 
-        async with ServiceDeribitWebsocketConnector().get_websocket() as websocket:
+        async with ServiceDeribitWebsocketConnector() as websocket:
             await ServiceDeribitAuthentication().authenticate(websocket)
             await websocket.send(json.dumps(msg.build_message()))
 
@@ -39,7 +40,7 @@ class ServiceDeribitOrders:
                 id, data = self.deribit_messaging.message_handle(response)
 
                 # if the id matches the initial msg id, we can break the loop
-                if id == msg_id or id is None:
+                if id == msg_id:
                     return data
 
     async def buy_async(self, instrument_name: str, amount: float, price: float) -> ModelOrder:

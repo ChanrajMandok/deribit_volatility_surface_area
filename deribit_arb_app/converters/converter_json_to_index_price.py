@@ -1,5 +1,4 @@
 import json
-
 from typing import Optional
 
 from deribit_arb_app.model.model_index_price import ModelIndexPrice
@@ -26,12 +25,12 @@ class ConverterJsonToIndexPrice:
 
         data = params["data"]
 
-        index_name = data["index_name"]
-        price = data["price"]
-        timestamp = data["timestamp"]
+        index_name   = data["index_name"]
+        price        = data["price"]
+        timestamp    = data["timestamp"]
 
         return ModelIndexPrice(
-            index_name=index_name,
-            price=price,
-            timestamp=timestamp
+            index_name  =index_name,
+            price       =price,
+            timestamp   =timestamp
         )

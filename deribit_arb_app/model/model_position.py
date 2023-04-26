@@ -12,6 +12,7 @@ class ModelPosition(ModelSubjectable, models.Model):
     average_price                    = models.DecimalField(max_digits=20, decimal_places=8, null=False)
     estimated_liquidation_price      = models.DecimalField(max_digits=20, decimal_places=8, null=False)
     initial_margin                   = models.DecimalField(max_digits=20, decimal_places=8, null=False)
+    interest_value                   = models.DecimalField(max_digits=20, decimal_places=8, null=False)
     maintenance_margin               = models.DecimalField(max_digits=20, decimal_places=8, null=False)
     open_orders_margin               = models.DecimalField(max_digits=20, decimal_places=8, null=False)
     leverage                         = models.DecimalField(max_digits=20, decimal_places=8, null=False)

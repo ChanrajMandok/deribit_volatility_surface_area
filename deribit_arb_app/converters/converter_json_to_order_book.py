@@ -27,11 +27,11 @@ class ConverterJsonToOrderBook:
             json_data = json_obj_params["data"]
 
             return ModelOrderBook(
-                instrument_name=json_data["instrument_name"],
-                best_bid_price=json_data["best_bid_price"],
-                best_ask_price=json_data["best_ask_price"],
-                best_bid_amount=json_data["best_bid_amount"],
-                best_ask_amount=json_data["best_ask_amount"]
+                instrument_name   = json_data["instrument_name"],
+                best_bid_price    = json_data["best_bid_price"],
+                best_ask_price    = json_data["best_ask_price"],
+                best_bid_amount   = json_data["best_bid_amount"],
+                best_ask_amount   = json_data["best_ask_amount"]
             )
 
         except Exception as e:

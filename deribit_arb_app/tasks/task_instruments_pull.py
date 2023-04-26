@@ -1,7 +1,6 @@
 from deribit_arb_app.tasks.task_interface import TaskInterface
 from deribit_arb_app.services.service_api_deribit import ServiceApiDeribit
 
-
 class TaskInstrumentPull(TaskInterface):
 
     def __init__(self) -> None:
