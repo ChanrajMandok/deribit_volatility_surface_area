@@ -7,6 +7,6 @@ class TaskInstrumentPull(TaskInterface):
         self.api_deribit = ServiceApiDeribit()
         super().__init__()
 
-    def run(self):
-        self.api_deribit.get_instruments(currency='BTC', kind='future')
-        self.api_deribit.get_instruments(currency='BTC', kind='option')
+    async def run(self):
+        await self.api_deribit.get_instruments(currency='BTC', kind='future')
+        await self.api_deribit.get_instruments(currency='BTC', kind='option')

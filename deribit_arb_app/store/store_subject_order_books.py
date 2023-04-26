@@ -18,9 +18,10 @@ class StoreSubjectOrderBooks:
         if not order_book.instrument_name in self.__subject_order_books:
             self.__subject_order_books[order_book.instrument_name] = SubjectOrderBook(order_book)
         self.__subject_order_books[order_book.instrument_name].set_instance(order_book)
-        print(f"{order_book.instrument_name} updated: {order_book.best_bid_price}:{order_book.best_bid_amount} - {order_book.best_ask_price}:{order_book.best_ask_amount}")
+        print(f"{order_book.instrument_name} updated: Bid: {order_book.best_bid_price} [{order_book.best_bid_amount}] - Ask: {order_book.best_ask_price} [{order_book.best_ask_amount}]")
         
     def get_subject(self, instrument: ModelInstrument) -> SubjectOrderBook:
         if not instrument.instrument_name in self.__subject_order_books:
             self.__subject_order_books[instrument.instrument_name] = SubjectOrderBook(ModelOrderBook(instrument_name=instrument.instrument_name))
-        return self.__subject_order_books[instrument.instrument_name]
+        x = self.__subject_order_books[instrument.instrument_name]
+        return x 

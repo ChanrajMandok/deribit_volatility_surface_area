@@ -22,7 +22,7 @@ class ModelInstrument(ModelExchangeSubscribable, models.Model):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.channel_name = " Quote." + self.instrument_name
+        self.channel_name = "quote." + self.instrument_name
 
     class Meta:
         managed = False
