@@ -1,23 +1,33 @@
 from abc import ABC, abstractmethod
-from typing import Generic, TypeVar
+from typing import Dict, Iterator, Mapping, TypeVar
 
-    ######################
-    # Observer Interface #
-    ######################
 
-T=TypeVar('T')
-class ObserverInterface(ABC, Generic[T]):
+E=TypeVar('E')
+M=TypeVar('M')
+
+class ObserverInterface(ABC, Mapping[E, M]):
     """
     The Observer interface declares the update method, used by subjects.
     """
 
-    @abstractmethod
-    def update(self) -> None:
+    def update(self, key: E, instance: M, old_instance: M, change: object) -> None:
         """
         Receive update from subject.
         """
-        pass
+        raise NotImplementedError(f"ObserverInterface: update not implemented for E: {str(E)} and M: {str(M)}")
+    
+    def update_many(self, instances = Dict[E, M]) -> None:
+        """
+        Receive updates from subject.
+        """
+        raise NotImplementedError(f"ObserverInterface: update_many not implemented for E: {str(E)} and M: {str(M)}")
+    
+    def __getitem__(self, item: E) -> M:
+        value = str(item)
+        return self.d[value]
 
-    @abstractmethod
-    def get(self) -> T:
-        pass
+    def __len__(self) -> int:
+        return len(self.d)
+
+    def __iter__(self) -> Iterator[E]:
+        return iter(self.d)

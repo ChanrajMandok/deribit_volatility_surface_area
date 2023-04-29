@@ -8,10 +8,8 @@ class ModelIndex(ModelExchangeSubscribable, models.Model):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        ModelExchangeSubscribable.__init__(self.index_name)
-
+        self.channel_name = "deribit_price_index." + self.index_name
 
     class Meta:
         managed = False
-        
         ordering = ['index_name']

@@ -12,12 +12,12 @@ from deribit_arb_app.observers.observer_indicator_annualised_return_spread impor
 class StrategyCashAndCarryBasic:
 
     def __init__(self, 
-            instrument1: ModelInstrument, 
-            instrument2: ModelInstrument, 
+            instrument_1: ModelInstrument, 
+            instrument_2: ModelInstrument, 
             index: ModelIndex) -> None:
 
-        self.instrument1 = instrument1
-        self.instrument2 = instrument2
+        self.instrument_1 = instrument_1
+        self.instrument_2 = instrument_2
         self.index = index
 
         # service dependencies
@@ -29,8 +29,8 @@ class StrategyCashAndCarryBasic:
         # create and update the relevant indicator
 
         self.indicator_annualized_return_spread = ModelIndicatorAnnualisedReturnSpread(
-                 instrument1=instrument1,
-                 instrument2=instrument2,
+                 instrument_1=instrument_1,
+                 instrument_2=instrument_2,
                  index=index
         )
 
@@ -58,8 +58,8 @@ class StrategyCashAndCarryBasic:
         #  - which instrument(s) are invested and for which BTC notional
         #  - where is our collateral
 
-        # equity = self.api_deribit.get_account_summary(self.instrument1.base_currency)
-        # positions = self.api_deribit.get_positions(self.instrument1.base_currency)
+        # equity = self.api_deribit.get_account_summary(self.instrument_1.base_currency)
+        # positions = self.api_deribit.get_positions(self.instrument_1.base_currency)
 
         if indicator_annualized_return_spread_float < 0.03:
             # roll the spread

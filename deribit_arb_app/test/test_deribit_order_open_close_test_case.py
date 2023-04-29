@@ -2,7 +2,6 @@ import asyncio
 import asynctest
 import sys, traceback
 
-from deribit_arb_app.model.model_instrument import ModelInstrument
 from deribit_arb_app.store.store_instruments import StoreInstruments
 from deribit_arb_app.store.store_subject_order_books import StoreSubjectOrderBooks
 from deribit_arb_app.store.store_deribit_open_orders import StoreDeribitOpenOrders
@@ -11,16 +10,19 @@ from deribit_arb_app.services.service_api_deribit import ServiceApiDeribit
 from deribit_arb_app.services.service_deribit_orders import ServiceDeribitOrders
 from deribit_arb_app.services.service_deribit_messaging import ServiceDeribitMessaging
 from deribit_arb_app.services.service_deribit_subscribe import ServiceDeribitSubscribe
+from deribit_arb_app.tasks.task_instruments_pull import TaskInstrumentPull
 
-
-    #######################################################################
-    # TestCase Testing Authentication Object in StoreDeribitAuthorization #
-    #######################################################################
+    ################################################################################################
+    # TestCase Testing Orderbook Snapshot and Deribit Orders Buy & Cancel & Retrieve Functionality #
+    ################################################################################################
     
-class TestDeribitOrderTestCase(asynctest.TestCase):
+class TestDeribitOrderOpenCloseTestCase(asynctest.TestCase):
 
-    def setUp(self):
+    async def setUp(self):
+        super().setUp()
+        await TaskInstrumentPull().run()
         self.store_instrument = StoreInstruments()
+        self.instrument = self.store_instrument.get_deribit_instrument('BTC-PERPETUAL')
         self.store_subject_order_books = StoreSubjectOrderBooks()
         self.deribit_subscribe = ServiceDeribitSubscribe()
         self.deribit_orders = ServiceDeribitOrders()
@@ -28,12 +30,8 @@ class TestDeribitOrderTestCase(asynctest.TestCase):
         self.store_deribit_open_orders = StoreDeribitOpenOrders()
         self.deribit_api = ServiceApiDeribit()
         self.my_loop = asyncio.new_event_loop()
-        self.instrument = None
+        self.open_order_id = None
         
-    async def a_corountine_get_instruments(self):
-        await asyncio.wait_for(self.deribit_api.get_instruments(currency='BTC', kind='future'), timeout=25)
-        self.instrument = self.store_instrument.get_deribit_instrument('BTC-PERPETUAL')
-
     async def a_coroutine_order_book(self):
         await asyncio.wait_for(self.deribit_subscribe.subscribe(subscribables=[self.instrument], snapshot=True), timeout=25.0)
 
@@ -45,15 +43,35 @@ class TestDeribitOrderTestCase(asynctest.TestCase):
                 instrument_name=self.instrument.instrument_name, 
                 amount=(float(self.instrument.contract_size*10)), 
                 price=limit_price)
+    
+    async def a_coroutine_get_open_orders(self):
+        await asyncio.wait_for(self.deribit_orders.get_open_orders_by_currency('BTC'),timeout=100.0)
         
-    def test_buy(self):
+    async def a_coroutine_cancel(self):
+
+        open_orders = self.store_deribit_open_orders.get_deribit_open_orders(self.instrument)
+        if open_orders is None:
+            raise ValueError('there are no open_orders in the store dictionary!')
+        self.open_order_id = list(open_orders.keys())[0]
+        try:
+            await asyncio.wait_for(self.deribit_orders.cancel(order_id=self.open_order_id),timeout=3.0)
+        except asyncio.TimeoutError as e:
+            pass
+
+    def test_buy_and_cancel_open_order(self):
         try: 
-            self.my_loop.run_until_complete(self.a_corountine_get_instruments())
             self.my_loop.run_until_complete(self.a_coroutine_order_book())
             self.my_loop.run_until_complete(self.a_coroutine_buy())
+            self.assertIsNotNone(self.store_deribit_open_orders.get_deribit_open_orders(instrument=self.instrument))
+            
+            self.my_loop.run_until_complete(self.a_coroutine_get_open_orders())
+            self.my_loop.run_until_complete(self.a_coroutine_cancel())
+            self.my_loop.run_until_complete(self.a_coroutine_get_open_orders())
+            self.assertIsNone(self.store_deribit_open_orders.get_deribit_open_order(self.instrument, self.open_order_id ))
+            
         except Exception as e:
             _, _, exc_traceback = sys.exc_info()
             traceback.print_tb(exc_traceback, limit=None, file=None)
         finally:
+            
             self.my_loop.close()
-            self.assertIsNotNone(self.store_deribit_open_orders.get_deribit_open_orders(self.instrument))

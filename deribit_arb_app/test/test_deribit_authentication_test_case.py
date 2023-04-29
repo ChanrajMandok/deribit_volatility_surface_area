@@ -1,4 +1,3 @@
-import asyncio
 import asynctest
 
 from deribit_arb_app.store.store_deribit_authorization import StoreDeribitAuthorization
@@ -14,6 +13,7 @@ from deribit_arb_app.services.service_deribit_websocket_connector import Service
 class TestDeribitAuthenticationTestCase(asynctest.TestCase):
 
     def setUp(self):
+        super().setUp()
         self.deribit_authentication = ServiceDeribitAuthentication()
         self.deribit_messaging = ServiceDeribitMessaging()
         self.store_deribit_authorization = StoreDeribitAuthorization()

@@ -3,24 +3,28 @@ import asyncio
 import traceback
 import asynctest
 
+from deribit_arb_app.tasks.task_instruments_pull import TaskInstrumentPull
+
 from deribit_arb_app.store.store_instruments import StoreInstruments
 from deribit_arb_app.services.service_api_deribit import ServiceApiDeribit
 from deribit_arb_app.services.service_deribit_subscribe import ServiceDeribitSubscribe
 
 
+    ##########################################################################
+    # TestCase Testing funcitonality to subscribe to Instrument Price Stream #
+    ##########################################################################
+
 class TestDeribitSubscribeInstrumentsTestCase(asynctest.TestCase):
 
-    def setUp(self):
+    async def setUp(self):
+        super().setUp()
+        await TaskInstrumentPull().run()
         self.store_instrument = StoreInstruments()
+        self.instrument = self.store_instrument.get_deribit_instrument('BTC-PERPETUAL')
         self.deribit_subscribe = ServiceDeribitSubscribe()
         self.my_loop = asyncio.new_event_loop()
         self.deribit_api = ServiceApiDeribit()
-        self.instrument = None
         
-    async def a_corountine_get_instruments(self):
-        await asyncio.wait_for(self.deribit_api.get_instruments(currency='BTC', kind='future'), timeout=5)
-        self.instrument = self.store_instrument.get_deribit_instrument('BTC-PERPETUAL')
-
     async def a_coroutine_subscribe(self):
         try:
             await asyncio.wait_for(self.deribit_subscribe.subscribe(
@@ -37,7 +41,6 @@ class TestDeribitSubscribeInstrumentsTestCase(asynctest.TestCase):
 
     def test_subscribe(self):
         try:
-            self.my_loop.run_until_complete(self.a_corountine_get_instruments())
             self.my_loop.run_until_complete(self.a_coroutine_subscribe())
         finally:
             self.my_loop.close()

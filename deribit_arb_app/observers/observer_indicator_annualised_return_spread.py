@@ -1,3 +1,4 @@
+from singleton_decorator import singleton
 from deribit_arb_app.observers.observer_interface import ObserverInterface
 from deribit_arb_app.store.store_subject_order_books import StoreSubjectOrderBooks
 from deribit_arb_app.store.store_subject_index_prices import StoreSubjectIndexPrices
@@ -8,7 +9,8 @@ from deribit_arb_app.services.service_indicator_annualised_return_spread_builder
     #########################################################################
     # Observer monitors the Annualised Return Spead between two instruments #
     #########################################################################
-
+    
+@singleton
 class ObserverIndicatorAnnualisedReturnSpread(ObserverInterface):
 
     # holds the subject-observer logic
@@ -17,8 +19,8 @@ class ObserverIndicatorAnnualisedReturnSpread(ObserverInterface):
     def __init__(self, instance: ModelIndicatorAnnualisedReturnSpread) -> None:
         super().__init__()
         self.__indicator_annualised_return_spread = None
-        self.instrument1 = instance.instrument1
-        self.instrument2 = instance.instrument2
+        self.instrument_1 = instance.instrument_1
+        self.instrument_2 = instance.instrument_2
         self.index = instance.index
         
         self.store_subject_order_books = StoreSubjectOrderBooks()
@@ -30,7 +32,7 @@ class ObserverIndicatorAnnualisedReturnSpread(ObserverInterface):
         
         # attach this observer to the relevant subjects: the order book and the index price
 
-        for instrument in [self.instrument1, self.instrument2]:
+        for instrument in [self.instrument_1, self.instrument_2]:
             self.store_subject_order_books.get_subject(instrument).attach(self)
         self.store_subject_index_prices.get_subject(self.index).attach(self)
 
@@ -45,6 +47,6 @@ class ObserverIndicatorAnnualisedReturnSpread(ObserverInterface):
         return self.__indicator_annualised_return_spread
 
     def __exit__(self):
-        for instrument in [self.instrument1, self.instrument2]:
+        for instrument in [self.instrument_1, self.instrument_2]:
             self.store_subject_order_books.get_subject(instrument).detach(self)   
         self.store_subject_index_prices.get_subject(self.index).detach(self)

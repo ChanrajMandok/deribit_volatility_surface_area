@@ -12,9 +12,9 @@ class TestDeribitAccountSummaryTestCase(asynctest.TestCase):
 
     def setUp(self):
         super().setUp()
-        self.deribit_account_summary = ServiceDeribitAccountSummary(currency="BTC")
         self.store_deribit_account_summary = StoreDeribitAccountSummary()
-
+        self.deribit_account_summary = ServiceDeribitAccountSummary(currency="BTC")
+        
     async def a_coroutine(self):        
         await asyncio.wait_for(self.deribit_account_summary.get(), timeout=100.0)
 

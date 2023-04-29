@@ -6,17 +6,16 @@ from deribit_arb_app.model.model_instrument import ModelInstrument
 
 class ModelIndicatorAnnualisedReturnSpread(ModelSubjectable, models.Model):
 
-    instrument1     = models.ForeignKey(ModelInstrument, on_delete=models.CASCADE, related_name='instrument_1_IASR')
-    instrument2     = models.ForeignKey(ModelInstrument, on_delete=models.CASCADE, related_name='instrument_2_IASR')
+    instrument_1     = models.ForeignKey(ModelInstrument, on_delete=models.CASCADE, related_name='instrument_1_IASR')
+    instrument_2     = models.ForeignKey(ModelInstrument, on_delete=models.CASCADE, related_name='instrument_2_IASR')
     index           = models.ForeignKey(ModelIndex, on_delete=models.CASCADE)
-    value           =  models.DecimalField(max_digits=20, decimal_places=8, null=False)
-    amount          =  models.DecimalField(max_digits=20, decimal_places=8, null=False)
+    value           =  models.DecimalField(max_digits=20, decimal_places=8, null=True)
+    amount          =  models.DecimalField(max_digits=20, decimal_places=8, null=True)
 
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        key = f"ann-ret-spread-{self.instrument1.instrument_name}-{self.instrument2.instrument_name}"
-        ModelSubjectable.__init__(key)
+        key = f"ann-ret-spread-{kwargs['instrument_1'].instrument_name}-{kwargs['instrument_2'].instrument_name}"
+        super().__init__(key=key, *args, **kwargs)
 
     class Meta:
         managed = False 

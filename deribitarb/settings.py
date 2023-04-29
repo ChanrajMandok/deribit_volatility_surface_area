@@ -132,7 +132,8 @@ SHELL_PLUS = "ipython"
 SHELL_PLUS_IMPORTS = [
     'from deribit_arb_app.backtesting.deribit_retrieve_historical_funding_rates_http import ServiceDeribitRetrieveHistoricalFundingRatesHttp',
     'from deribit_arb_app.backtesting.deribit_retrieve_historical_funding_rates_async import ServiceDeribitRetrieveHistoricalFundingRatesAsync',
-    'from deribit_arb_app.backtesting.service_candles_binance_retriever_async import ServiceCandlesBinanceRetrieverAsync'
+    'from deribit_arb_app.backtesting.service_candles_binance_retriever_async import ServiceCandlesBinanceRetrieverAsync',
+    'from deribit_arb_app.services.service_testing import ServiceTesting'
 
 ]
 
