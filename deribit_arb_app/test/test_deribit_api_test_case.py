@@ -33,7 +33,7 @@ class TestDeribitApiTestCase(asynctest.TestCase):
                         instrument=self.store_instruments.get_deribit_instrument(self.instrument), 
                         direction=EnumDirection.BUY, 
                         amount=50.0, 
-                        price=24000)
+                        price=25000)
 
         open_orders = await self.api_deribit.get_open_orders(currency=self.currency)
 

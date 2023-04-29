@@ -5,7 +5,7 @@ from deribit_arb_app.services.service_api_deribit import ServiceApiDeribit
     # Task utilised in Testing to Populate Store to allow retrieval of ModelInstrument Objects #
     ############################################################################################
 
-class TaskInstrumentPull(TaskInterface):
+class TaskInstrumentsPull(TaskInterface):
 
     def __init__(self) -> None:
         self.api_deribit = ServiceApiDeribit()

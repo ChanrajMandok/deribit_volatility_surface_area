@@ -54,20 +54,10 @@ class StrategyCashAndCarryBasic:
 
         indicator_annualized_return_spread_float = float(indicator_annualized_return_spread_value)
 
-        # we need to check our position:
-        #  - which instrument(s) are invested and for which BTC notional
-        #  - where is our collateral
-
-        # equity = self.api_deribit.get_account_summary(self.instrument_1.base_currency)
-        # positions = self.api_deribit.get_positions(self.instrument_1.base_currency)
-
         if indicator_annualized_return_spread_float < 0.03:
-            # roll the spread
-            pass
+            print('roll the spread')
         elif indicator_annualized_return_spread_float > 0.03:
-            # roll back the spread
-            pass
+            print('roll back the spread')
         else:
-            # either open the spread - or wait
-            pass
+            print('No trade')
      

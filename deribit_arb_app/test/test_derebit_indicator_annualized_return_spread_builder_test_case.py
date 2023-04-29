@@ -4,17 +4,18 @@ import sys, traceback
 
 from deribit_arb_app.model.model_index import ModelIndex
 from deribit_arb_app.store.store_instruments import StoreInstruments
-from deribit_arb_app.tasks.task_instruments_pull import TaskInstrumentPull
+
+from deribit_arb_app.tasks.task_instruments_pull import TaskInstrumentsPull
 from deribit_arb_app.model.model_indicator_annualised_return_spread import ModelIndicatorAnnualisedReturnSpread
 
 from deribit_arb_app.services.service_deribit_subscribe import ServiceDeribitSubscribe
 from deribit_arb_app.observers.observer_indicator_annualised_return_spread import ObserverIndicatorAnnualisedReturnSpread
-
+from deribit_arb_app.store.store_subject_indicator_annualized_return_spreads import StoreSubjectIndicatorAnnualizedReturnSpreads
 
 class TestDeribitIndicatorAnnualizedReturnSpreadBuilderTestCase(asynctest.TestCase):
 
     async def setUp(self):
-        await TaskInstrumentPull().run()
+        await TaskInstrumentsPull().run()
         self.store_instrument = StoreInstruments()
         self.instrument_1 = self.store_instrument.get_deribit_instrument('BTC-29SEP23')
         self.instrument_2 = self.store_instrument.get_deribit_instrument('BTC-29DEC23')
@@ -29,6 +30,7 @@ class TestDeribitIndicatorAnnualizedReturnSpreadBuilderTestCase(asynctest.TestCa
                 instrument_2 = self.instrument_2,
                 index = self.index))
         
+        self.store_subject_indicator_annualized_return_spreads = StoreSubjectIndicatorAnnualizedReturnSpreads()
         self.my_loop = asyncio.new_event_loop()
 
     async def a_coroutine(self):
@@ -37,9 +39,8 @@ class TestDeribitIndicatorAnnualizedReturnSpreadBuilderTestCase(asynctest.TestCa
                         subscribables=[
                             self.instrument_1,
                             self.instrument_2,
-                            self.index
-                        ]
-            ), timeout=15) 
+                            self.index],
+                            snapshot=False), timeout=5) 
         except asyncio.TimeoutError as e:
             pass
         except Exception as e:

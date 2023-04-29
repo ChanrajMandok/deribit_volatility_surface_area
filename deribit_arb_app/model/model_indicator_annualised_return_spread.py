@@ -14,7 +14,7 @@ class ModelIndicatorAnnualisedReturnSpread(ModelSubjectable, models.Model):
 
 
     def __init__(self, *args, **kwargs):
-        key = f"ann-ret-spread-{kwargs['instrument_1'].instrument_name}-{kwargs['instrument_2'].instrument_name}"
+        key = f"Annualised_Spread-{kwargs['instrument_1'].instrument_name}-{kwargs['instrument_2'].instrument_name}"
         super().__init__(key=key, *args, **kwargs)
 
     class Meta:

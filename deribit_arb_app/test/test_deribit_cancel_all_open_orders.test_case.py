@@ -10,7 +10,7 @@ from deribit_arb_app.store.store_deribit_open_orders import StoreDeribitOpenOrde
 from deribit_arb_app.services.service_deribit_messaging import ServiceDeribitMessaging
 from deribit_arb_app.store.store_instruments import StoreInstruments
 from deribit_arb_app.store.store_subject_order_books import StoreSubjectOrderBooks
-from deribit_arb_app.tasks.task_instruments_pull import TaskInstrumentPull
+from deribit_arb_app.tasks.task_instruments_pull import TaskInstrumentsPull
 
     ###########################################################
     # TestCase Testing DeribitOrders Cancel All Functionality #
@@ -20,7 +20,7 @@ class TestDeribitOrderCancelAllOpenOrderTestCase(asynctest.TestCase):
 
     async def setUp(self):
         super().setUp()
-        await TaskInstrumentPull().run()
+        await TaskInstrumentsPull().run()
         self.store_instrument = StoreInstruments()
         self.instrument = self.store_instrument.get_deribit_instrument('BTC-PERPETUAL')
         self.deribit_api = ServiceApiDeribit()
