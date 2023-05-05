@@ -1,5 +1,8 @@
 from django.db import models
 
+    ###########################
+    # Model for quote Objects #
+    ###########################
 
 class ModelQuote(models.Model):
 

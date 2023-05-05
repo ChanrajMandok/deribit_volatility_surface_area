@@ -1,8 +1,11 @@
 from django.db import models
-from deribit_arb_app.model.model_exchange_subscribable import ModelExchangeSubscribable
+from deribit_arb_app.model.model_subscribable import ModelSubscribable
 
+    ###########################################################
+    # Model for BSM implied Volatility (subscribable) Objects #
+    ###########################################################
 
-class ModelInstrument(ModelExchangeSubscribable, models.Model):
+class ModelInstrument(ModelSubscribable, models.Model):
 
     instrument_name             = models.CharField(max_length=255)
     tick_size                   = models.DecimalField(max_digits=20, decimal_places=8, null=False)

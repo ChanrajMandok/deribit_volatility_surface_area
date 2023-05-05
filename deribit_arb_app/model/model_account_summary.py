@@ -1,5 +1,8 @@
 from django.db import models
 
+    #####################################
+    # Model for account Summary Objects #
+    #####################################
 
 class ModelAccountSummary(models.Model):
 

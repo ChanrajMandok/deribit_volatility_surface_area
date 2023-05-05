@@ -5,6 +5,9 @@ from deribit_arb_app.observers.observer_interface import ObserverInterface
 
 T=TypeVar('T', ModelSubjectable, ModelSubjectable)
 
+    ###############################################################################################
+    # Subject interface declaring set of methods which manage subscriptions and observer subjects #
+    ###############################################################################################
 
 class SubjectInterface(ABC, Generic[T]):
 

@@ -6,9 +6,9 @@ from deribit_arb_app.subjects.subject_index_price import SubjectIndexPrice
 
 from deribit_arb_app.store.store_subjectable_interface import StoreSubjectableInterface
 
-    ##############################################
-    # Store Manages & Stores Subjectable objects #
-    ##############################################
+    #################################################################
+    # Store Manages & Stores Subjectable index price Steams objects #
+    #################################################################
 
 @singleton
 class StoreSubjectIndexPrices(StoreSubjectableInterface):

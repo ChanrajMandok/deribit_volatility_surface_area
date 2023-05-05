@@ -1,10 +1,11 @@
-import json
+
 import sys
+import json
 import traceback
 from typing import List, Dict
 
 from deribit_arb_app.model.model_message import ModelMessage
-from deribit_arb_app.model.model_exchange_subscribable import ModelExchangeSubscribable
+from deribit_arb_app.model.model_subscribable import ModelSubscribable
 
 from deribit_arb_app.services.service_deribit_messaging import ServiceDeribitMessaging
 from deribit_arb_app.services.service_deribit_websocket_connector import ServiceDeribitWebsocketConnector
@@ -13,7 +14,7 @@ from deribit_arb_app.services.service_deribit_websocket_connector import Service
     # Service Provides interface to Subscribe to Websocket #
     ########################################################
 
-class ServiceDeribitSubscribe(ModelExchangeSubscribable):
+class ServiceDeribitSubscribe(ModelSubscribable):
 
     def __init__(self):
 
@@ -43,7 +44,7 @@ class ServiceDeribitSubscribe(ModelExchangeSubscribable):
                     _, _, exc_traceback = sys.exc_info()
                     traceback.print_tb(exc_traceback, limit=None, file=None)
 
-    async def subscribe(self, subscribables: List[ModelExchangeSubscribable], snapshot: bool):
+    async def subscribe(self, subscribables: List[ModelSubscribable], snapshot: bool):
 
         method = "public/subscribe"
 
@@ -62,7 +63,7 @@ class ServiceDeribitSubscribe(ModelExchangeSubscribable):
             _, _, exc_traceback = sys.exc_info()
             traceback.print_tb(exc_traceback, limit=None, file=None)
 
-    async def unsubscribe(self, subscribables: List[ModelExchangeSubscribable]):
+    async def unsubscribe(self, subscribables: List[ModelSubscribable]):
 
         method = "public/unsubscribe"
 

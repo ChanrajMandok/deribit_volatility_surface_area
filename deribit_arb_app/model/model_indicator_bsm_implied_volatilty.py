@@ -3,8 +3,11 @@ from deribit_arb_app.model.model_subjectable import ModelSubjectable
 from deribit_arb_app.model.model_index import ModelIndex
 from deribit_arb_app.model.model_instrument import ModelInstrument
 
+    ##########################################################
+    # Model for BSM implied Volatility (subjectable) Objects #
+    ##########################################################
 
-class ModelIndicatorImpliedVolatility(ModelSubjectable, models.Model):
+class ModelIndicatorBsmImpliedVolatility(ModelSubjectable, models.Model):
 
     instrument     = models.ForeignKey(ModelInstrument, on_delete=models.CASCADE, related_name='instrument_IV')
     index          = models.ForeignKey(ModelIndex, on_delete=models.CASCADE, related_name='index_IV')

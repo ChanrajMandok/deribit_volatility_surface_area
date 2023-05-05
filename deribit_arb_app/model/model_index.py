@@ -1,8 +1,11 @@
 from django.db import models
-from deribit_arb_app.model.model_exchange_subscribable import ModelExchangeSubscribable
+from deribit_arb_app.model.model_subscribable import ModelSubscribable
 
+    ##########################################
+    # Model for Index (subscribable) Objects #
+    ##########################################
 
-class ModelIndex(ModelExchangeSubscribable, models.Model):
+class ModelIndex(ModelSubscribable, models.Model):
 
     index_name       = models.CharField(max_length=255)
 

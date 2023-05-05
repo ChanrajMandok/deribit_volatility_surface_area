@@ -1,1 +1,0 @@
-config_currencies_dict = {'future':{'BTC','ETH'}}

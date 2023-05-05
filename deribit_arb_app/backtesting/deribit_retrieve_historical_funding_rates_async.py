@@ -14,7 +14,7 @@ class ServiceDeribitRetrieveHistoricalFundingRatesAsync():
     def __init__(self):
         self.base_url = os.environ['BASE_HTTP_URL']
         
-    def main(self, lookback_period):
+    def main(self, lookback_period) -> List:
         timestamps = self.time_increments(lookback_period=lookback_period)
         result = asyncio.run(self.fetch_all(timestamps=timestamps))
         return result   

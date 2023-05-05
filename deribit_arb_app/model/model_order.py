@@ -1,6 +1,9 @@
 from django.db import models
 from deribit_arb_app.model.model_trade import ModelTrade
 
+    ###########################
+    # Model for order objects #
+    ###########################
 
 class ModelOrder(models.Model):
 

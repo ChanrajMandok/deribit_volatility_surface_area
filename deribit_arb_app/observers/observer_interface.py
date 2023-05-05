@@ -1,6 +1,9 @@
 from abc import ABC, abstractmethod
 from typing import Dict, Iterator, Mapping, TypeVar
 
+    ##################################################
+    # Interface provides observers with update logic #
+    ##################################################
 
 E=TypeVar('E')
 M=TypeVar('M')

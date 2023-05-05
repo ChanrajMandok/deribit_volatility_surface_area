@@ -1,6 +1,9 @@
 from django.db import models
 from deribit_arb_app.model.model_subjectable import ModelSubjectable
 
+    #############################################
+    # Model for Orderbook (subjectable) Objects #
+    #############################################
 
 class ModelOrderBook(ModelSubjectable , models.Model):
 

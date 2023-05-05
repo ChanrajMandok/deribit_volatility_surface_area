@@ -2,16 +2,15 @@ import warnings
 import numpy as np
 
 from scipy.stats import norm
-
 from deribit_arb_app.enums.enum_option_type import EnumOptionType
-N = norm.cdf
 
     ##################################################
     # Service Implements Black Scholes Merton Pricer #
     ##################################################
 
 class ServicePricerBlackScholes:
-    
+    N = norm.cdf
+
     def bs_put(self, S, K, T, r, vol):
         d1 = round((np.log(S/K)+(r+0.5*vol*vol)*T)/(vol*np.sqrt(T)),8)
         d2 = round((d1-vol*np.sqrt(T)),5)

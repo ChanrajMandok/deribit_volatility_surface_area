@@ -1,10 +1,9 @@
-import asyncio
 from typing import Dict, List, Optional
 
 from deribit_arb_app.model.model_order import ModelOrder
 from deribit_arb_app.model.model_position import ModelPosition
 from deribit_arb_app.model.model_instrument import ModelInstrument
-from deribit_arb_app.model.model_exchange_subscribable import ModelExchangeSubscribable
+from deribit_arb_app.model.model_subscribable import ModelSubscribable
 
 from deribit_arb_app.enums.enum_direction import EnumDirection
 
@@ -85,7 +84,7 @@ class ServiceApiDeribit(ServiceApiInterface):
 
         return await deribit_account_summary.get()
 
-    async def subscribe(self, subscribables: List[ModelExchangeSubscribable]):
+    async def subscribe(self, subscribables: List[ModelSubscribable]):
 
         # deribit quotes service
         deribit_subscribe = ServiceDeribitSubscribe()
@@ -96,7 +95,7 @@ class ServiceApiDeribit(ServiceApiInterface):
 
         await task
 
-    async def unsubscribe(self, subscribables: List[ModelExchangeSubscribable]):
+    async def unsubscribe(self, subscribables: List[ModelSubscribable]):
     
         # deribit quotes service
         deribit_subscribe = ServiceDeribitSubscribe()

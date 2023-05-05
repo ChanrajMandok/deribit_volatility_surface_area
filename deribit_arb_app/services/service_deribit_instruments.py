@@ -1,5 +1,5 @@
 import json
-from typing import Dict, List
+from typing import Dict
 
 from deribit_arb_app.model.model_message import ModelMessage
 from deribit_arb_app.model.model_instrument import ModelInstrument

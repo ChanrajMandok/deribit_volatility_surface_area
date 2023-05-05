@@ -1,8 +1,8 @@
 from deribit_arb_app.enums.enum_no_value_interface import NoValue
 
-    ###############################################
-    # Enum for value control of OptionType Values #
-    ###############################################
+    ##################################################
+    # Enum Provides Immutable Value for Option Types #
+    ##################################################
 
 class EnumOptionType(NoValue):
 

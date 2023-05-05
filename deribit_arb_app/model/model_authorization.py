@@ -1,5 +1,8 @@
 from django.db import models
 
+    ###################################
+    # Model for Authorization Objects #
+    ###################################
 
 class ModelAuthorization(models.Model):
 

@@ -1,5 +1,8 @@
 from django.db import models
 
+    ########################################
+    # Model for Historical Funding Objects #
+    ########################################
 
 class ModelHistoricalFundingRate(models.Model):
 

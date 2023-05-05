@@ -5,7 +5,7 @@ from deribit_arb_app.model.model_order import ModelOrder
 from deribit_arb_app.model.model_instrument import ModelInstrument
 
     ##############################################
-    # Store Manages & Stores Derebit Open Orders #
+    # Store Manages & Stores Derebit open orders #
     ##############################################
 
 @singleton

@@ -1,5 +1,8 @@
 from typing import Dict
 
+    #############################
+    # Model for Message Objects #
+    #############################
 
 class ModelMessage:
 

@@ -1,5 +1,8 @@
 from django.db import models
 
+    #########################
+    # Model Trading Objects #
+    #########################
 
 class ModelTrade(models.Model):
 

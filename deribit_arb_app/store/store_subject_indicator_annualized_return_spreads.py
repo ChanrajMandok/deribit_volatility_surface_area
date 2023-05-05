@@ -3,12 +3,12 @@ import traceback
 from singleton_decorator import singleton
 
 from deribit_arb_app.store.store_subjectable_interface import StoreSubjectableInterface
-from deribit_arb_app.subjects.subject_indicator_annualised_return_spread import SubjectIndicatorAnnualisedReturnSpread
 from deribit_arb_app.model.model_indicator_annualised_return_spread import ModelIndicatorAnnualisedReturnSpread
+from deribit_arb_app.subjects.subject_indicator_annualised_return_spread import SubjectIndicatorAnnualisedReturnSpread
 
-    ####################################################
-    # Store Manages & Stores Indicator Spreads objects #
-    ####################################################
+    #####################################################################
+    # Store Manages & Stores Annualized Return Spread Indicator objects #
+    #####################################################################
 
 @singleton
 class StoreSubjectIndicatorAnnualizedReturnSpreads(StoreSubjectableInterface):

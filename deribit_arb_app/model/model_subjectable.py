@@ -1,5 +1,8 @@
 from django.db import models
 
+    #############################
+    # Model Subjectable Objects #
+    #############################
 
 class ModelSubjectable(models.Model):
 

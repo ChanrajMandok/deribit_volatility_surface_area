@@ -1,5 +1,8 @@
 from enum import Enum
 
+    ##################################################
+    # Interface provdes no value interface for Enums #
+    ##################################################
 
 class NoValue(Enum):
 
