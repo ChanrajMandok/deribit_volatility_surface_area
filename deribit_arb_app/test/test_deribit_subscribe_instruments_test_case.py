@@ -9,7 +9,6 @@ from deribit_arb_app.store.store_instruments import StoreInstruments
 from deribit_arb_app.services.service_api_deribit import ServiceApiDeribit
 from deribit_arb_app.services.service_deribit_subscribe import ServiceDeribitSubscribe
 
-
     ##########################################################################
     # TestCase Testing funcitonality to subscribe to Instrument Price Stream #
     ##########################################################################
@@ -18,7 +17,7 @@ class TestDeribitSubscribeInstrumentsTestCase(asynctest.TestCase):
 
     async def setUp(self):
         super().setUp()
-        await TaskInstrumentsPull().run()
+        await TaskInstrumentsPull().run(currency='BTC', kind='future')
         self.store_instrument = StoreInstruments()
         self.instrument = self.store_instrument.get_deribit_instrument('BTC-PERPETUAL')
         self.deribit_subscribe = ServiceDeribitSubscribe()
@@ -28,7 +27,7 @@ class TestDeribitSubscribeInstrumentsTestCase(asynctest.TestCase):
     async def a_coroutine_subscribe(self):
         try:
             await asyncio.wait_for(self.deribit_subscribe.subscribe(
-                    subscribables=[self.instrument], snapshot=False), timeout=10)
+                    subscribables=[self.instrument], snapshot=False), timeout=2)
         except asyncio.exceptions.TimeoutError:
             pass
         except Exception as e:

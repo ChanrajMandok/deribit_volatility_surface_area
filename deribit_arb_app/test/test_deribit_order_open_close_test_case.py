@@ -7,10 +7,10 @@ from deribit_arb_app.store.store_subject_order_books import StoreSubjectOrderBoo
 from deribit_arb_app.store.store_deribit_open_orders import StoreDeribitOpenOrders
 
 from deribit_arb_app.services.service_api_deribit import ServiceApiDeribit
+from deribit_arb_app.tasks.task_instruments_pull import TaskInstrumentsPull
 from deribit_arb_app.services.service_deribit_orders import ServiceDeribitOrders
 from deribit_arb_app.services.service_deribit_messaging import ServiceDeribitMessaging
 from deribit_arb_app.services.service_deribit_subscribe import ServiceDeribitSubscribe
-from deribit_arb_app.tasks.task_instruments_pull import TaskInstrumentsPull
 
     ################################################################################################
     # TestCase Testing Orderbook Snapshot and Deribit Orders Buy & Cancel & Retrieve Functionality #
@@ -20,7 +20,7 @@ class TestDeribitOrderOpenCloseTestCase(asynctest.TestCase):
 
     async def setUp(self):
         super().setUp()
-        await TaskInstrumentsPull().run()
+        await TaskInstrumentsPull().run(currency='BTC', kind='future')
         self.store_instrument = StoreInstruments()
         self.instrument = self.store_instrument.get_deribit_instrument('BTC-PERPETUAL')
         self.store_subject_order_books = StoreSubjectOrderBooks()

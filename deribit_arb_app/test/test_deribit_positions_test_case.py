@@ -3,7 +3,6 @@ import asyncio
 import traceback
 import asynctest
 
-from deribit_arb_app.tasks.task_instruments_pull import TaskInstrumentsPull
 from deribit_arb_app.store.store_deribit_positions import StoreDeribitPositions
 from deribit_arb_app.services.service_deribit_positions import ServiceDeribitPositions
 

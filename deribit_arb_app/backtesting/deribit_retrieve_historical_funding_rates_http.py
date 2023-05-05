@@ -25,7 +25,7 @@ class ServiceDeribitRetrieveHistoricalFundingRatesHttp():
             response_list = []
             date_from = max(date_to - 2678400000, date_from_0)
             while date_to > date_from_0:
-                response = requests.get(url= f'{self.base_url}/public/get_funding_rate_history?end_timestamp={date_to}&instrument_name=BTC-PERPETUAL&start_timestamp={date_from}')
+                response = requests.get(url= f'{self.base_url}/get_funding_rate_history?end_timestamp={date_to}&instrument_name=BTC-PERPETUAL&start_timestamp={date_from}')
                 if response.status_code != 200:
                     raise Exception(f'Request failed with status code {response.status_code}')
                 data = json.loads(response.content)['result']

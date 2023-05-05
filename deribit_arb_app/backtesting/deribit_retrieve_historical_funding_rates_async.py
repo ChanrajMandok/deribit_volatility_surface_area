@@ -21,7 +21,7 @@ class ServiceDeribitRetrieveHistoricalFundingRatesAsync():
         
     async def fetch(self, timestamp_start:int, timestamp_end:int) -> List:
         async with aiohttp.ClientSession() as session:
-            async with session.get(url= f'{self.base_url}/public/get_funding_rate_history?end_timestamp={timestamp_end}&instrument_name=BTC-PERPETUAL&start_timestamp={timestamp_start}') as response:
+            async with session.get(url= f'{self.base_url}/get_funding_rate_history?end_timestamp={timestamp_end}&instrument_name=BTC-PERPETUAL&start_timestamp={timestamp_start}') as response:
                 data = await response.json()
                 return(data['result'])
             

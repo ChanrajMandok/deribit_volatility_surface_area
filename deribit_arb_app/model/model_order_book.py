@@ -9,6 +9,7 @@ class ModelOrderBook(ModelSubjectable , models.Model):
     best_ask_price        = models.DecimalField(max_digits=20, decimal_places=8, null=True)
     best_bid_amount       = models.DecimalField(max_digits=20, decimal_places=8, null=True)
     best_ask_amount       = models.DecimalField(max_digits=20, decimal_places=8, null=True)
+    
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
