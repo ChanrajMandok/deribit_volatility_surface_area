@@ -44,7 +44,7 @@ class TestDeribitIndicatorAnnualizedReturnSpreadBuilderTestCase(asynctest.TestCa
                             self.instrument_1,
                             self.instrument_2,
                             self.index],
-                            snapshot=False), timeout=3) 
+                            snapshot=False), timeout=4) 
         except asyncio.TimeoutError as e:
             pass
         except Exception as e:
@@ -56,6 +56,3 @@ class TestDeribitIndicatorAnnualizedReturnSpreadBuilderTestCase(asynctest.TestCa
             self.my_loop.run_until_complete(self.a_coroutine())
         finally:
             self.my_loop.close()
-
-    def tearDown(self):
-       self.my_loop.close()

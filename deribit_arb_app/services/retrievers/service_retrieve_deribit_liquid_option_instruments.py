@@ -4,18 +4,18 @@ import aiohttp
 import asyncio
 from typing import List
 
-from datetime import timedelta, datetime
 from deribit_arb_app.model.model_index import ModelIndex
-
 from deribit_arb_app.model.model_instrument import ModelInstrument
 from deribit_arb_app.store.store_instruments import StoreInstruments
 from deribit_arb_app.tasks.task_instruments_pull import TaskInstrumentsPull
 
-    #############################################################################
-    # Retriever Retrieves Liquid option instruments for volatility surface area #
-    #############################################################################
+    ##########################################################################################
+    # Retriever Retrieves Liquid option instruments for volatility surface area subscription #
+    ##########################################################################################
 
 class ServiceRetrieveDeribitLiquidOptionInstruments():
+
+    ## retrieved instruments list does not include the index instrumet (eg. btc_usd), this must be added at the execution service. 
 
     def __init__(self):
         self.base_url = 'https://deribit.com/api/v2/public'
@@ -23,7 +23,6 @@ class ServiceRetrieveDeribitLiquidOptionInstruments():
     async def async_setup(self):
         await TaskInstrumentsPull().run(currency='BTC')
         self.store_instrument = StoreInstruments()
-        self.index = ModelIndex(index_name="btc_usd")
         
     async def main(self):
         await self.async_setup()
@@ -31,7 +30,7 @@ class ServiceRetrieveDeribitLiquidOptionInstruments():
         instruments = [x for x in list(store_instruments.values()) if x.kind == 'option']
         liquid_instrument_names = await self.fetch_all(instruments=instruments)
         result = [x for x in instruments if x.instrument_name in liquid_instrument_names]
-        result.append(self.index)
+
         return result
         
     async def fetch(self, instrument:ModelInstrument) -> List:

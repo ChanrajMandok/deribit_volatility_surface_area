@@ -27,7 +27,7 @@ class TestDeribitSubscribeInstrumentsTestCase(asynctest.TestCase):
     async def a_coroutine_subscribe(self):
         try:
             await asyncio.wait_for(self.deribit_subscribe.subscribe(
-                    subscribables=[self.instrument], snapshot=False), timeout=2)
+                    subscribables=[self.instrument], snapshot=False), timeout=10)
         except asyncio.exceptions.TimeoutError:
             pass
         except Exception as e:

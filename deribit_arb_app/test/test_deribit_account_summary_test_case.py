@@ -16,7 +16,7 @@ class TestDeribitAccountSummaryTestCase(asynctest.TestCase):
         self.deribit_account_summary = ServiceDeribitAccountSummary(currency="BTC")
         
     async def a_coroutine(self):        
-        await asyncio.wait_for(self.deribit_account_summary.get(), timeout=100.0)
+        await asyncio.wait_for(self.deribit_account_summary.get(), timeout=10.0)
 
     def test_account_summary_get(self):
         self.loop.run_until_complete(self.a_coroutine())

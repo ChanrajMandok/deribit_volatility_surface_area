@@ -1,10 +1,12 @@
+from typing import List
 from singleton_decorator import singleton
+from concurrent.futures import ThreadPoolExecutor
 
 from deribit_arb_app.observers.observer_interface import ObserverInterface
 from deribit_arb_app.store.store_subject_order_books import StoreSubjectOrderBooks
 from deribit_arb_app.store.store_subject_index_prices import StoreSubjectIndexPrices
 from deribit_arb_app.model.model_indicator_bsm_implied_volatilty import ModelIndicatorBsmImpliedVolatility
-from deribit_arb_app.services.service_implied_volatilty_bsm_builder import ServiceImpliedVolatilityBsmBuilder
+from deribit_arb_app.services.builders.service_implied_volatilty_bsm_builder import ServiceImpliedVolatilityBsmBuilder
 from deribit_arb_app.store.store_subject_indicator_bsm_implied_volatilty import StoreSubjectIndicatorBsmImpliedVolatilty
 
     ###################################################################################################
@@ -12,35 +14,48 @@ from deribit_arb_app.store.store_subject_indicator_bsm_implied_volatilty import 
     ###################################################################################################
 
 @singleton
-class ObserverIndicatorBsmImpliedVoaltility(ObserverInterface):
+class ObserverIndicatorBsmImpliedVolatility(ObserverInterface):
 
-    def __init__(self, iiv_instance:ModelIndicatorBsmImpliedVolatility) -> None:
-        super.__init__()
-        self.__indicator_bsm_implied_volatility     = None
-        self.instrument                             = iiv_instance.instrument
-        self.index                                  = iiv_instance.index 
+    def __init__(self, instances:List[ModelIndicatorBsmImpliedVolatility]) -> None:
+        super().__init__()
+        self.indicators = {}
+        self.store_subject_order_books = StoreSubjectOrderBooks()
+        self.store_subject_index_prices = StoreSubjectIndexPrices()
+        self.store_subject_indicator_bsm_iv = StoreSubjectIndicatorBsmImpliedVolatilty()
+        
+        for instance in instances:
+            key = instance.key
+            instrument = instance.instrument
+            index = instance.index
+            self.indicators[key] = instance
 
-        self.store_subject_order_books              = StoreSubjectOrderBooks()
-        self.store_subject_index_prices             = StoreSubjectIndexPrices()
-        self.store_subject_indicator_bsm_iv         = StoreSubjectIndicatorBsmImpliedVolatilty()
-        self.service_implied_volatilty_bsm_builder  = ServiceImpliedVolatilityBsmBuilder(iiv_instance)
+            # Attach observer to instrument orderbook and index
+            self.store_subject_order_books.get_subject(instrument).attach(self)
+            self.store_subject_index_prices.get_subject(index).attach(self)
 
-        # Attach observer to instrument orderbook and index 
-        self.store_subject_order_books.get_subject(self.instrument).attach(self)
-        self.store_subject_index_prices.get_subject(self.index).attach(self)
+    def update(self) -> None:
 
-    def update(self) -> None: 
-        self.__indicator_bsm_implied_volatility = self.service_implied_volatilty_bsm_builder.build()
-        if self.__indicator_bsm_implied_volatility is None:
-            return 
-        print(f"{self.__indicator_bsm_implied_volatility.key}: {round(self.__indicator_bsm_implied_volatility.value, 6)}")
-        self.store_subject_indicator_bsm_iv.update_subject(self.__indicator_bsm_implied_volatility)
+        ## build has computationally intense BSM calculation so threading is utilised
+        with ThreadPoolExecutor(max_workers=4) as executor:
+            tasks = []
+            for key, indicator in self.indicators.items():
+                service_implied_volatilty_bsm_builder = ServiceImpliedVolatilityBsmBuilder(indicator)
+                task = executor.submit(service_implied_volatilty_bsm_builder.build)
+                tasks.append((key, task))
+            
+            for key, task in tasks:
+                result = task.result()
+                if result is None:
+                    continue
+                print(f"{result.key}: {round(result.value, 6)}")
+                self.store_subject_indicator_bsm_iv.update_subject(key, result)
 
-    def get(self) -> ModelIndicatorBsmImpliedVolatility :
-        return self.__indicator_bsm_implied_volatility
-    
+    def get(self) -> List[ModelIndicatorBsmImpliedVolatility]:
+        return list(self.indicators.values())
+
     def __exit__(self):
-        self.store_subject_order_books.get_subject(self.instrument).attach(self)
-        self.store_subject_index_prices.get_subject(self.index).attach(self)
-
-        ##todo potientially observe a complete list of instruments in one go, this may be less completx and optimise the code more effectivly
+        for key, indicator in self.indicators.items():
+            instrument = indicator.instrument
+            index = indicator.index
+            self.store_subject_order_books.get_subject(instrument).detach(self)
+            self.store_subject_index_prices.get_subject(index).detach(self)

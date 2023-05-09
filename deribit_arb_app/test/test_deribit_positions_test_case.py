@@ -19,7 +19,7 @@ class TestDeribitPositionsTestCase(asynctest.TestCase):
         self.my_loop = asyncio.new_event_loop()
 
     async def positions_coroutine(self):
-        await asyncio.wait_for(self.deribit_positions.get(), timeout=100.0) 
+        await asyncio.wait_for(self.deribit_positions.get(), timeout=10) 
 
     def test_positions_get(self):
         try:
