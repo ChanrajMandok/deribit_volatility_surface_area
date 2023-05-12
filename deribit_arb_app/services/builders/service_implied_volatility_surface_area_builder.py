@@ -4,6 +4,7 @@ import traceback
 from typing import List
 
 from deribit_arb_app.model.model_index import ModelIndex
+from deribit_arb_app.model.model_instrument import ModelInstrument
 from deribit_arb_app.services.service_deribit_subscribe import ServiceDeribitSubscribe
 from deribit_arb_app.model.model_indicator_bsm_implied_volatilty import ModelIndicatorBsmImpliedVolatility
 from deribit_arb_app.store.store_subject_indicator_bsm_implied_volatilty import StoreSubjectIndicatorBsmImpliedVolatilty
@@ -14,27 +15,26 @@ from deribit_arb_app.services.retrievers.service_retrieve_deribit_liquid_option_
     # Plot Subscribe, Observe and plot Asset Specific Volatility Surface Area #
     ###########################################################################
 
-class ServiceBuildVolatiltySurfaceArea():
+class ServiceImpliedVolatiltySurfaceAreaBuilder():
     
     async def setup(self):
         self.liquid_instruments_list_retriever = ServiceRetrieveDeribitLiquidOptionInstruments()
         self.deribit_subscribe = ServiceDeribitSubscribe()
         self.index = ModelIndex(index_name="btc_usd")
-        self.instruments = await self.liquid_instruments_list_retriever.main()
-        # self.observer_indicator_bsm_implied_volatility = ObserverIndicatorBsmImpliedVolatility() 
+        self.instruments = await self.liquid_instruments_list_retriever.main(populate=False)
         
         observers = []
         for instrument in self.instruments:
             observers.append(ModelIndicatorBsmImpliedVolatility(self,
-                                                            instrument=instrument,
-                                                            index=self.index
-                                                            ))
+                                                                instrument=instrument,
+                                                                index=self.index
+                                                                ))
         ObserverIndicatorBsmImpliedVolatility(observers)    
         
         self.store_subject_indicator_bsm_implied_volatilty = StoreSubjectIndicatorBsmImpliedVolatilty()
         self.my_loop = asyncio.new_event_loop()
 
-    async def a_coroutine_subscribe(self, instruments:List):
+    async def a_coroutine_subscribe(self, instruments:List[ModelInstrument]):
         try:
             await self.deribit_subscribe.subscribe(subscribables=instruments,
                                                    snapshot=False)
@@ -44,7 +44,13 @@ class ServiceBuildVolatiltySurfaceArea():
              _, _, exc_traceback = sys.exc_info()
              traceback.print_tb(exc_traceback, limit=None, file=None)
 
+    async def a_coroutine_print_store(self, store: StoreSubjectIndicatorBsmImpliedVolatilty):
+        async for store_data in store.stream_store():
+            print(store_data)
+
     async def main(self):
         await (self.setup())
         self.instruments.insert(0,self.index)
-        asyncio.create_task(await self.a_coroutine_subscribe(self.instruments))
+        asyncio.create_task(self.a_coroutine_subscribe(self.instruments))
+        await asyncio.sleep(10)
+        asyncio.create_task(self.a_coroutine_print_store(self.store_subject_indicator_bsm_implied_volatilty))

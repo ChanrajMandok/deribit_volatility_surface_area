@@ -47,7 +47,7 @@ class ObserverIndicatorBsmImpliedVolatility(ObserverInterface):
                 result = task.result()
                 if result is None:
                     continue
-                print(f"{result.key}: {round(result.value, 6)}")
+                # print(f"{result.key}: {round(result.value, 6)}")
                 self.store_subject_indicator_bsm_iv.update_subject(key, result)
 
     def get(self) -> List[ModelIndicatorBsmImpliedVolatility]:

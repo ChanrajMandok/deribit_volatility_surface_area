@@ -134,7 +134,7 @@ SHELL_PLUS_IMPORTS = [
     'from deribit_arb_app.backtesting.deribit_retrieve_historical_funding_rates_async import ServiceDeribitRetrieveHistoricalFundingRatesAsync',
     'from deribit_arb_app.backtesting.service_candles_binance_retriever_async import ServiceCandlesBinanceRetrieverAsync',
     'from deribit_arb_app.services.service_testing import ServiceTesting',
-    'from deribit_arb_app.services.service_build_implied_volatility_surface_area import ServiceBuildVolatiltySurfaceArea',
+    'from deribit_arb_app.services.builders.service_implied_volatility_surface_area_builder import ServiceImpliedVolatiltySurfaceAreaBuilder',
     'from deribit_arb_app.services.retrievers.service_retrieve_deribit_liquid_option_instruments import ServiceRetrieveDeribitLiquidOptionInstruments'
 
 ]

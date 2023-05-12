@@ -45,7 +45,7 @@ class TestDeribitOrderOpenCloseTestCase(asynctest.TestCase):
                 price=limit_price)
     
     async def a_coroutine_get_open_orders(self):
-        await asyncio.wait_for(self.deribit_orders.get_open_orders_by_currency('BTC'),timeout=100.0)
+        await asyncio.wait_for(self.deribit_orders.get_open_orders_by_currency('BTC'),timeout=25.0)
         
     async def a_coroutine_cancel(self):
 

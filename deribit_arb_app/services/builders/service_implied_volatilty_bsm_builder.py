@@ -1,3 +1,4 @@
+import math
 import datetime
 from typing import Optional
 
@@ -20,7 +21,8 @@ class ServiceImpliedVolatilityBsmBuilder:
         self.index                           = indicator_implied_volatility.index
 
     def build(self) -> Optional[ModelIndicatorBsmImpliedVolatility]:
-        index_price      = self.store_subject_index_prices.get_subject(self.index).get_instance()
+        index            = self.store_subject_index_prices.get_subject(self.index).get_instance()
+        index_price      = index.price
         book             = self.store_subject_order_books.get_subject(self.instrument).get_instance()
         name             = self.instrument.instrument_name
         instrument_ask   = book.best_ask_price
@@ -29,22 +31,20 @@ class ServiceImpliedVolatilityBsmBuilder:
         expiry_date      = datetime.datetime.fromtimestamp((expiry_timestamp/1000))
         current_date     = datetime.datetime.utcnow()
 
-        if index_price is None:
-            print("index is missing")
-
-        if any(not var for var in [index_price, book, name, instrument_ask, instrument_bid, expiry_date]):
+        ## preventing unecessary overhead of BSM calculat
+        if any(not var for var in [index, index_price, book, name, (instrument_ask or instrument_bid), expiry_date]):
             return None
 
         # BSM inputs
         r = 0.0
-        s = index_price.price
+        s = index_price
         k = float(name.split('-')[2])
         t = (expiry_date - current_date).days / 365.0
         option_type = self.instrument.option_type
         
         target = (instrument_ask + instrument_bid) / 2 if instrument_ask and instrument_bid \
                     else instrument_ask or instrument_bid
-        
+            
         implied_vol = self.service_black_scholes_pricer.find_vol(
             target_value=target, 
             S=s, 
@@ -53,8 +53,13 @@ class ServiceImpliedVolatilityBsmBuilder:
             r=r, 
             option_type=option_type)
         
+        if math.isnan(implied_vol):
+            # print(f"{self.instrument.instrument_name} iv is none ")
+            return None
+
         return ModelIndicatorBsmImpliedVolatility(
             instrument=self.instrument, 
             index=self.index,
             value=implied_vol
         )
+        

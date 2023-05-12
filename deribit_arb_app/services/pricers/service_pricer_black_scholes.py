@@ -27,7 +27,7 @@ class ServicePricerBlackScholes:
 
     def find_vol(self, target_value, S, K, T, r, option_type, *args):
         MAX_ITERATIONS = 200
-        PRECISION = 1.0e-5
+        PRECISION = 1.0e-10
         sigma = 1.0
         try:
             for i in range(0, MAX_ITERATIONS):

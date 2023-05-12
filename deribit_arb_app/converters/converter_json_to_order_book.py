@@ -38,3 +38,17 @@ class ConverterJsonToOrderBook:
 
         except Exception as e:
             raise
+
+    def convert_request_data(self) -> Optional[ModelOrderBook]:
+
+        json_data = self.json_obj
+
+        orderbook =  ModelOrderBook(
+                                    instrument_name   = json_data["instrument_name"],
+                                    best_bid_price    = json_data["best_bid_price"],
+                                    best_ask_price    = json_data["best_ask_price"],
+                                    best_bid_amount   = json_data["best_bid_amount"],
+                                    best_ask_amount   = json_data["best_ask_amount"]
+                                    )
+            
+        return orderbook
