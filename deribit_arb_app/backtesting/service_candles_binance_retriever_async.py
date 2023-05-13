@@ -44,7 +44,6 @@ class ServiceCandlesBinanceRetrieverAsync():
         result = [x for y in list_of_candle_list for x in y]
         return result
     
-
     def ts_increments(self, lookback_period=int) -> List:
         increment = 1000    
         lookback_period=lookback_period + (increment - lookback_period % increment) if lookback_period % increment > 0 else lookback_period

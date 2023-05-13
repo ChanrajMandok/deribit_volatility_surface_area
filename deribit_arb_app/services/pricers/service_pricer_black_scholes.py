@@ -1,6 +1,7 @@
 import warnings
 import numpy as np
 
+from typing import Optional
 from scipy.stats import norm
 from deribit_arb_app.enums.enum_option_type import EnumOptionType
 
@@ -25,7 +26,7 @@ class ServicePricerBlackScholes:
         d1 = round((np.log(S/K)+(r+0.5*sigma*sigma)*T)/(sigma*np.sqrt(T)),8)
         return round((S*norm.pdf(d1)*np.sqrt(T)),8)
 
-    def find_vol(self, target_value, S, K, T, r, option_type, *args):
+    def find_vol(self, target_value, S, K, T, r, option_type, *args) -> Optional[float]:
         MAX_ITERATIONS = 200
         PRECISION = 1.0e-10
         sigma = 1.0

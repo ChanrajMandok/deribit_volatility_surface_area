@@ -1,8 +1,9 @@
 import asynctest
 
+from deribit_arb_app.enums.enum_currency import EnumCurrency
 from deribit_arb_app.enums.enum_direction import EnumDirection
 from deribit_arb_app.store.store_instruments import StoreInstruments
-
+from deribit_arb_app.enums.enum_instrument_kind import EnumInstrumentKind
 from deribit_arb_app.services.service_api_deribit import ServiceApiDeribit
 
     ##############################################
@@ -16,15 +17,15 @@ class TestDeribitApiTestCase(asynctest.TestCase):
         self.api_deribit = ServiceApiDeribit()
         self.store_instruments = StoreInstruments()
         
-        self.currency = 'BTC'
-        self.instrument_type = 'future'
+        self.currency = EnumCurrency.BTC.value
+        self.instrument_kind = EnumInstrumentKind.FUTURE.value
         self.instrument = 'BTC-PERPETUAL'
 
     async def test_api_deribit_functions(self):
 
         await self.api_deribit.get_instruments(
             currency=self.currency, 
-            kind=self.instrument_type)
+            kind=self.instrument_kind)
         
         self.assertIsNotNone(self.store_instruments.get_deribit_instruments())
         

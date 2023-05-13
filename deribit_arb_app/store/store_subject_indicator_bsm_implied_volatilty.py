@@ -54,9 +54,3 @@ class StoreSubjectIndicatorBsmImpliedVolatilty():
             self.subject_indicatorBsmImpliedVolatilty[key] = \
                 SubjectIndicatorBsmImpliedVolatility()
         return self.subject_indicatorBsmImpliedVolatilty[key]
-    
-    async def stream_store(self):
-            """Asynchronously yield the current state of the store."""
-            while True:
-                await asyncio.sleep(0)  # yield control to the event loop
-                yield self.subject_indicatorBsmImpliedVolatilty

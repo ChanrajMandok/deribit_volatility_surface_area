@@ -13,7 +13,7 @@ class ConverterJsonToIndex:
 
         self.json_obj = json.loads(json_string)
 
-    def convert(self)   -> List[ModelIndex]:
+    def convert(self) -> List[ModelIndex]:
 
         if not "params" in self.json_obj:
             return None

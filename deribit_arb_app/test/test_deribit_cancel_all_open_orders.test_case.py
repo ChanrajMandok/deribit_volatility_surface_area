@@ -2,6 +2,9 @@ import asyncio
 import asynctest
 import sys, traceback
 
+from deribit_arb_app.enums.enum_currency import EnumCurrency
+from deribit_arb_app.enums.enum_instrument_kind import EnumInstrumentKind
+
 from deribit_arb_app.services.service_api_deribit import ServiceApiDeribit
 from deribit_arb_app.services.service_deribit_orders import ServiceDeribitOrders
 from deribit_arb_app.services.service_deribit_subscribe import ServiceDeribitSubscribe
@@ -20,7 +23,9 @@ class TestDeribitOrderCancelAllOpenOrderTestCase(asynctest.TestCase):
 
     async def setUp(self):
         super().setUp()
-        await TaskInstrumentsPull().run(currency='BTC', kind='future')
+        self.currency = EnumCurrency.BTC.value
+        self.instrument_kind = EnumInstrumentKind.FUTURE.value
+        await TaskInstrumentsPull().run(currency=self.currency, kind=self.instrument_kind)
         self.store_instrument = StoreInstruments()
         self.instrument = self.store_instrument.get_deribit_instrument('BTC-PERPETUAL')
         self.deribit_api = ServiceApiDeribit()
@@ -45,7 +50,7 @@ class TestDeribitOrderCancelAllOpenOrderTestCase(asynctest.TestCase):
                 price=limit_price)
     
     async def a_coroutine_get_open_orders(self):
-        await asyncio.wait_for(self.deribit_orders.get_open_orders_by_currency('BTC'),timeout=10.0)
+        await asyncio.wait_for(self.deribit_orders.get_open_orders_by_currency(self.currency),timeout=10.0)
 
     async def a_coroutine_cancel_all(self):
 

@@ -3,7 +3,9 @@ import asynctest
 import sys, traceback
 
 from deribit_arb_app.model.model_index import ModelIndex
+from deribit_arb_app.enums.enum_currency import EnumCurrency
 from deribit_arb_app.store.store_instruments import StoreInstruments
+from deribit_arb_app.enums.enum_instrument_kind import EnumInstrumentKind
 
 from deribit_arb_app.tasks.task_instruments_pull import TaskInstrumentsPull
 from deribit_arb_app.model.model_indicator_annualised_return_spread import ModelIndicatorAnnualisedReturnSpread
@@ -19,7 +21,9 @@ from deribit_arb_app.store.store_subject_indicator_annualized_return_spreads imp
 class TestDeribitIndicatorAnnualizedReturnSpreadBuilderTestCase(asynctest.TestCase):
 
     async def setUp(self):
-        await TaskInstrumentsPull().run(currency='BTC', kind='future')
+        self.currency = EnumCurrency.BTC.value
+        self.instrument_kind = EnumInstrumentKind.FUTURE.value
+        await TaskInstrumentsPull().run(currency=self.currency, kind=self.instrument_kind)
         self.store_instrument = StoreInstruments()
         self.instrument_1 = self.store_instrument.get_deribit_instrument('BTC-29SEP23')
         self.instrument_2 = self.store_instrument.get_deribit_instrument('BTC-29DEC23')

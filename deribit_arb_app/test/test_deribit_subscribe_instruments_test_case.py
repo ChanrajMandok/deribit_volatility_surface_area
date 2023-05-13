@@ -3,10 +3,11 @@ import asyncio
 import traceback
 import asynctest
 
-from deribit_arb_app.tasks.task_instruments_pull import TaskInstrumentsPull
-
+from deribit_arb_app.enums.enum_currency import EnumCurrency
 from deribit_arb_app.store.store_instruments import StoreInstruments
+from deribit_arb_app.enums.enum_instrument_kind import EnumInstrumentKind
 from deribit_arb_app.services.service_api_deribit import ServiceApiDeribit
+from deribit_arb_app.tasks.task_instruments_pull import TaskInstrumentsPull
 from deribit_arb_app.services.service_deribit_subscribe import ServiceDeribitSubscribe
 
     ##########################################################################
@@ -17,7 +18,9 @@ class TestDeribitSubscribeInstrumentsTestCase(asynctest.TestCase):
 
     async def setUp(self):
         super().setUp()
-        await TaskInstrumentsPull().run(currency='BTC', kind='future')
+        self.currency = EnumCurrency.BTC.value
+        self.instrument_kind = EnumInstrumentKind.FUTURE.value
+        await TaskInstrumentsPull().run(currency=self.currency, kind=self.instrument_kind)
         self.store_instrument = StoreInstruments()
         self.instrument = self.store_instrument.get_deribit_instrument('BTC-PERPETUAL')
         self.deribit_subscribe = ServiceDeribitSubscribe()

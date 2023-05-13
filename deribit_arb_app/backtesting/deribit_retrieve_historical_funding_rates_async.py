@@ -14,14 +14,14 @@ class ServiceDeribitRetrieveHistoricalFundingRatesAsync():
     def __init__(self):
         self.base_url = os.environ['BASE_HTTP_URL']
         
-    def main(self, lookback_period) -> List:
+    def main(self, lookback_period) -> List[dict]:
         timestamps = self.time_increments(lookback_period=lookback_period)
         result = asyncio.run(self.fetch_all(timestamps=timestamps))
         return result   
         
     async def fetch(self, timestamp_start:int, timestamp_end:int) -> List:
         async with aiohttp.ClientSession() as session:
-            async with session.get(url= f'{self.base_url}/get_funding_rate_history?end_timestamp={timestamp_end}&instrument_name=BTC-PERPETUAL&start_timestamp={timestamp_start}') as response:
+            async with session.get(url= f'{self.base_url}/public/get_funding_rate_history?end_timestamp={timestamp_end}&instrument_name=BTC-PERPETUAL&start_timestamp={timestamp_start}') as response:
                 data = await response.json()
                 return(data['result'])
             
