@@ -9,11 +9,11 @@ from deribit_arb_app.store.store_instruments import StoreInstruments
 from deribit_arb_app.tasks.task_instruments_pull import TaskInstrumentsPull
 from deribit_arb_app.services.handlers.service_deribit_static_orderbook_handler import ServiceDeribitStaticOrderbookHandler
 
-    #################################################
-    # Retriever Retrieves Liquid option instruments #
-    #################################################
+    ##########################################
+    # Retriever Retrieves Liquid Instruments #
+    ##########################################
 
-class ServiceRetrieveDeribitLiquidOptionInstruments():
+class ServiceDeribitLiquidInstrumentsRetriever():
 
     ## retrieved instruments list does not include the index instrumet (eg. btc_usd), this must be added at the execution service. 
 
@@ -23,16 +23,16 @@ class ServiceRetrieveDeribitLiquidOptionInstruments():
         self.minimum_liquidity_threshold = os.environ['MINIMUM_LIQUIDITY_THRESHOLD']
     
     async def async_setup(self, currency:str, kind:str):
-        await TaskInstrumentsPull().run(currency, kind)
+        await TaskInstrumentsPull().run(currency=currency, kind=kind)
         self.store_instrument = StoreInstruments()
         
-    async def main(self, populate:bool, currency:str, kind:str) -> List[str]:
+    async def main(self, populate:bool, currency:str, kind:str) -> List[ModelInstrument]:
         await self.async_setup(currency=currency, kind=kind)
         store_instruments = self.store_instrument.get_deribit_instruments()
-        instruments = [x for x in list(store_instruments.values()) if x.kind == kind]
+        instruments = list(filter(lambda x: x.kind == kind and x.base_currency == currency, store_instruments.values()))
         liquid_instrument_names = await self.fetch_all(instruments=instruments, populate=populate)
-        result = [x.instrument_name for x in instruments if x.instrument_name in liquid_instrument_names]
-        return result
+        result_instrument_names = [x for x in instruments if x.instrument_name in liquid_instrument_names]
+        return result_instrument_names
         
     async def fetch(self, instrument:ModelInstrument) -> List:
         async with aiohttp.ClientSession() as session:
@@ -40,7 +40,7 @@ class ServiceRetrieveDeribitLiquidOptionInstruments():
                 data = await response.json()
                 return(data)
             
-    async def fetch_all(self, instruments:List, populate:bool) -> List:
+    async def fetch_all(self, instruments:List[ModelInstrument], populate:bool) -> List[str]:
         batch_size = 20
         tasks = []
         sem = asyncio.Semaphore(20)  # Adjust this number to limit concurrent tasks
@@ -53,7 +53,7 @@ class ServiceRetrieveDeribitLiquidOptionInstruments():
             batch = instruments[i:i+batch_size]
             batch_tasks = [asyncio.create_task(bound_fetch(sem, instrument)) for instrument in batch]
             tasks.extend(batch_tasks)
-            await asyncio.sleep(1)
+            await asyncio.sleep(0.5)
 
         l = await asyncio.gather(*tasks)
         

@@ -10,7 +10,7 @@ from deribit_arb_app.services.handlers.service_deribit_orders_handler import Ser
 from deribit_arb_app.services.handlers.service_deribit_positions_handler import ServiceDeribitPositionsHandler
 from deribit_arb_app.services.handlers.service_deribit_instruments_handler import ServiceDeribitInstrumentsHandler
 from deribit_arb_app.services.handlers.service_deribit_subscription_handler import ServiceDeribitSubscriptionHandler
-from deribit_arb_app.services.handlers.service_deribit_subscription_handler import ServiceDeribitSubscriptionHandler
+from deribit_arb_app.services.handlers.service_deribit_unsubcription_handler import ServiceDeribitUnsubscriptionHandler
 from deribit_arb_app.services.handlers.service_deribit_authentication_handler import ServiceDeribitAuthenticationHandler
 from deribit_arb_app.services.handlers.service_deribit_account_summary_handler import ServiceDeribitAccountSummaryHandler
 
@@ -38,8 +38,12 @@ class ServiceDeribitMessaging:
 
             if message_type == 0:
                 data = ServiceDeribitPositionsHandler().set_positions(response_json)
-            if message_type == 1:
+            elif message_type == 1:
                 ServiceDeribitAuthenticationHandler().set_authorization(response_json)
+            elif message_type == 2:
+                ServiceDeribitSubscriptionHandler().handle(response_json)
+            elif message_type == 3:
+                ServiceDeribitUnsubscriptionHandler().handle(response_json)
             elif message_type == 4:
                 data = ServiceDeribitInstrumentsHandler().set_instruments(response_json)
             elif message_type == 5:
@@ -53,7 +57,7 @@ class ServiceDeribitMessaging:
             elif message_type == 10:
                 data = ServiceDeribitOrdersHandler().set_cancelled_order(response_json)
             elif method == "subscription":
-                ServiceDeribitSubscriptionHandler().handle(response_json)
+                ServiceDeribitSubscriptionHandler().handle(response_json)    
             else:
                 pass
 
@@ -78,7 +82,7 @@ class ServiceDeribitMessaging:
             msg_id = 100000 + msg_id
         elif method == "public/subscribe":
             msg_id = 200000 + msg_id
-        elif method == "public/subscribe":
+        elif method == "public/unsubscribe":
             msg_id = 300000 + msg_id
         elif method == "public/get_instruments":
             msg_id = 400000 + msg_id

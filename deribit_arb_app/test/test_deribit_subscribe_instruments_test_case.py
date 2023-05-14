@@ -40,7 +40,6 @@ class TestDeribitSubscribeInstrumentsTestCase(asynctest.TestCase):
     async def a_coroutine_unsubscribe(self):
         await self.deribit_subscribe.unsubscribe([self.instrument], snapshot=False)
 
-
     def test_subscribe(self):
         try:
             self.my_loop.run_until_complete(self.a_coroutine_subscribe())

@@ -25,3 +25,11 @@ class StoreSubjectOrderBooks:
             self.__subject_order_books[instrument.instrument_name] = SubjectOrderBook(ModelOrderBook(instrument_name=instrument.instrument_name))
         x = self.__subject_order_books[instrument.instrument_name]
         return x 
+    
+    def remove_subject(self, instrument: ModelInstrument):
+        if instrument.instrument_name in self.__subject_order_books:
+            del self.__subject_order_books[instrument.instrument_name]
+            
+    def remove_subject_by_key(self, instrument_name: str):
+        if instrument_name in self.__subject_order_books:
+            del self.__subject_order_books[instrument_name]       

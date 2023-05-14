@@ -95,13 +95,13 @@ class ServiceApiDeribit(ServiceApiInterface):
 
         await task
 
-    async def unsubscribe(self, subscribables: List[ModelSubscribable]):
+    async def unsubscribe(self, unsubscribables: List[ModelSubscribable]):
     
         # deribit quotes service
         deribit_subscribe = ServiceDeribitSubscribe()
 
         task = self.my_loop.create_task(deribit_subscribe.unsubscribe(
-            subscribables=subscribables
+            unsubscribables=unsubscribables
         ))
 
         await task

@@ -54,6 +54,7 @@ class ServiceDeribitSubscribe(ModelSubscribable):
 
         for subscribable in subscribables:
             params["channels"].append(subscribable.channel_name)
+            print(f"sub {subscribable.channel_name}")
             self.subscriptions.append(subscribable)
 
         try:
@@ -63,7 +64,7 @@ class ServiceDeribitSubscribe(ModelSubscribable):
             _, _, exc_traceback = sys.exc_info()
             traceback.print_tb(exc_traceback, limit=None, file=None)
 
-    async def unsubscribe(self, subscribables: List[ModelSubscribable]):
+    async def unsubscribe(self, unsubscribables: List[ModelSubscribable]):
 
         method = "public/unsubscribe"
 
@@ -71,8 +72,9 @@ class ServiceDeribitSubscribe(ModelSubscribable):
             "channels": []
         }
 
-        for subscribable in subscribables:
-            params["channels"].append(subscribable.channel_name)
-            self.subscriptions.remove(subscribable)
-
+        for unsubscribable in unsubscribables:
+            self.subscriptions.remove(unsubscribable)
+            params["channels"].append(unsubscribable.channel_name)
+            print(f"unsub {unsubscribable.channel_name}")
+            
         await self.send_instructions(method, params)
