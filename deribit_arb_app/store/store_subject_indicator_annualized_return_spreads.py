@@ -25,6 +25,7 @@ class StoreSubjectIndicatorAnnualizedReturnSpreads(StoreSubjectableInterface):
             self.__subject_indicator_annualised_return_spreads[indicator_annualised_return_spread.key] = SubjectIndicatorAnnualisedReturnSpread(indicator_annualised_return_spread)
         try:
             self.__subject_indicator_annualised_return_spreads[indicator_annualised_return_spread.key].set_instance(indicator_annualised_return_spread)
+            print(f"{indicator_annualised_return_spread.instrument_1.instrument_name}-{indicator_annualised_return_spread.instrument_2.instrument_name} Spread: {indicator_annualised_return_spread.value}")
         except Exception as e:
             print(e)
             _, _, exc_traceback = sys.exc_info()

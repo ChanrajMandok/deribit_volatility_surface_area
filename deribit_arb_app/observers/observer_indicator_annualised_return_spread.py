@@ -14,39 +14,42 @@ from deribit_arb_app.services.builders.service_indicator_annualised_return_sprea
 @singleton
 class ObserverIndicatorAnnualisedReturnSpread(ObserverInterface):
 
-    # holds the subject-observer logic
-    # attach and detach the observer from the subject's observers list
-
-    def __init__(self, instance: ModelIndicatorAnnualisedReturnSpread) -> None:
+    def __init__(self) -> None:
         super().__init__()
-        self.__indicator_annualised_return_spread = None
-        self.instrument_1 = instance.instrument_1
-        self.instrument_2 = instance.instrument_2
-        self.index = instance.index
-        
+        self.indicators = {}
         self.store_subject_order_books = StoreSubjectOrderBooks()
         self.store_subject_index_prices = StoreSubjectIndexPrices()
+        self.service_builder = ServiceIndicatorAnnualisedReturnSpreadBuilder()
         self.store_subject_indicator_annualized_return_spreads = StoreSubjectIndicatorAnnualizedReturnSpreads()
 
-        self.service_indicator_annualised_return_spread_builder = ServiceIndicatorAnnualisedReturnSpreadBuilder(instance)
-        
-        # attach this observer to the relevant subjects: the order book and the index price
+    def attach_indicator(self, instance: ModelIndicatorAnnualisedReturnSpread):
+        key = instance.key
+        self.indicators[key] = instance
 
-        for instrument in [self.instrument_1, self.instrument_2]:
+        # Attach this observer to the relevant subjects: the order book and the index price
+        for instrument in [instance.instrument_1, instance.instrument_2]:
             self.store_subject_order_books.get_subject(instrument).attach(self)
-        self.store_subject_index_prices.get_subject(self.index).attach(self)
-        
+        self.store_subject_index_prices.get_subject(instance.index).attach(self)
+
     def update(self):
-        self.__indicator_annualised_return_spread = self.service_indicator_annualised_return_spread_builder.build()
-        if self.__indicator_annualised_return_spread is None:
-            return
-        # print(f"{self.__indicator_annualised_return_spread.key}: {round(self.__indicator_annualised_return_spread.value,6)}%")
-        self.store_subject_indicator_annualized_return_spreads.update_subject(self.__indicator_annualised_return_spread)
+        for key, instance in self.indicators.items():
+            try:
+                indicator = self.service_builder.build(instance)
+                if indicator is not None:
+                    self.store_subject_indicator_annualized_return_spreads.update_subject(indicator)
+            except Exception as e:
+                print(f"Error updating indicator: {instance.key}")
+                print(f"Error message: {str(e)}")
 
-    def get(self) -> ModelIndicatorAnnualisedReturnSpread:
-        return self.__indicator_annualised_return_spread
+    def get(self, key) -> ModelIndicatorAnnualisedReturnSpread:
+        return self.indicators.get(key)
 
-    def __exit__(self):
-        for instrument in [self.instrument_1, self.instrument_2]:
-            self.store_subject_order_books.get_subject(instrument).detach(self)   
-        self.store_subject_index_prices.get_subject(self.index).detach(self)
+    def detach_indicator(self, key):
+        instance = self.indicators[key]
+        for instrument in [instance.instrument_1, instance.instrument_2]:
+            self.store_subject_order_books.get_subject(instrument).detach(self)
+        self.store_subject_index_prices.get_subject(instance.index).detach(self)
+
+    def detach_all(self):
+        for key in list(self.indicators.keys()):
+            self.detach_indicator(key)

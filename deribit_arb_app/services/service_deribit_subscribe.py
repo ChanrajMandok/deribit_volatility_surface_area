@@ -73,7 +73,8 @@ class ServiceDeribitSubscribe(ModelSubscribable):
         }
 
         for unsubscribable in unsubscribables:
-            self.subscriptions.remove(unsubscribable)
+            if unsubscribable in self.subscriptions:
+                self.subscriptions.remove(unsubscribable)
             params["channels"].append(unsubscribable.channel_name)
             print(f"unsub {unsubscribable.channel_name}")
             

@@ -32,11 +32,17 @@ class TestDeribitIndicatorAnnualizedReturnSpreadBuilderTestCase(asynctest.TestCa
             index_name="btc_usd")
         
         self.deribit_subscribe = ServiceDeribitSubscribe()
-        self.observer_indicator_annualised_return_spread = ObserverIndicatorAnnualisedReturnSpread(
-            ModelIndicatorAnnualisedReturnSpread(self,
-                instrument_1 = self.instrument_1,
-                instrument_2 = self.instrument_2,
-                index = self.index))
+        
+        # create an instance of ObserverIndicatorAnnualisedReturnSpread
+        self.observer_indicator_annualised_return_spread = ObserverIndicatorAnnualisedReturnSpread()
+        
+        # create an instance of ModelIndicatorAnnualisedReturnSpread
+        indicator = ModelIndicatorAnnualisedReturnSpread(self,
+                                                         instrument_1 = self.instrument_1,
+                                                         instrument_2 = self.instrument_2,
+                                                         index = self.index)
+        # add the indicator to the observer
+        self.observer_indicator_annualised_return_spread.attach_indicator(indicator)
         
         self.store_subject_indicator_annualized_return_spreads = StoreSubjectIndicatorAnnualizedReturnSpreads()
         self.my_loop = asyncio.new_event_loop()
@@ -48,7 +54,7 @@ class TestDeribitIndicatorAnnualizedReturnSpreadBuilderTestCase(asynctest.TestCa
                             self.instrument_1,
                             self.instrument_2,
                             self.index],
-                            snapshot=False), timeout=4) 
+                            snapshot=False), timeout=10) 
         except asyncio.TimeoutError as e:
             pass
         except Exception as e:

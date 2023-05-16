@@ -16,10 +16,10 @@ class ServiceDeribitInstrumentsSubscriptionManager():
         self.queue = asyncio.Queue()
         self.previous_instruments = None
         self.deribit_subscribe = ServiceDeribitSubscribe()
-        # self.instruments_refresh_increment = os.environ['INSTRUMENTS_REFRESH']
+        self.instruments_refresh_increment = os.environ['INSTRUMENTS_REFRESH']
         self.liquid_instruments_retriever = ServiceDeribitLiquidInstrumentsRetriever()
     
-    async def manage_instrument_subscribables(self, currency: str, kind: str) -> Tuple[List[str], List[str]]:
+    async def manage_instrument_subscribables(self, currency: str, kind: str) -> Tuple[List[ModelInstrument], List[ModelInstrument]]:
             while True:
                 instruments = await self.liquid_instruments_retriever.main(populate=False, currency=currency, kind=kind)
                 instrument_names = [instrument.instrument_name for instrument in instruments]
@@ -36,7 +36,7 @@ class ServiceDeribitInstrumentsSubscriptionManager():
                 
                 print(len(instruments_subscribables),len(instruments_unsubscribables))
                 await self.queue.put((instruments_subscribables, instruments_unsubscribables))
-                await asyncio.sleep(3)
+                await asyncio.sleep(360)
 
     def _get_instrument_names(self, instruments):
         return [instrument.instrument_name for instrument in instruments]

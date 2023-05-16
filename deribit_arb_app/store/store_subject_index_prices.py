@@ -20,7 +20,7 @@ class StoreSubjectIndexPrices(StoreSubjectableInterface):
         if not index_price.index_name in self.__subject_index_prices:
             self.__subject_index_prices[index_price.index_name] = SubjectIndexPrice(index_price)
         self.__subject_index_prices[index_price.index_name].set_instance(index_price)
-        # print(f"{index_price.index_name} updated: {index_price.price}")
+        print(f"{index_price.index_name} updated: {index_price.price}")
         
     def get_subject(self, index: ModelIndex) -> SubjectIndexPrice:
         if not index.index_name in self.__subject_index_prices:

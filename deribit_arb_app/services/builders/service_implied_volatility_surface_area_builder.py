@@ -12,7 +12,7 @@ from deribit_arb_app.model.model_indicator_bsm_implied_volatilty import ModelInd
 from deribit_arb_app.observers.observer_indicator_bsm_implied_volatility import ObserverIndicatorBsmImpliedVolatility
 from deribit_arb_app.store.store_subject_indicator_bsm_implied_volatilty import StoreSubjectIndicatorBsmImpliedVolatilty
 from deribit_arb_app.services.retrievers.service_deribit_liquid_instruments_retriever import ServiceDeribitLiquidInstrumentsRetriever
-from deribit_arb_app.services.service_deribit_instruments_subscription_manager import ServiceDeribitInstrumentsSubscriptionManager
+from deribit_arb_app.services.managers.service_deribit_instruments_subscription_manager import ServiceDeribitInstrumentsSubscriptionManager
 
 
     ###########################################################################
@@ -57,8 +57,6 @@ class ServiceImpliedVolatiltySurfaceAreaBuilder():
              
     async def a_corountine_instrument_subcription_managment(self):
         await self.service_deribit_liquid_instruments_manager().main(currency=self.currency, kind=self.kind)
-        
-        
              
     async def main(self):
         await (self.setup())

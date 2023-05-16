@@ -1,7 +1,7 @@
 import os
 import asyncio
 import aiohttp
-from typing import List
+from typing import List, Optional
 from decimal import Decimal
 
 from deribit_arb_app.model.model_instrument import ModelInstrument
@@ -34,11 +34,18 @@ class ServiceDeribitLiquidInstrumentsRetriever():
         result_instrument_names = [x for x in instruments if x.instrument_name in liquid_instrument_names]
         return result_instrument_names
         
-    async def fetch(self, instrument:ModelInstrument) -> List:
+    async def fetch(self, instrument:ModelInstrument) -> Optional[List]:
         async with aiohttp.ClientSession() as session:
             async with session.get(url= f'{self.base_url}/public/get_order_book?depth=10&instrument_name={instrument.instrument_name}') as response:
-                data = await response.json()
-                return(data)
+                if response.status not in (200, 429):
+                    print(f"HTTP response status: {response.status}")
+                    return None
+                try:
+                    data = await response.json()
+                    return data
+                except aiohttp.client_exceptions.ContentTypeError as e:
+                    print(f"ContentTypeError occurred for instrument {instrument.instrument_name} with error: {e}")
+                    return None
             
     async def fetch_all(self, instruments:List[ModelInstrument], populate:bool) -> List[str]:
         batch_size = 20
