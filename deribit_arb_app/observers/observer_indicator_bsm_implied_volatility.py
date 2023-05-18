@@ -22,8 +22,9 @@ class ObserverIndicatorBsmImpliedVolatility(ObserverInterface):
         self.store_subject_order_books = StoreSubjectOrderBooks()
         self.store_subject_index_prices = StoreSubjectIndexPrices()
         self.store_subject_indicator_bsm_iv = StoreSubjectIndicatorBsmImpliedVolatilty()
+        self.service_implied_volatilty_bsm_builder = ServiceImpliedVolatilityBsmBuilder()
 
-    def add_indicator(self, instance: ModelIndicatorBsmImpliedVolatility):
+    def attach_indicator(self, instance: ModelIndicatorBsmImpliedVolatility):
         key = instance.key
         instrument = instance.instrument
         index = instance.index
@@ -47,18 +48,17 @@ class ObserverIndicatorBsmImpliedVolatility(ObserverInterface):
 
     def update(self) -> None:
         with ThreadPoolExecutor(max_workers=4) as executor:
-            tasks = [(key, executor.submit(ServiceImpliedVolatilityBsmBuilder(indicator).build))
-                     for key, indicator in self.indicators.items()]
+            tasks = [(key, executor.submit(self.service_implied_volatilty_bsm_builder.build, indicator))
+                    for key, indicator in self.indicators.items()]
 
-            for key, task in tasks:
+            for key, future in tasks:
                 try:
-                    result = task.result()
-                    if result:
+                    result = future.result()
+                    if result is not None:
                         self.store_subject_indicator_bsm_iv.update_subject(key, result)
                 except Exception as e:
                     print(f"Error updating indicator: {key}")
                     print(f"Error message: {str(e)}")
-                    # Handle the exception based on your requirements
 
     def get(self) -> List[ModelIndicatorBsmImpliedVolatility]:
         return list(self.indicators.values())

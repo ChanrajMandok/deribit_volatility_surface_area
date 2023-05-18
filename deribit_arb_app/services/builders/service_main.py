@@ -13,7 +13,7 @@ class ServiceMain():
         self.queue = asyncio.Queue()
         self.index = ModelIndex(index_name="btc_usd")
         self.service_deribit_observer_manager = ServiceDeribitObserversManager()
-        self.service_deribit_instruments_subscription_manager = ServiceDeribitInstrumentsSubscriptionManager()
+        self.service_deribit_instruments_subscription_manager = ServiceDeribitInstrumentsSubscriptionManager(queue=self.queue)
         
     async def main(self, currency: str, kind: str):
         asyncio.create_task(self.service_deribit_instruments_subscription_manager.manage_instrument_subscribables(currency, kind))  
