@@ -9,7 +9,7 @@ from deribit_arb_app.converters.converter_json_to_authorization import Converter
     ##########################################
 
 @singleton
-class ServiceDeribitAuthenticationHandler:
+class ServiceDeribitAuthenticationHandler():
 
     def __init__(self):
 

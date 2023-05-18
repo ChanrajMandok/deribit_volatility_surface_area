@@ -19,3 +19,7 @@ class ModelIndicatorBsmImpliedVolatility(ModelSubjectable, models.Model):
 
     class Meta:
         managed = False 
+        
+    def generate_key(self, instrument):
+        key = f"BSM Implied Volatility-{instrument.instrument_name}"
+        return key

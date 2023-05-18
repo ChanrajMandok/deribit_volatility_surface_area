@@ -7,7 +7,7 @@ from singleton_decorator import singleton
     #############################################
 
 @singleton
-class ServiceDeribitWebsocketConnector:
+class ServiceDeribitWebsocketConnector():
 
     def __init__(self):
 

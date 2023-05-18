@@ -8,7 +8,7 @@ from deribit_arb_app.model.model_index import ModelIndex
     ##########################################
 
 @singleton
-class StoreIndexes:
+class StoreIndexes():
 
     def __init__(self):
         self.__deribit_indexes = None

@@ -6,7 +6,7 @@ from deribit_arb_app.model.model_authorization import ModelAuthorization
     # Converter Converts Json object to ModelAuthorization #
     ########################################################
 
-class ConverterJsonToAuthorization:
+class ConverterJsonToAuthorization():
 
     def __init__(self, json_string):
 

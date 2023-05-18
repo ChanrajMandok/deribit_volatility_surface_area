@@ -9,7 +9,7 @@ from deribit_arb_app.model.model_instrument import ModelInstrument
     # Converter Converts Json object to list of ModelInstrument #
     #############################################################
 
-class ConverterJsonToInstruments:
+class ConverterJsonToInstruments():
 
     def __init__(self, json_string):
 

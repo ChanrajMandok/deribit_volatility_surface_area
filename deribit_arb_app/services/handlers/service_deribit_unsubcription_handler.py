@@ -7,7 +7,7 @@ from deribit_arb_app.store.store_subject_index_prices import StoreSubjectIndexPr
     #########################################################
 
 @singleton
-class ServiceDeribitUnsubscriptionHandler:
+class ServiceDeribitUnsubscriptionHandler():
 
     def __init__(self):
         self.store_subject_order_books = StoreSubjectOrderBooks()

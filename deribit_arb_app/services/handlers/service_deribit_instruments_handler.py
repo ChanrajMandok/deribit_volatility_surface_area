@@ -11,7 +11,7 @@ from deribit_arb_app.converters.converter_json_to_instruments import ConverterJs
     #######################################
 
 @singleton
-class ServiceDeribitInstrumentsHandler:
+class ServiceDeribitInstrumentsHandler():
 
     def __init__(self):
 

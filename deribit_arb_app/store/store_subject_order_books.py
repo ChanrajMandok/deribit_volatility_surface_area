@@ -9,7 +9,7 @@ from deribit_arb_app.subjects.subject_order_book import SubjectOrderBook
     #########################################################
 
 @singleton
-class StoreSubjectOrderBooks:
+class StoreSubjectOrderBooks():
 
     def __init__(self):
         self.__subject_order_books = {}

@@ -14,7 +14,7 @@ from deribit_arb_app.services.service_deribit_websocket_connector import Service
     #####################################################
 
 @singleton
-class ServiceDeribitPositions:
+class ServiceDeribitPositions():
 
     def __init__(self, currency: str):
 

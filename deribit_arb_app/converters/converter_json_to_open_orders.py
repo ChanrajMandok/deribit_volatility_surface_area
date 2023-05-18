@@ -10,7 +10,7 @@ from deribit_arb_app.converters.converter_json_object_to_order import ConverterJ
     # Converter Converts Json object to Model Order #
     #################################################
 
-class ConverterJsonToOpenOrders:
+class ConverterJsonToOpenOrders():
 
     def __init__(self, json_string):
 

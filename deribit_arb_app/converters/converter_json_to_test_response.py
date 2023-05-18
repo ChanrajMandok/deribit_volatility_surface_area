@@ -7,7 +7,7 @@ from deribit_arb_app.enums.enum_field_name import EnumFieldName
     # Converter Converts Json object to String #
     ############################################
 
-class ConverterJsonToTestResponse:
+class ConverterJsonToTestResponse():
 
     def __init__(self, json_string):
 

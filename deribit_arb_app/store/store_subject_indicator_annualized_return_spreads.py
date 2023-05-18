@@ -35,3 +35,10 @@ class StoreSubjectIndicatorAnnualizedReturnSpreads(StoreSubjectableInterface):
         if not indicator_annualised_return_spread.key in self.__subject_indicator_annualised_return_spreads:
             self.__subject_indicator_annualised_return_spreads[indicator_annualised_return_spread.key] = SubjectIndicatorAnnualisedReturnSpread(indicator_annualised_return_spread)
         return self.__subject_indicator_annualised_return_spreads[indicator_annualised_return_spread.key]
+    
+    def remove_subject(self, indicator_annualised_return_spread: ModelIndicatorAnnualisedReturnSpread):
+        if indicator_annualised_return_spread is None:
+            return
+
+        if indicator_annualised_return_spread.key in self.__subject_indicator_annualised_return_spreads:
+            del self.__subject_indicator_annualised_return_spreads[indicator_annualised_return_spread.key]

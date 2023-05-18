@@ -9,7 +9,7 @@ from deribit_arb_app.converters.converter_json_to_order_book import ConverterJso
     ####################################################################
 
 @singleton
-class ServiceDeribitStaticOrderbookHandler:
+class ServiceDeribitStaticOrderbookHandler():
 
     def __init__(self):
 

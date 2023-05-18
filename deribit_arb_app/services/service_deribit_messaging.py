@@ -18,7 +18,7 @@ from deribit_arb_app.services.handlers.service_deribit_account_summary_handler i
     # Service provides Interface for Deribit messages #
     ###################################################
 
-class ServiceDeribitMessaging:
+class ServiceDeribitMessaging():
 
     def message_handle(self, response) -> Tuple[Union[int, str, None], object]:
 

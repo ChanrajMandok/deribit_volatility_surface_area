@@ -9,7 +9,7 @@ from deribit_arb_app.converters.converter_json_to_test_response import Converter
     ##################################################
 
 @singleton
-class ServiceDeribitTestHandler:
+class ServiceDeribitTestHandler():
 
     def __init__(self):
 

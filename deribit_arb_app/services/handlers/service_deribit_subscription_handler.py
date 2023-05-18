@@ -11,7 +11,7 @@ from deribit_arb_app.converters.converter_json_to_index_price import ConverterJs
     #######################################################
 
 @singleton
-class ServiceDeribitSubscriptionHandler:
+class ServiceDeribitSubscriptionHandler():
 
     def __init__(self):
         self.store_subject_order_books = StoreSubjectOrderBooks()

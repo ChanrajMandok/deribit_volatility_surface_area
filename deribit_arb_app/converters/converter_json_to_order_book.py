@@ -7,7 +7,7 @@ from deribit_arb_app.model.model_order_book import ModelOrderBook
     # Converter Converts Json object to ModelOrderBook #
     ####################################################
 
-class ConverterJsonToOrderBook:
+class ConverterJsonToOrderBook():
 
     def __init__(self, json_string):
         self.json_obj = json.loads(json_string)

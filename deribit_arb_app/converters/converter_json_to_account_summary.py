@@ -6,7 +6,7 @@ from deribit_arb_app.model.model_account_summary import ModelAccountSummary
     # Converter Converts Json object to ModelAccountSummary #
     #########################################################
 
-class ConverterJsonToAccountSummary:
+class ConverterJsonToAccountSummary():
 
     def __init__(self, json_string):
 

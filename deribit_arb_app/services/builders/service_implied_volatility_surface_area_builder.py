@@ -14,7 +14,6 @@ from deribit_arb_app.store.store_subject_indicator_bsm_implied_volatilty import 
 from deribit_arb_app.services.retrievers.service_deribit_liquid_instruments_retriever import ServiceDeribitLiquidInstrumentsRetriever
 from deribit_arb_app.services.managers.service_deribit_instruments_subscription_manager import ServiceDeribitInstrumentsSubscriptionManager
 
-
     ###########################################################################
     # Plot Subscribe, Observe and plot Asset Specific Volatility Surface Area #
     ###########################################################################
@@ -29,22 +28,6 @@ class ServiceImpliedVolatiltySurfaceAreaBuilder():
         self.liquid_instruments_list_retriever = ServiceDeribitLiquidInstrumentsRetriever()
         self.service_deribit_liquid_instruments_manager = ServiceDeribitInstrumentsSubscriptionManager()
         
-    async def setup(self):
-        self.instruments = await self.liquid_instruments_list_retriever.main(populate=False, currency=self.currency, kind=self.kind)
-        
-        observers = []
-        for instrument in self.instruments:
-            if instrument == self.index:
-                continue
-            observers.append(ModelIndicatorBsmImpliedVolatility(self,
-                                                                instrument=instrument,
-                                                                index=self.index
-                                                                ))
-        ObserverIndicatorBsmImpliedVolatility(observers)    
-        
-        self.store_subject_indicator_bsm_implied_volatilty = StoreSubjectIndicatorBsmImpliedVolatilty()
-        self.my_loop = asyncio.new_event_loop()
-
     async def a_coroutine_subscribe(self, instruments:List[ModelInstrument]):
         try:
             await self.deribit_subscribe.subscribe(subscribables=instruments,

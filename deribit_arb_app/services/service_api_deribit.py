@@ -2,10 +2,9 @@ from typing import Dict, List, Optional
 
 from deribit_arb_app.model.model_order import ModelOrder
 from deribit_arb_app.model.model_position import ModelPosition
+from deribit_arb_app.enums.enum_direction import EnumDirection
 from deribit_arb_app.model.model_instrument import ModelInstrument
 from deribit_arb_app.model.model_subscribable import ModelSubscribable
-
-from deribit_arb_app.enums.enum_direction import EnumDirection
 
 from deribit_arb_app.services.service_api_interface import ServiceApiInterface
 from deribit_arb_app.services.service_deribit_orders import ServiceDeribitOrders

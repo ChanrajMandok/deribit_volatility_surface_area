@@ -4,7 +4,6 @@ from typing import Dict
 from singleton_decorator import singleton
 from deribit_arb_app.model.model_order import ModelOrder
 from deribit_arb_app.store.store_deribit_open_orders import StoreDeribitOpenOrders
-
 from deribit_arb_app.converters.converter_json_to_order import ConverterJsonToOrder
 from deribit_arb_app.converters.converter_json_to_open_orders import ConverterJsonToOpenOrders
 from deribit_arb_app.converters.converter_json_to_cancelled_order import ConverterJsonToCancelledOrder
@@ -14,7 +13,7 @@ from deribit_arb_app.converters.converter_json_to_cancelled_order import Convert
     ##################################
 
 @singleton
-class ServiceDeribitOrdersHandler:
+class ServiceDeribitOrdersHandler():
 
     def __init__(self):
         self.store_deribit_open_orders = StoreDeribitOpenOrders()

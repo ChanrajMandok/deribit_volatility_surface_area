@@ -3,7 +3,6 @@ from typing import Dict
 
 from deribit_arb_app.model.model_message import ModelMessage
 from deribit_arb_app.model.model_instrument import ModelInstrument
-
 from deribit_arb_app.services.service_deribit_messaging import ServiceDeribitMessaging
 from deribit_arb_app.services.service_deribit_websocket_connector import ServiceDeribitWebsocketConnector
 
@@ -11,7 +10,7 @@ from deribit_arb_app.services.service_deribit_websocket_connector import Service
     # Service retrieves Deribit instruments via Websocket #
     #######################################################
 
-class ServiceDeribitInstruments:
+class ServiceDeribitInstruments():
 
     def __init__(self, currency: str, kind: str):
 

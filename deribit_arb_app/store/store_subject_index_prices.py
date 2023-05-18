@@ -3,7 +3,6 @@ from singleton_decorator import singleton
 from deribit_arb_app.model.model_index import ModelIndex
 from deribit_arb_app.model.model_index_price import ModelIndexPrice
 from deribit_arb_app.subjects.subject_index_price import SubjectIndexPrice
-
 from deribit_arb_app.store.store_subjectable_interface import StoreSubjectableInterface
 
     #################################################################

@@ -3,7 +3,6 @@ from typing import Dict
 
 from singleton_decorator import singleton
 from deribit_arb_app.model.model_position import ModelPosition
-
 from deribit_arb_app.store.store_deribit_positions import StoreDeribitPositions
 from deribit_arb_app.converters.converter_json_to_positions import ConverterJsonToPositions
 
@@ -12,7 +11,7 @@ from deribit_arb_app.converters.converter_json_to_positions import ConverterJson
     ######################################
 
 @singleton
-class ServiceDeribitPositionsHandler:
+class ServiceDeribitPositionsHandler():
 
     def __init__(self):
 

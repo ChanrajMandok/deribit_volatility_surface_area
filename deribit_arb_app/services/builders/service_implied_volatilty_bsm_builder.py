@@ -11,7 +11,7 @@ from deribit_arb_app.model.model_indicator_bsm_implied_volatilty import ModelInd
     # Service Builds implied Volatilty mesure which can be observed #
     #################################################################
 
-class ServiceImpliedVolatilityBsmBuilder:
+class ServiceImpliedVolatilityBsmBuilder():
     
     def __init__(self):
         self.store_subject_order_books       = StoreSubjectOrderBooks()

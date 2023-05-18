@@ -9,7 +9,7 @@ from deribit_arb_app.model.model_instrument import ModelInstrument
     ##############################################
 
 @singleton
-class StoreDeribitOpenOrders:
+class StoreDeribitOpenOrders():
 
     # {'BTC': {order_id1: order1, order_id2: order2, ...}, 'ETH': { ... }}
 

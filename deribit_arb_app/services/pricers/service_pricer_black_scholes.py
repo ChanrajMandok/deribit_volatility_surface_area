@@ -9,7 +9,7 @@ from deribit_arb_app.enums.enum_option_type import EnumOptionType
     # Service Implements Black Scholes Merton Pricer #
     ##################################################
 
-class ServicePricerBlackScholes:
+class ServicePricerBlackScholes():
     N = norm.cdf
 
     def bs_put(self, S, K, T, r, vol):

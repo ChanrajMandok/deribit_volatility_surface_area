@@ -6,7 +6,6 @@ from typing import List, Dict
 
 from deribit_arb_app.model.model_message import ModelMessage
 from deribit_arb_app.model.model_subscribable import ModelSubscribable
-
 from deribit_arb_app.services.service_deribit_messaging import ServiceDeribitMessaging
 from deribit_arb_app.services.service_deribit_websocket_connector import ServiceDeribitWebsocketConnector
 
@@ -54,7 +53,7 @@ class ServiceDeribitSubscribe(ModelSubscribable):
 
         for subscribable in subscribables:
             params["channels"].append(subscribable.channel_name)
-            print(f"sub {subscribable.channel_name}")
+            print(f"SUBSCRIBED {subscribable.channel_name}")
             self.subscriptions.append(subscribable)
 
         try:
@@ -76,6 +75,6 @@ class ServiceDeribitSubscribe(ModelSubscribable):
             if unsubscribable in self.subscriptions:
                 self.subscriptions.remove(unsubscribable)
             params["channels"].append(unsubscribable.channel_name)
-            print(f"unsub {unsubscribable.channel_name}")
+            print(f"UNSUBSCRIBED {unsubscribable.channel_name}")
             
         await self.send_instructions(method, params)

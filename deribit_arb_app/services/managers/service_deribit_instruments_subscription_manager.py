@@ -7,13 +7,14 @@ from deribit_arb_app.model.model_instrument import ModelInstrument
 from deribit_arb_app.services.service_deribit_subscribe import ServiceDeribitSubscribe
 from deribit_arb_app.services.retrievers.service_deribit_liquid_instruments_retriever import ServiceDeribitLiquidInstrumentsRetriever
     
-    #####################################################
-    # Service Handles & Manages Liquid instruments List # 
-    #####################################################
+    ##########################################################################
+    # Service Handles & Manages instrument subscriptions and Unsubscriptions # 
+    ##########################################################################
 
 class ServiceDeribitInstrumentsSubscriptionManager():
-    def __init__(self):
-        self.queue = asyncio.Queue()
+    
+    def __init__(self, queue:asyncio.Queue):
+        self.queue = queue
         self.previous_instruments = None
         self.deribit_subscribe = ServiceDeribitSubscribe()
         self.instruments_refresh_increment = os.environ['INSTRUMENTS_REFRESH']
@@ -49,20 +50,5 @@ class ServiceDeribitInstrumentsSubscriptionManager():
         except Exception:
             traceback.print_exc()
 
-    async def a_coroutine_unsubscribe(self, unsubscribables: List[ModelInstrument]):
+    async def a_coroutine_unsubscribe(self, unsubscribables: List[ModelInstrument]): 
         await self.deribit_subscribe.unsubscribe(unsubscribables=unsubscribables)
-
-    async def main(self, currency: str, kind: str):
-        asyncio.create_task(self.manage_instrument_subscribables(currency, kind))  # Start the producer.
-        while True:
-            try:
-                while self.queue.qsize() > 1:
-                    await self.queue.get()
-                    self.queue.task_done()
-                instruments_subscribe, instruments_unsubscribe = await self.queue.get()  # This will wait until there are new items in the queue.
-                if len(instruments_subscribe) > 0:
-                    sub = asyncio.create_task(self.a_coroutine_subscribe(subscribables=instruments_subscribe))
-                if len(instruments_unsubscribe) > 0:
-                    unsub = asyncio.create_task(self.a_coroutine_unsubscribe(unsubscribables=instruments_unsubscribe))
-            except Exception as e:
-                print("An error occurred: %s", e, exc_info=True)

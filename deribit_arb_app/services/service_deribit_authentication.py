@@ -10,7 +10,7 @@ from deribit_arb_app.services.service_deribit_messaging import ServiceDeribitMes
     ##########################################################
 
 @singleton
-class ServiceDeribitAuthentication:
+class ServiceDeribitAuthentication():
 
     def __init__(self):
 

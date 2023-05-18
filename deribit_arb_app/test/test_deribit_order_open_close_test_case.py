@@ -5,12 +5,11 @@ import sys, traceback
 from deribit_arb_app.enums.enum_currency import EnumCurrency
 from deribit_arb_app.store.store_instruments import StoreInstruments
 from deribit_arb_app.enums.enum_instrument_kind import EnumInstrumentKind
-from deribit_arb_app.store.store_subject_order_books import StoreSubjectOrderBooks
-from deribit_arb_app.store.store_deribit_open_orders import StoreDeribitOpenOrders
-
 from deribit_arb_app.services.service_api_deribit import ServiceApiDeribit
 from deribit_arb_app.tasks.task_instruments_pull import TaskInstrumentsPull
 from deribit_arb_app.services.service_deribit_orders import ServiceDeribitOrders
+from deribit_arb_app.store.store_subject_order_books import StoreSubjectOrderBooks
+from deribit_arb_app.store.store_deribit_open_orders import StoreDeribitOpenOrders
 from deribit_arb_app.services.service_deribit_messaging import ServiceDeribitMessaging
 from deribit_arb_app.services.service_deribit_subscribe import ServiceDeribitSubscribe
 

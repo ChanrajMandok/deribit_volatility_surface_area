@@ -11,7 +11,7 @@ from deribit_arb_app.converters.converter_json_to_account_summary import Convert
     ##############################################
 
 @singleton
-class ServiceDeribitAccountSummaryHandler:
+class ServiceDeribitAccountSummaryHandler():
 
     def __init__(self):
 

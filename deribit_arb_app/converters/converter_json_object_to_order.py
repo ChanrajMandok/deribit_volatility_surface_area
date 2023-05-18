@@ -9,7 +9,7 @@ from deribit_arb_app.enums.enum_field_name import EnumFieldName
     #################################################
 
 @singleton
-class ConverterJsonObjectToOrder:
+class ConverterJsonObjectToOrder():
 
     def convert(self, json_order) -> ModelOrder:
 

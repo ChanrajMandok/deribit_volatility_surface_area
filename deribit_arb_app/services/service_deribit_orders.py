@@ -13,7 +13,7 @@ from deribit_arb_app.services.service_deribit_websocket_connector import Service
     # Service sends orders to Deribit via Websocket #
     #################################################
 
-class ServiceDeribitOrders:
+class ServiceDeribitOrders():
 
     def __init__(self) -> None:
         

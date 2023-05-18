@@ -8,7 +8,7 @@ from deribit_arb_app.model.model_instrument import ModelInstrument
     ##############################################
 
 @singleton
-class StoreInstruments:
+class StoreInstruments():
 
     def __init__(self):
         self.__deribit_instruments = {}

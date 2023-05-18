@@ -1,7 +1,7 @@
 import math
-import asyncio
 from singleton_decorator import singleton
 
+from deribit_arb_app.store.store_subjectable_interface import StoreSubjectableInterface
 from deribit_arb_app.model.model_indicator_bsm_implied_volatilty import ModelIndicatorBsmImpliedVolatility
 from deribit_arb_app.subjects.subject_indicator_bsm_implied_volatillity import SubjectIndicatorBsmImpliedVolatility
 
@@ -10,7 +10,7 @@ from deribit_arb_app.subjects.subject_indicator_bsm_implied_volatillity import S
     ##################################################################
 
 @singleton
-class StoreSubjectIndicatorBsmImpliedVolatilty():
+class StoreSubjectIndicatorBsmImpliedVolatilty(StoreSubjectableInterface):
 
     def __init__(self) -> None:
         self.subject_indicatorBsmImpliedVolatilty = {}
@@ -54,3 +54,10 @@ class StoreSubjectIndicatorBsmImpliedVolatilty():
             self.subject_indicatorBsmImpliedVolatilty[key] = \
                 SubjectIndicatorBsmImpliedVolatility()
         return self.subject_indicatorBsmImpliedVolatilty[key]
+    
+    def remove_subject(self, key: str):
+        if key is None:
+            return
+
+        if key in self.subject_indicatorBsmImpliedVolatilty:
+            del self.subject_indicatorBsmImpliedVolatilty[key]

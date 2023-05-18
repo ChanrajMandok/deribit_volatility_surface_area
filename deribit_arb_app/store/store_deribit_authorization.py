@@ -8,7 +8,7 @@ from deribit_arb_app.model.model_authorization import ModelAuthorization
     ################################################
 
 @singleton
-class StoreDeribitAuthorization:
+class StoreDeribitAuthorization():
 
     def __init__(self):
         self.__authorization = None

@@ -7,7 +7,7 @@ from deribit_arb_app.model.model_index import ModelIndex
     # Converter Converts Json object to ModelIndex #
     ################################################
 
-class ConverterJsonToIndex:
+class ConverterJsonToIndex():
 
     def __init__(self, json_string):
 

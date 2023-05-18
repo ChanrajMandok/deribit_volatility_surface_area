@@ -8,7 +8,7 @@ from deribit_arb_app.model.model_account_summary import ModelAccountSummary
     ##################################################
 
 @singleton
-class StoreDeribitAccountSummary:
+class StoreDeribitAccountSummary():
 
     def __init__(self):
         self.__account_summary = None

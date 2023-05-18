@@ -7,7 +7,7 @@ from deribit_arb_app.model.model_index_price import ModelIndexPrice
     # Converter Converts Json object to ModelIndexPrice #
     #####################################################
 
-class ConverterJsonToIndexPrice:
+class ConverterJsonToIndexPrice():
 
     def __init__(self, json_string):
 
