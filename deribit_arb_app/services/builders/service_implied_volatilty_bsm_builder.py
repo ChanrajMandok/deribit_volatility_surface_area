@@ -5,7 +5,7 @@ from typing import Optional
 from deribit_arb_app.store.store_subject_order_books import StoreSubjectOrderBooks
 from deribit_arb_app.store.store_subject_index_prices import StoreSubjectIndexPrices
 from deribit_arb_app.services.pricers.service_pricer_black_scholes import ServicePricerBlackScholes
-from deribit_arb_app.model.model_indicator_bsm_implied_volatilty import ModelIndicatorBsmImpliedVolatility
+from deribit_arb_app.model.indicator_models.model_indicator_bsm_implied_volatilty import ModelIndicatorBsmImpliedVolatility
 
     #################################################################
     # Service Builds implied Volatilty mesure which can be observed #

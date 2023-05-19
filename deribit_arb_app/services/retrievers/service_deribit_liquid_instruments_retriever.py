@@ -20,13 +20,12 @@ class ServiceDeribitLiquidInstrumentsRetriever():
     def __init__(self):        
         self.base_url = os.environ['BASE_HTTP_URL']
         self.service_deribit_static_orderbook_handler = ServiceDeribitStaticOrderbookHandler()
-        self.minimum_liquidity_threshold = os.environ['MINIMUM_LIQUIDITY_THRESHOLD']
     
     async def async_setup(self, currency:str, kind:str):
         await TaskInstrumentsPull().run(currency=currency, kind=kind)
         self.store_instrument = StoreInstruments()
         
-    async def main(self, populate:bool, currency:str, kind:str) -> List[ModelInstrument]:
+    async def main(self, populate:bool, currency:str, kind:str, minimum_liquidity_threshold:int) -> List[ModelInstrument]:
         await self.async_setup(currency=currency, kind=kind)
         store_instruments = self.store_instrument.get_deribit_instruments()
         instruments = list(filter(lambda x: x.kind == kind and x.base_currency == currency, store_instruments.values()))
@@ -47,7 +46,7 @@ class ServiceDeribitLiquidInstrumentsRetriever():
                     print(f"ContentTypeError occurred for instrument {instrument.instrument_name} with error: {e}")
                     return None
             
-    async def fetch_all(self, instruments:List[ModelInstrument], populate:bool) -> List[str]:
+    async def fetch_all(self, instruments:List[ModelInstrument], populate:bool, minimum_liquidity_threshold:int) -> List[str]:
         batch_size = 20
         tasks = []
         sem = asyncio.Semaphore(20)  # Adjust this number to limit concurrent tasks
@@ -71,8 +70,8 @@ class ServiceDeribitLiquidInstrumentsRetriever():
             result = x.get('result', {})
             stats = result.get('stats', {})
             volume_usd = Decimal(stats.get('volume_usd', 0))
-            ## check that instrument has atleast 5k of trading vol in last 24h
-            if volume_usd > Decimal(self.minimum_liquidity_threshold):
+            ## check that instrument has atleast 'minimum_liquidity_threshold' of trading vol in last 24h
+            if volume_usd > Decimal(minimum_liquidity_threshold):
                 instrument_name = result['instrument_name']
                 underlying_price = Decimal(result.get('underlying_price', 0))
                 index_price = Decimal(result.get('index_price', 0))

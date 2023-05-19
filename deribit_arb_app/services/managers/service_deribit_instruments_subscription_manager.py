@@ -2,7 +2,8 @@ import os
 import asyncio
 import traceback
 
-from typing import List, Tuple
+from typing import List, Tuple, Optional
+from deribit_arb_app.model.model_index import ModelIndex
 from deribit_arb_app.model.model_instrument import ModelInstrument
 from deribit_arb_app.services.service_deribit_subscribe import ServiceDeribitSubscribe
 from deribit_arb_app.services.retrievers.service_deribit_liquid_instruments_retriever import ServiceDeribitLiquidInstrumentsRetriever
@@ -19,10 +20,21 @@ class ServiceDeribitInstrumentsSubscriptionManager():
         self.deribit_subscribe = ServiceDeribitSubscribe()
         self.instruments_refresh_increment = os.environ['INSTRUMENTS_REFRESH']
         self.liquid_instruments_retriever = ServiceDeribitLiquidInstrumentsRetriever()
-    
-    async def manage_instrument_subscribables(self, currency: str, kind: str) -> Tuple[List[ModelInstrument], List[ModelInstrument]]:
+        
+    async def manage_instrument_subscribables(self, currency: str,
+                                                    kind: str,
+                                                    index: Optional[ModelIndex],
+                                                    minimum_liquidity_threshold: int,
+                                                    ) -> Tuple[List[ModelInstrument], List[ModelInstrument], List[ModelInstrument]]:
+
             while True:
-                instruments = await self.liquid_instruments_retriever.main(populate=False, currency=currency, kind=kind)
+                instruments = await self.liquid_instruments_retriever.main(kind=kind,
+                                                                           populate=False,
+                                                                           currency=currency,
+                                                                           minimum_liquidity_threshold=minimum_liquidity_threshold)
+                ## ensure that index is always subscribed to if it is provided -> can take index dependent strats & inverse
+                if index:
+                    instruments.insert(0,index)
                 instrument_names = [instrument.instrument_name for instrument in instruments]
 
                 if self.previous_instruments is None:

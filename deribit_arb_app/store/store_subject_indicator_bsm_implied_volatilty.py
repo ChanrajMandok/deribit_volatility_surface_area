@@ -2,7 +2,7 @@ import math
 from singleton_decorator import singleton
 
 from deribit_arb_app.store.store_subjectable_interface import StoreSubjectableInterface
-from deribit_arb_app.model.model_indicator_bsm_implied_volatilty import ModelIndicatorBsmImpliedVolatility
+from deribit_arb_app.model.indicator_models.model_indicator_bsm_implied_volatilty import ModelIndicatorBsmImpliedVolatility
 from deribit_arb_app.subjects.subject_indicator_bsm_implied_volatillity import SubjectIndicatorBsmImpliedVolatility
 
     ##################################################################

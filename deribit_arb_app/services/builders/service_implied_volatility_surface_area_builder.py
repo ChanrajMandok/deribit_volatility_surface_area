@@ -1,3 +1,4 @@
+import os
 import sys
 import asyncio
 import traceback
@@ -8,7 +9,7 @@ from deribit_arb_app.enums.enum_currency import EnumCurrency
 from deribit_arb_app.model.model_instrument import ModelInstrument
 from deribit_arb_app.enums.enum_instrument_kind import EnumInstrumentKind
 from deribit_arb_app.services.service_deribit_subscribe import ServiceDeribitSubscribe
-from deribit_arb_app.model.model_indicator_bsm_implied_volatilty import ModelIndicatorBsmImpliedVolatility
+from deribit_arb_app.model.indicator_models.model_indicator_bsm_implied_volatilty import ModelIndicatorBsmImpliedVolatility
 from deribit_arb_app.observers.observer_indicator_bsm_implied_volatility import ObserverIndicatorBsmImpliedVolatility
 from deribit_arb_app.store.store_subject_indicator_bsm_implied_volatilty import StoreSubjectIndicatorBsmImpliedVolatilty
 from deribit_arb_app.services.retrievers.service_deribit_liquid_instruments_retriever import ServiceDeribitLiquidInstrumentsRetriever
@@ -21,6 +22,7 @@ from deribit_arb_app.services.managers.service_deribit_instruments_subscription_
 class ServiceImpliedVolatiltySurfaceAreaBuilder():
     
     def __init__(self):
+        self.minimum_liquidity_threshold = os.environ['VSA_MINIMUM_LIQUIDITY_THRESHOLD']
         self.currency = EnumCurrency.BTC.value
         self.kind = EnumInstrumentKind.OPTION.value
         self.index = ModelIndex(index_name="btc_usd")
@@ -39,7 +41,9 @@ class ServiceImpliedVolatiltySurfaceAreaBuilder():
              traceback.print_tb(exc_traceback, limit=None, file=None)
              
     async def a_corountine_instrument_subcription_managment(self):
-        await self.service_deribit_liquid_instruments_manager().main(currency=self.currency, kind=self.kind)
+        await self.service_deribit_liquid_instruments_manager().main(kind=self.kind,
+                                                                     currency=self.currency, 
+                                                                     minimum_liquidity_threshold=self.minimum_liquidity_threshold)
              
     async def main(self):
         await (self.setup())

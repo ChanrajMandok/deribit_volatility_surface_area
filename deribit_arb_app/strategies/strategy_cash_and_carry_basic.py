@@ -1,6 +1,6 @@
 from deribit_arb_app.model.model_index import ModelIndex
 from deribit_arb_app.model.model_instrument import ModelInstrument
-from deribit_arb_app.model.model_indicator_annualised_return_spread import ModelIndicatorAnnualisedReturnSpread
+from deribit_arb_app.model.indicator_models.model_indicator_annualised_return_spread import ModelIndicatorAnnualisedReturnSpread
 
 from deribit_arb_app.services.service_api_deribit import ServiceApiDeribit
 from deribit_arb_app.store.store_subject_order_books import StoreSubjectOrderBooks

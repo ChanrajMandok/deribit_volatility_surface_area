@@ -1,3 +1,4 @@
+import os
 import asyncio
 
 from deribit_arb_app.model.model_index import ModelIndex
@@ -8,15 +9,22 @@ from deribit_arb_app.services.managers.service_deribit_instruments_subscription_
     # Plot Subscribe, Observe and plot Asset Specific Volatility Surface Area #
     ###########################################################################
 
-class ServiceMain():
+class ServiceImpliedVolatilitySurfaceAreaBuilderMain():
     def __init__(self):
         self.queue = asyncio.Queue()
         self.index = ModelIndex(index_name="btc_usd")
         self.service_deribit_observer_manager = ServiceDeribitObserversManager()
+        self.minimum_liquidity_threshold = os.environ['VSA_MINIMUM_LIQUIDITY_THRESHOLD']
         self.service_deribit_instruments_subscription_manager = ServiceDeribitInstrumentsSubscriptionManager(queue=self.queue)
         
-    async def main(self, currency: str, kind: str):
-        asyncio.create_task(self.service_deribit_instruments_subscription_manager.manage_instrument_subscribables(currency, kind))  
+    async def run_strategy(self, currency: str, kind: str):
+        ## Deribit only quotes ETH or BTC options and as such index can only be one of 2 inputs, this strategy utilised the inde to S0 input to BSM
+        index = ModelIndex(index_name="btc_usd") if currency == "BTC" else ModelIndex(index_name="btc_usd") 
+        asyncio.create_task(self.service_deribit_instruments_subscription_manager.manage_instrument_subscribables(kind=kind,
+                                                                                                                  index=index
+                                                                                                                  currency=currency,
+                                                                                                                  minimum_liquidity_threshold=self.minimum_liquidity_threshold
+                                                                                                                   ))  
         while True:
             try:
                 while self.queue.qsize() > 1:
