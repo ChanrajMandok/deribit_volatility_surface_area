@@ -5,11 +5,12 @@ import sys, traceback
 from deribit_arb_app.model.model_index import ModelIndex
 from deribit_arb_app.enums.enum_currency import EnumCurrency
 from deribit_arb_app.store.store_instruments import StoreInstruments
+from deribit_arb_app.enums.enum_index_currency import EnumIndexCurrency
 from deribit_arb_app.enums.enum_instrument_kind import EnumInstrumentKind
 from deribit_arb_app.tasks.task_instruments_pull import TaskInstrumentsPull
 from deribit_arb_app.services.service_deribit_subscribe import ServiceDeribitSubscribe
-from deribit_arb_app.model.indicator_models.model_indicator_annualised_return_spread import ModelIndicatorAnnualisedReturnSpread
 from deribit_arb_app.observers.observer_indicator_annualised_return_spread import ObserverIndicatorAnnualisedReturnSpread
+from deribit_arb_app.model.indicator_models.model_indicator_annualised_return_spread import ModelIndicatorAnnualisedReturnSpread
 from deribit_arb_app.store.store_subject_indicator_annualized_return_spreads import StoreSubjectIndicatorAnnualizedReturnSpreads
 
     #########################################################################################################
@@ -26,8 +27,7 @@ class TestDeribitIndicatorAnnualizedReturnSpreadBuilderTestCase(asynctest.TestCa
         self.instrument_1 = self.store_instrument.get_deribit_instrument('BTC-29SEP23')
         self.instrument_2 = self.store_instrument.get_deribit_instrument('BTC-29DEC23')
         
-        self.index = ModelIndex(
-            index_name="btc_usd")
+        self.index = ModelIndex(EnumIndexCurrency.BTC.value)
         
         self.deribit_subscribe = ServiceDeribitSubscribe()
         

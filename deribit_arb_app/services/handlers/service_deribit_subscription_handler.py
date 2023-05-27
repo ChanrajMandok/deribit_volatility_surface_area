@@ -1,6 +1,6 @@
 import json
-
 from singleton_decorator import singleton
+
 from deribit_arb_app.store.store_subject_order_books import StoreSubjectOrderBooks
 from deribit_arb_app.store.store_subject_index_prices import StoreSubjectIndexPrices
 from deribit_arb_app.converters.converter_json_to_order_book import ConverterJsonToOrderBook

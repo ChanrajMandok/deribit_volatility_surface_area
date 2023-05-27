@@ -1,8 +1,9 @@
 import os
 import asyncio
 import aiohttp
-from typing import List, Optional
+
 from decimal import Decimal
+from typing import List, Optional
 
 from deribit_arb_app.model.model_instrument import ModelInstrument
 from deribit_arb_app.store.store_instruments import StoreInstruments

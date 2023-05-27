@@ -2,8 +2,9 @@ import os
 import asyncio
 
 from deribit_arb_app.model.model_index import ModelIndex
-from deribit_arb_app.services.managers.service_deribit_observer_manager import ServiceDeribitObserversManager
+from deribit_arb_app.enums.enum_index_currency import EnumIndexCurrency
 from deribit_arb_app.services.managers.service_deribit_instruments_subscription_manager import ServiceDeribitInstrumentsSubscriptionManager
+from deribit_arb_app.services.managers.service_deribit_observer_bsm_implied_volatilty_manager import ServiceDeribitObserverBsmImpliedVolatilityManager
 
     ###########################################################################
     # Plot Subscribe, Observe and plot Asset Specific Volatility Surface Area #
@@ -12,16 +13,15 @@ from deribit_arb_app.services.managers.service_deribit_instruments_subscription_
 class ServiceImpliedVolatilitySurfaceAreaBuilderMain():
     def __init__(self):
         self.queue = asyncio.Queue()
-        self.index = ModelIndex(index_name="btc_usd")
-        self.service_deribit_observer_manager = ServiceDeribitObserversManager()
         self.minimum_liquidity_threshold = os.environ['VSA_MINIMUM_LIQUIDITY_THRESHOLD']
+        self.service_deribit_observer_bsm_implied_volatilty_manager = ServiceDeribitObserverBsmImpliedVolatilityManager()
         self.service_deribit_instruments_subscription_manager = ServiceDeribitInstrumentsSubscriptionManager(queue=self.queue)
         
     async def run_strategy(self, currency: str, kind: str):
-        ## Deribit only quotes ETH or BTC options and as such index can only be one of 2 inputs, this strategy utilised the inde to S0 input to BSM
-        index = ModelIndex(index_name="btc_usd") if currency == "BTC" else ModelIndex(index_name="btc_usd") 
+        index_currency_value = getattr(EnumIndexCurrency, currency.upper()).value
+        index = ModelIndex(index_name=index_currency_value)
         asyncio.create_task(self.service_deribit_instruments_subscription_manager.manage_instrument_subscribables(kind=kind,
-                                                                                                                  index=index
+                                                                                                                  index=index,
                                                                                                                   currency=currency,
                                                                                                                   minimum_liquidity_threshold=self.minimum_liquidity_threshold
                                                                                                                    ))  
@@ -36,6 +36,9 @@ class ServiceImpliedVolatilitySurfaceAreaBuilderMain():
                 if len(instruments_unsubscribe) > 0:
                     unsubscribe_task = asyncio.create_task(self.service_deribit_instruments_subscription_manager.a_coroutine_unsubscribe(unsubscribables=instruments_unsubscribe))
                 if len(instruments_subscribe) > 0 or len(instruments_unsubscribe) > 0:
-                    observer_task = asyncio.create_task(self.service_deribit_observer_manager.manager_observers(subscribables=instruments_subscribe, unsubscribables=instruments_unsubscribe))    
+                    observer_task = asyncio.create_task(self.service_deribit_observer_bsm_implied_volatilty_manager.manager_observers(index=index,
+                                                                                                                                      subscribables=instruments_subscribe,
+                                                                                                                                      unsubscribables=instruments_unsubscribe
+                                                                                                                                      ))    
             except Exception as e:
                 print("An error occurred: %s", e, exc_info=True)

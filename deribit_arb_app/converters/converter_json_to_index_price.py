@@ -1,4 +1,5 @@
 import json
+
 from typing import Optional
 
 from deribit_arb_app.model.model_index_price import ModelIndexPrice

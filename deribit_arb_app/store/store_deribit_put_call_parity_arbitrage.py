@@ -1,5 +1,6 @@
 import sys
 import traceback
+
 from singleton_decorator import singleton
 
 from deribit_arb_app.store.store_subjectable_interface import StoreSubjectableInterface

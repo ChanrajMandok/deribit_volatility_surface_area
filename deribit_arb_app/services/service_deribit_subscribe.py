@@ -2,6 +2,7 @@
 import sys
 import json
 import traceback
+
 from typing import List, Dict
 
 from deribit_arb_app.model.model_message import ModelMessage

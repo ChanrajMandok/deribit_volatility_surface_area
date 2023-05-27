@@ -1,7 +1,8 @@
 from django.db import models
-from deribit_arb_app.model.model_subjectable import ModelSubjectable
+
 from deribit_arb_app.model.model_index import ModelIndex
 from deribit_arb_app.model.model_instrument import ModelInstrument
+from deribit_arb_app.model.model_subjectable import ModelSubjectable
 
     ##########################################################
     # Model for BSM implied Volatility (subjectable) Objects #

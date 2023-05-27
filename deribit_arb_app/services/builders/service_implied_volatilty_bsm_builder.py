@@ -1,5 +1,6 @@
 import math
 import datetime
+
 from typing import Optional
 
 from deribit_arb_app.store.store_subject_order_books import StoreSubjectOrderBooks
@@ -54,13 +55,13 @@ class ServiceImpliedVolatilityBsmBuilder():
             r=r, 
             option_type=option_type)
         
-        if math.isnan(implied_vol):
+        if math.isnan(implied_vol) or implied_vol < 0:
             # print(f"{self.instrument.instrument_name} iv is none ")
             return None
 
         return ModelIndicatorBsmImpliedVolatility(
             instrument=instrument, 
-            index=index,
+            index=index_instrument,
             value=implied_vol
         )
         

@@ -17,7 +17,6 @@ class ModelIndexPrice(ModelSubjectable, models.Model):
 
     class Meta:
         managed = False
-        
         ordering = ['-timestamp']
         
 

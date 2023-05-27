@@ -5,9 +5,9 @@ from concurrent.futures import ThreadPoolExecutor
 from deribit_arb_app.observers.observer_interface import ObserverInterface
 from deribit_arb_app.store.store_subject_order_books import StoreSubjectOrderBooks
 from deribit_arb_app.store.store_subject_index_prices import StoreSubjectIndexPrices
-from deribit_arb_app.model.indicator_models.model_indicator_bsm_implied_volatilty import ModelIndicatorBsmImpliedVolatility
 from deribit_arb_app.services.builders.service_implied_volatilty_bsm_builder import ServiceImpliedVolatilityBsmBuilder
 from deribit_arb_app.store.store_subject_indicator_bsm_implied_volatilty import StoreSubjectIndicatorBsmImpliedVolatilty
+from deribit_arb_app.model.indicator_models.model_indicator_bsm_implied_volatilty import ModelIndicatorBsmImpliedVolatility
 
     ###################################################################################################
     # Observer monitors the instrument orderbook & index price feed and updates BSM Implied volatilty #
@@ -66,3 +66,5 @@ class ObserverIndicatorBsmImpliedVolatility(ObserverInterface):
     def detach_all(self):
         for key in list(self.indicators.keys()):
             self.detach_indicator(key)
+
+    ## cannot update many as bsm must be ran every single time

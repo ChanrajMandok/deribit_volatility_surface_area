@@ -1,6 +1,6 @@
 import warnings
-import numpy as np
 
+import numpy as np
 from typing import Optional
 from scipy.stats import norm
 from deribit_arb_app.enums.enum_option_type import EnumOptionType

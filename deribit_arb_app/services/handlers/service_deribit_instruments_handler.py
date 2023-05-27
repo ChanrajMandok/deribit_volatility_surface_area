@@ -1,7 +1,7 @@
 import json
 from typing import Dict
-
 from singleton_decorator import singleton
+
 from deribit_arb_app.model.model_instrument import ModelInstrument
 from deribit_arb_app.store.store_instruments import StoreInstruments
 from deribit_arb_app.converters.converter_json_to_instruments import ConverterJsonToInstruments

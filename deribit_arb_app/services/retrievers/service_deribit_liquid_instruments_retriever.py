@@ -1,8 +1,9 @@
 import os
 import asyncio
 import aiohttp
-from typing import List, Optional
+
 from decimal import Decimal
+from typing import List, Optional
 
 from deribit_arb_app.model.model_instrument import ModelInstrument
 from deribit_arb_app.store.store_instruments import StoreInstruments
@@ -29,7 +30,7 @@ class ServiceDeribitLiquidInstrumentsRetriever():
         await self.async_setup(currency=currency, kind=kind)
         store_instruments = self.store_instrument.get_deribit_instruments()
         instruments = list(filter(lambda x: x.kind == kind and x.base_currency == currency, store_instruments.values()))
-        liquid_instrument_names = await self.fetch_all(instruments=instruments, populate=populate)
+        liquid_instrument_names = await self.fetch_all(instruments=instruments, populate=populate, minimum_liquidity_threshold=minimum_liquidity_threshold)
         result_instrument_names = [x for x in instruments if x.instrument_name in liquid_instrument_names]
         return result_instrument_names
         

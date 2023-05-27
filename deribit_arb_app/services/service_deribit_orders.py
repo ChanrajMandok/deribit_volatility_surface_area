@@ -1,10 +1,10 @@
 import json
 import uuid
+
 from typing import Dict
 
 from deribit_arb_app.model.model_order import ModelOrder
 from deribit_arb_app.model.model_message import ModelMessage
-
 from deribit_arb_app.services.service_deribit_messaging import ServiceDeribitMessaging
 from deribit_arb_app.services.service_deribit_authentication import ServiceDeribitAuthentication
 from deribit_arb_app.services.service_deribit_websocket_connector import ServiceDeribitWebsocketConnector

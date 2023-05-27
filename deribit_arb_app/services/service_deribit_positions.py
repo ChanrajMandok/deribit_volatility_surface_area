@@ -1,4 +1,5 @@
 import json
+
 from typing import Dict
 from singleton_decorator import singleton
 

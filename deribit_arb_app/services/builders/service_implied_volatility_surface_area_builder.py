@@ -2,16 +2,18 @@ import os
 import sys
 import asyncio
 import traceback
+
 from typing import List
 
 from deribit_arb_app.model.model_index import ModelIndex
 from deribit_arb_app.enums.enum_currency import EnumCurrency
 from deribit_arb_app.model.model_instrument import ModelInstrument
+from deribit_arb_app.enums.enum_index_currency import EnumIndexCurrency
 from deribit_arb_app.enums.enum_instrument_kind import EnumInstrumentKind
 from deribit_arb_app.services.service_deribit_subscribe import ServiceDeribitSubscribe
-from deribit_arb_app.model.indicator_models.model_indicator_bsm_implied_volatilty import ModelIndicatorBsmImpliedVolatility
 from deribit_arb_app.observers.observer_indicator_bsm_implied_volatility import ObserverIndicatorBsmImpliedVolatility
 from deribit_arb_app.store.store_subject_indicator_bsm_implied_volatilty import StoreSubjectIndicatorBsmImpliedVolatilty
+from deribit_arb_app.model.indicator_models.model_indicator_bsm_implied_volatilty import ModelIndicatorBsmImpliedVolatility
 from deribit_arb_app.services.retrievers.service_deribit_liquid_instruments_retriever import ServiceDeribitLiquidInstrumentsRetriever
 from deribit_arb_app.services.managers.service_deribit_instruments_subscription_manager import ServiceDeribitInstrumentsSubscriptionManager
 
@@ -25,7 +27,7 @@ class ServiceImpliedVolatiltySurfaceAreaBuilder():
         self.minimum_liquidity_threshold = os.environ['VSA_MINIMUM_LIQUIDITY_THRESHOLD']
         self.currency = EnumCurrency.BTC.value
         self.kind = EnumInstrumentKind.OPTION.value
-        self.index = ModelIndex(index_name="btc_usd")
+        self.index = ModelIndex(EnumIndexCurrency.BTC.value)
         self.deribit_subscribe = ServiceDeribitSubscribe()
         self.liquid_instruments_list_retriever = ServiceDeribitLiquidInstrumentsRetriever()
         self.service_deribit_liquid_instruments_manager = ServiceDeribitInstrumentsSubscriptionManager()

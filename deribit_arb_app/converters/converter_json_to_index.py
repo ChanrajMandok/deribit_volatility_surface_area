@@ -1,4 +1,5 @@
 import json
+
 from typing import List
 
 from deribit_arb_app.model.model_index import ModelIndex
