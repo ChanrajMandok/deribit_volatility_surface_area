@@ -55,7 +55,7 @@ class ServiceDeribitInstrumentsSubscriptionManager():
                 instruments_unsubscribables = [instrument for instrument in self.previous_instruments if instrument.instrument_name not in instrument_names]
 
             self.previous_instruments = instruments
-            print(len(instruments_subscribables), len(instruments_unsubscribables))
+            # print(len(instruments_subscribables), len(instruments_unsubscribables))
             await self.queue.put((instruments_subscribables, instruments_unsubscribables))
             await asyncio.sleep(360)
             

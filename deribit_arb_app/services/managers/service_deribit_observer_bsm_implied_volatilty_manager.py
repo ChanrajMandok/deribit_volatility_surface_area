@@ -32,7 +32,7 @@ class ServiceDeribitObserverBsmImpliedVolatilityManager():
                         index=index
                     )
                     self.observer_indicator_bsm_implied_volatility.attach_indicator(indicator)
-                    print(f"{str(indicator.key)} observer attached")
+                    # print(f"{str(indicator.key)} observer attached")
 
         # only detach index from unsubscribables if their are no live observers
         if len(self.store_subject_indicator_bsm_implied_volatilty.indicators) == 0:
@@ -45,7 +45,7 @@ class ServiceDeribitObserverBsmImpliedVolatilityManager():
                     indicator = self.store_subject_indicator_bsm_implied_volatilty.get_subject(key)
                     if indicator:
                         self.observer_indicator_bsm_implied_volatility.detach_indicator(key)
-                        print(f"{str(indicator.key)} observer detached")
+                        # print(f"{str(indicator.key)} observer detached")
                         ## remove if the indicator exists, else do nothing
                         
         

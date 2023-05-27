@@ -1,4 +1,6 @@
 import math
+import asyncio
+from typing import Dict, AsyncGenerator
 
 from singleton_decorator import singleton
 
@@ -15,6 +17,7 @@ class StoreSubjectIndicatorBsmImpliedVolatilty(StoreSubjectableInterface):
 
     def __init__(self) -> None:
         self.subject_indicatorBsmImpliedVolatilty = {}
+        self.update_event = asyncio.Event()
         
     def update_subject(self, key: str, indicator_bsm_implied_volatility: ModelIndicatorBsmImpliedVolatility):
 
@@ -40,7 +43,7 @@ class StoreSubjectIndicatorBsmImpliedVolatilty(StoreSubjectableInterface):
             self.subject_indicatorBsmImpliedVolatilty[key] = \
                 SubjectIndicatorBsmImpliedVolatility()
         return self.subject_indicatorBsmImpliedVolatilty[key]
-    
+
     def remove_subject(self, key: str):
         if key is None:
             return

@@ -54,7 +54,7 @@ class ServiceDeribitSubscribe(ModelSubscribable):
 
         for subscribable in subscribables:
             params["channels"].append(subscribable.channel_name)
-            print(f"SUBSCRIBED {subscribable.channel_name}")
+            # print(f"SUBSCRIBED {subscribable.channel_name}")
             self.subscriptions.append(subscribable)
 
         try:
@@ -76,6 +76,6 @@ class ServiceDeribitSubscribe(ModelSubscribable):
             if unsubscribable in self.subscriptions:
                 self.subscriptions.remove(unsubscribable)
             params["channels"].append(unsubscribable.channel_name)
-            print(f"UNSUBSCRIBED {unsubscribable.channel_name}")
+            # print(f"UNSUBSCRIBED {unsubscribable.channel_name}")
             
         await self.send_instructions(method, params)
