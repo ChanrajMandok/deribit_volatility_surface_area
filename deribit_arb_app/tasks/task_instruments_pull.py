@@ -1,6 +1,6 @@
 from deribit_arb_app.tasks.task_interface import TaskInterface
 from deribit_arb_app.enums.enum_instrument_kind import EnumInstrumentKind
-from deribit_arb_app.services.service_api_deribit import ServiceApiDeribit
+from deribit_arb_app.services.deribit_api.service_api_deribit import ServiceApiDeribit
 
     ############################################################################################
     # Task utilised in Testing to Populate Store to allow retrieval of ModelInstrument Objects #

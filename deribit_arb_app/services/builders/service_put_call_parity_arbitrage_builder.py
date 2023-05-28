@@ -12,7 +12,7 @@ from deribit_arb_app.model.indicator_models.model_indicator_put_call_parity_arbi
     # Service Builds Put_call Parity Arbitrage relational Model #
     #############################################################
 
-class ServiceImpliedVolatilityBsmBuilder():
+class ServicePutCallParityAribtrageBuilder():
     
     def __init__(self):
         self.store_subject_order_books       = StoreSubjectOrderBooks()
@@ -47,33 +47,50 @@ class ServiceImpliedVolatilityBsmBuilder():
         if any(not var for var in [index, index_price, call_instrument_book, put_instrument_book,
                 (put_instrument_ask or put_instrument_bid),(call_instrument_ask or call_instrument_bid), expiry_date]):
             return None
+        
+        k = float(call_instrument.instrument_name.split('-')[2])
+        t = (expiry_date - current_date).days / 365.0
+        r = 0.0
 
-        # BSM inputs
-        for instrument in [call_instrument,put_instrument]     
-            r = 0.0
-            s = index_price
-            k = float(instrument.instrument_name.split('-')[2])
-            t = (expiry_date - current_date).days / 365.0
-            option_type = instrument.option_type
+        call_target = (call_instrument_ask + call_instrument_bid) / 2 if call_instrument_ask and call_instrument_bid \
+                    else call_instrument_ask or call_instrument_bid
             
-            target = (instrument_ask + instrument_bid) / 2 if instrument_ask and instrument_bid \
-                        else instrument_ask or instrument_bid
-                
-            implied_vol = self.service_black_scholes_pricer.find_vol(
-                target_value=target, 
-                S=s, 
-                K=k, 
-                T=t, 
-                r=r, 
-                option_type=option_type)
+        call_implied_vol = self.service_black_scholes_pricer.find_vol(
+            target_value=call_target, 
+            S=index_price, 
+            K=k, 
+            T=t, 
+            r=r, 
+            option_type=call_instrument.option_type)
+        
+        put_target = (put_instrument_ask + put_instrument_bid) / 2 if put_instrument_ask and put_instrument_bid \
+                    else put_instrument_ask or put_instrument_bid
             
-            if math.isnan(implied_vol):
-                # print(f"{self.instrument.instrument_name} iv is none ")
-                return None
+        put_implied_vol = self.service_black_scholes_pricer.find_vol(
+            target_value=put_target, 
+            S=index_price, 
+            K=k, 
+            T=t, 
+            r=r, 
+            option_type=put_instrument.option_type)
+
+        if math.isnan(call_implied_vol) or math.isnan(put_implied_vol):
+            # print(f"{self.instrument.instrument_name} iv is none ")
+            return None
+        
+        # Calculate present value of strike price
+        pvk = k * math.exp(-r * t)
+
+        # Calculate put-call parity difference
+        put_call_parity_diff = call_value + pvk - put_value - S
+        arbitrage = abs(put_call_parity_diff) > threshold  # replace 'threshold' with an appropriate value
+
 
         return ModelIndicatorPutCallParityArbitrage(
-            instrument=instrument, 
+            put_instrument=put_instrument, 
+            call_instrument=call_instrument,
             index=index,
-            value=implied_vol
+            value=put_call_parity_diff,
+            arbitrage=arbitrage
         )
         

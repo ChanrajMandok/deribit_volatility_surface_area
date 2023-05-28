@@ -1,18 +1,21 @@
 import json
 
+from typing import Dict
 from singleton_decorator import singleton
 
 from deribit_arb_app.model.model_message import ModelMessage
-from deribit_arb_app.services.service_deribit_messaging import ServiceDeribitMessaging
-from deribit_arb_app.services.service_deribit_authentication import ServiceDeribitAuthentication
-from deribit_arb_app.services.service_deribit_websocket_connector import ServiceDeribitWebsocketConnector
+from deribit_arb_app.model.model_position import ModelPosition
 
-    ###########################################################
-    # Service retrieves Deribit Account Summary via Websocket #
-    ###########################################################
+from deribit_arb_app.services.deribit_api.service_deribit_messaging import ServiceDeribitMessaging
+from deribit_arb_app.services.deribit_api.service_deribit_authentication import ServiceDeribitAuthentication
+from deribit_arb_app.services.deribit_api.service_deribit_websocket_connector import ServiceDeribitWebsocketConnector
+
+    #####################################################
+    # Service Retrieves Deribit Positions via Websocket #
+    #####################################################
 
 @singleton
-class ServiceDeribitAccountSummary():
+class ServiceDeribitPositions():
 
     def __init__(self, currency: str):
 
@@ -20,10 +23,10 @@ class ServiceDeribitAccountSummary():
 
         self.params = {
                     "currency": currency,
-                    "extended": True
+                    "kind": "future"
                 }
 
-        self.method = "private/get_account_summary"
+        self.method = "private/get_positions"
 
         self.msg_id = self.deribit_messaging.generate_id(self.method)
 
@@ -33,21 +36,21 @@ class ServiceDeribitAccountSummary():
             params=self.params
         )
 
-    async def get(self):
+    async def get(self) -> Dict[str, Dict[str, ModelPosition]]:
 
         async with ServiceDeribitWebsocketConnector() as websocket:
 
             await ServiceDeribitAuthentication().authenticate(websocket)
             await websocket.send(json.dumps(self.msg.build_message()))
-            
+
             while websocket.open:
                 response = await websocket.recv()
-
+                
                 # handle the message and get the id
-                id, account_summary = self.deribit_messaging.message_handle(response)
+                id, positions = self.deribit_messaging.message_handle(response)
 
                 # if the id matches the initial msg id, we can break the loop
                 if id == self.msg_id:
-                    return account_summary
+                    return positions
 
 

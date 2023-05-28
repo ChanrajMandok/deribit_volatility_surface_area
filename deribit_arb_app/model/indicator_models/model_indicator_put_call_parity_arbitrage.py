@@ -13,6 +13,7 @@ class ModelIndicatorPutCallParityArbitrage(ModelSubjectable, models.Model):
     put_instrument   = models.ForeignKey(ModelInstrument, on_delete=models.CASCADE, related_name='put_instrument_PCP')
     call_instrument  = models.ForeignKey(ModelInstrument, on_delete=models.CASCADE, related_name='call_instrument_PCP')
     index            = models.ForeignKey(ModelIndex, on_delete=models.CASCADE, related_name='index_PCP')
+    strike           = models.DecimalField(max_digits=20, decimal_places=8, null=True)
     value            = models.DecimalField(max_digits=20, decimal_places=8, null=True)
     aribtrage        = models.BooleanField(null=False)
 
@@ -24,6 +25,3 @@ class ModelIndicatorPutCallParityArbitrage(ModelSubjectable, models.Model):
 
     class Meta:
         managed = False 
-
-
-    ### implement check to ensure that both instrumens have the same strike and ttm before 

@@ -2,7 +2,7 @@ import asyncio
 import asynctest
 
 from deribit_arb_app.store.store_deribit_account_summary import StoreDeribitAccountSummary
-from deribit_arb_app.services.service_deribit_account_summary import ServiceDeribitAccountSummary
+from deribit_arb_app.services.deribit_api.service_deribit_account_summary import ServiceDeribitAccountSummary
 
     #########################################################################
     # TestCase Testing Account Summary is within StoreDeribitAccountSummary #

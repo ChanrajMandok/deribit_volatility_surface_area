@@ -1,4 +1,4 @@
-from deribit_arb_app.services.service_deribit_messaging import ServiceDeribitMessaging
+from deribit_arb_app.services.deribit_api.service_deribit_messaging import ServiceDeribitMessaging
 
 deribit_messaging = ServiceDeribitMessaging
 

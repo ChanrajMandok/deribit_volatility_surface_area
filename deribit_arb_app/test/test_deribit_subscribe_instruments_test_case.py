@@ -6,9 +6,9 @@ import asynctest
 from deribit_arb_app.enums.enum_currency import EnumCurrency
 from deribit_arb_app.store.store_instruments import StoreInstruments
 from deribit_arb_app.enums.enum_instrument_kind import EnumInstrumentKind
-from deribit_arb_app.services.service_api_deribit import ServiceApiDeribit
 from deribit_arb_app.tasks.task_instruments_pull import TaskInstrumentsPull
-from deribit_arb_app.services.service_deribit_subscribe import ServiceDeribitSubscribe
+from deribit_arb_app.services.deribit_api.service_api_deribit import ServiceApiDeribit
+from deribit_arb_app.services.deribit_api.service_deribit_subscribe import ServiceDeribitSubscribe
 
     ##########################################################################
     # TestCase Testing funcitonality to subscribe to Instrument Price Stream #

@@ -7,8 +7,8 @@ from typing import List, Dict
 
 from deribit_arb_app.model.model_message import ModelMessage
 from deribit_arb_app.model.model_subscribable import ModelSubscribable
-from deribit_arb_app.services.service_deribit_messaging import ServiceDeribitMessaging
-from deribit_arb_app.services.service_deribit_websocket_connector import ServiceDeribitWebsocketConnector
+from deribit_arb_app.services.deribit_api.service_deribit_messaging import ServiceDeribitMessaging
+from deribit_arb_app.services.deribit_api.service_deribit_websocket_connector import ServiceDeribitWebsocketConnector
 
     ########################################################
     # Service Provides interface to Subscribe to Websocket #

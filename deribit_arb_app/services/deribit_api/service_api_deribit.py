@@ -5,12 +5,12 @@ from deribit_arb_app.model.model_position import ModelPosition
 from deribit_arb_app.enums.enum_direction import EnumDirection
 from deribit_arb_app.model.model_instrument import ModelInstrument
 from deribit_arb_app.model.model_subscribable import ModelSubscribable
-from deribit_arb_app.services.service_api_interface import ServiceApiInterface
-from deribit_arb_app.services.service_deribit_orders import ServiceDeribitOrders
-from deribit_arb_app.services.service_deribit_positions import ServiceDeribitPositions
-from deribit_arb_app.services.service_deribit_subscribe import ServiceDeribitSubscribe
-from deribit_arb_app.services.service_deribit_instruments import ServiceDeribitInstruments
-from deribit_arb_app.services.service_deribit_account_summary import ServiceDeribitAccountSummary
+from deribit_arb_app.services.deribit_api.service_api_interface import ServiceApiInterface
+from deribit_arb_app.services.deribit_api.service_deribit_orders import ServiceDeribitOrders
+from deribit_arb_app.services.deribit_api.service_deribit_positions import ServiceDeribitPositions
+from deribit_arb_app.services.deribit_api.service_deribit_subscribe import ServiceDeribitSubscribe
+from deribit_arb_app.services.deribit_api.service_deribit_instruments import ServiceDeribitInstruments
+from deribit_arb_app.services.deribit_api.service_deribit_account_summary import ServiceDeribitAccountSummary
 
     ################################################################################
     # Service Implements Deribit API to provide Framework to trade via Deribit API #

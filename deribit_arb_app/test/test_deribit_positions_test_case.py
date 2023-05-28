@@ -4,7 +4,7 @@ import traceback
 import asynctest
 
 from deribit_arb_app.store.store_deribit_positions import StoreDeribitPositions
-from deribit_arb_app.services.service_deribit_positions import ServiceDeribitPositions
+from deribit_arb_app.services.deribit_api.service_deribit_positions import ServiceDeribitPositions
 
     ########################################################################
     # TestCase Testing StoreDeribitPositions().get() to see open Positions #

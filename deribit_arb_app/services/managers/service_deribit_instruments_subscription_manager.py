@@ -7,7 +7,7 @@ from singleton_decorator import singleton
 
 from deribit_arb_app.model.model_index import ModelIndex
 from deribit_arb_app.model.model_instrument import ModelInstrument
-from deribit_arb_app.services.service_deribit_subscribe import ServiceDeribitSubscribe
+from deribit_arb_app.services.deribit_api.service_deribit_subscribe import ServiceDeribitSubscribe
 from deribit_arb_app.services.retrievers.service_deribit_liquid_instruments_retriever import ServiceDeribitLiquidInstrumentsRetriever
     
     ##########################################################################
