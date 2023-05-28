@@ -17,7 +17,6 @@ class StoreSubjectIndicatorBsmImpliedVolatilty(StoreSubjectableInterface):
 
     def __init__(self) -> None:
         self.subject_indicatorBsmImpliedVolatilty = {}
-        self.update_event = asyncio.Event()
         
     def update_subject(self, key: str, indicator_bsm_implied_volatility: ModelIndicatorBsmImpliedVolatility):
 
@@ -28,15 +27,15 @@ class StoreSubjectIndicatorBsmImpliedVolatilty(StoreSubjectableInterface):
             self.subject_indicatorBsmImpliedVolatilty[key] = \
                 SubjectIndicatorBsmImpliedVolatility(indicator_bsm_implied_volatility)
             self.subject_indicatorBsmImpliedVolatilty[key].set_instance(indicator_bsm_implied_volatility)
-            print(f"{key}: {round(indicator_bsm_implied_volatility.value,4)}")
+            print(f"{key}: {round(indicator_bsm_implied_volatility.Implied_volatilty,4)}")
         else:
-            existing_value = self.subject_indicatorBsmImpliedVolatilty[key].instance.value
-            new_value =  indicator_bsm_implied_volatility.value
+            existing_value = self.subject_indicatorBsmImpliedVolatilty[key].instance.Implied_volatilty
+            new_value =  indicator_bsm_implied_volatility.Implied_volatilty
             if existing_value == new_value:
                 return  # don't update if the existing value is the same as the prior value
             else:
                 self.subject_indicatorBsmImpliedVolatilty[key].set_instance(indicator_bsm_implied_volatility)
-                print(f"{key}: {round(indicator_bsm_implied_volatility.value,4)}")
+                print(f"{key}: {round(indicator_bsm_implied_volatility.Implied_volatilty,4)}")
 
     def get_subject(self, key: str) -> SubjectIndicatorBsmImpliedVolatility:
         if not key in self.subject_indicatorBsmImpliedVolatilty:

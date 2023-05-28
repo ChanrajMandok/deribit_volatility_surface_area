@@ -46,9 +46,6 @@ class ServiceImpliedVolatilitySurfaceAreaBuilderMain:
                                                                                                                                       subscribables=instruments_subscribe,
                                                                                                                                       unsubscribables=instruments_unsubscribe
                                                                                                                                       ))    
-                
-                async for updated_dict in self.store_subject_indicator_bsm_implied_volatilty.get_subjects():
-                    print('poo')
 
             except Exception as e:
                 print(f"Exception in run_strategy: {e}")

@@ -62,6 +62,8 @@ class ServiceImpliedVolatilityBsmBuilder():
         return ModelIndicatorBsmImpliedVolatility(
             instrument=instrument, 
             index=index_instrument,
-            value=implied_vol
+            Implied_volatilty=implied_vol,
+            strike=k,
+            time_to_maturity=t,
+            spot=s
         )
-        
