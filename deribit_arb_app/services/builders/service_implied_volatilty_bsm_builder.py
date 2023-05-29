@@ -41,7 +41,7 @@ class ServiceImpliedVolatilityBsmBuilder():
         r = 0.0
         s = index_price
         k = float(name.split('-')[2])
-        t = (expiry_date - current_date).days / 365.0
+        t = (expiry_date - current_date).total_seconds() / 31536000.0
         option_type = instrument.option_type
         
         target = (instrument_ask + instrument_bid) / 2 if instrument_ask and instrument_bid \
@@ -58,8 +58,11 @@ class ServiceImpliedVolatilityBsmBuilder():
         if math.isnan(implied_vol) or implied_vol < 0:
             # print(f"{self.instrument.instrument_name} iv is none ")
             return None
-
+        
+        object_name = f"BSM Implied Volatility-{name}"
+        
         return ModelIndicatorBsmImpliedVolatility(
+            name=object_name,
             instrument=instrument, 
             index=index_instrument,
             Implied_volatilty=implied_vol,

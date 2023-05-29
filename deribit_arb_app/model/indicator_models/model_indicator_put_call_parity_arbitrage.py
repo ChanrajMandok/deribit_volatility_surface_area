@@ -20,7 +20,9 @@ class ModelIndicatorPutCallParityArbitrage(ModelSubjectable, models.Model):
     #index needed to calculate BSM derived implied volatilty
 
     def __init__(self, *args, **kwargs):
-        key = f"PutCall Pricing Assymetry- C:{kwargs['put_instrument'].instrument_name} C:{['put_instrument'].instrument_name}"
+        put_instrument = kwargs['put_instrument'].instrument_name if 'put_instrument' in kwargs and kwargs['put_instrument'].instrument_name else None
+        call_instrument = kwargs['call_instrument'].instrument_name if 'call_instrument' in kwargs and kwargs['call_instrument'].instrument_name else None
+        key = f"Put_Call Pricing Assymetry- C:{put_instrument} C:{call_instrument}"
         super().__init__(key=key, *args, **kwargs)
 
     class Meta:

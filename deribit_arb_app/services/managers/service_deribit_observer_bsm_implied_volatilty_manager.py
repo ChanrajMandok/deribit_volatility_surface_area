@@ -27,7 +27,9 @@ class ServiceDeribitObserverBsmImpliedVolatilityManager():
         if subscribables is not None:
             for instrument in subscribables:
                 if instrument != index:
+                    object_name = f"BSM Implied Volatility-{instrument.instrument_name}"
                     indicator = ModelIndicatorBsmImpliedVolatility(
+                        name=object_name,
                         instrument=instrument,
                         index=index
                     )

@@ -9,7 +9,8 @@ from deribit_arb_app.model.model_subjectable import ModelSubjectable
     ############################################################
 
 class ModelIndicatorAnnualisedReturnSpread(ModelSubjectable, models.Model):
-
+    
+    name            = models.CharField(max_length=50, null=False)
     instrument_1    =  models.ForeignKey(ModelInstrument, on_delete=models.CASCADE, related_name='instrument_1_IASR')
     instrument_2    =  models.ForeignKey(ModelInstrument, on_delete=models.CASCADE, related_name='instrument_2_IASR')
     index           =  models.ForeignKey(ModelIndex, on_delete=models.CASCADE)
@@ -18,7 +19,9 @@ class ModelIndicatorAnnualisedReturnSpread(ModelSubjectable, models.Model):
 
 
     def __init__(self, *args, **kwargs):
-        key = f"Annualised_Spread-{kwargs['instrument_1'].instrument_name}-{kwargs['instrument_2'].instrument_name}"
+        instrument_1 = kwargs['instrument_1'].instrument_name if 'instrument_1' in kwargs and kwargs['instrument_1'].instrument_name else None
+        instrument_2 = kwargs['instrument_2'].instrument_name if 'instrument_2' in kwargs and kwargs['instrument_2'].instrument_name else None
+        key = f"Annualised_Spread-{instrument_1}-{instrument_2}"
         super().__init__(key=key, *args, **kwargs)
 
     class Meta:

@@ -1,3 +1,4 @@
+import os
 from typing import List
 from singleton_decorator import singleton
 from concurrent.futures import ThreadPoolExecutor
@@ -19,6 +20,7 @@ class ObserverIndicatorBsmImpliedVolatility(ObserverInterface):
     def __init__(self) -> None:
         super().__init__()
         self.indicators = {}
+        self.max_workers = os.environ.get('MAX_WORKERS', None)
         self.store_subject_order_books = StoreSubjectOrderBooks()
         self.store_subject_index_prices = StoreSubjectIndexPrices()
         self.store_subject_indicator_bsm_iv = StoreSubjectIndicatorBsmImpliedVolatilty()
@@ -47,7 +49,7 @@ class ObserverIndicatorBsmImpliedVolatility(ObserverInterface):
             del self.indicators[key]
 
     def update(self) -> None:
-        with ThreadPoolExecutor(max_workers=4) as executor:
+        with ThreadPoolExecutor(int(self.max_workers)) as executor:
             tasks = [(key, executor.submit(self.service_implied_volatilty_bsm_builder.build, indicator))
                     for key, indicator in self.indicators.items()]
 
@@ -55,7 +57,7 @@ class ObserverIndicatorBsmImpliedVolatility(ObserverInterface):
                 try:
                     result = future.result()
                     if result is not None:
-                        self.store_subject_indicator_bsm_iv.update_subject(key, result)
+                        self.store_subject_indicator_bsm_iv.update_subject(result)
                 except Exception as e:
                     print(f"Error updating indicator: {key}")
                     print(f"Error message: {str(e)}")
