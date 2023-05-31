@@ -18,7 +18,7 @@ class StoreSubjectOrderBooks():
         if not order_book.instrument_name in self.__subject_order_books:
             self.__subject_order_books[order_book.instrument_name] = SubjectIndicator(order_book)
         self.__subject_order_books[order_book.instrument_name].set_instance(order_book)
-        print(f"{order_book.instrument_name} updated: Bid: {order_book.best_bid_price} [{order_book.best_bid_amount}] - Ask: {order_book.best_ask_price} [{order_book.best_ask_amount}]")
+        # print(f"{order_book.instrument_name} updated: Bid: {order_book.best_bid_price} [{order_book.best_bid_amount}] - Ask: {order_book.best_ask_price} [{order_book.best_ask_amount}]")
         
     def get_subject(self, instrument: ModelInstrument):
         if not instrument.instrument_name in self.__subject_order_books:

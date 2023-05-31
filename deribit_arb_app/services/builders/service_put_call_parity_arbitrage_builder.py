@@ -85,7 +85,6 @@ class ServicePutCallParityAribtrageBuilder():
         put_call_parity_diff = call_value + pvk - put_value - S
         arbitrage = abs(put_call_parity_diff) > threshold  # replace 'threshold' with an appropriate value
 
-
         return ModelIndicatorPutCallParityArbitrage(
             put_instrument=put_instrument, 
             call_instrument=call_instrument,

@@ -15,10 +15,16 @@ class ServiceImpliedVolatilitySurfaceAreaBuilderMain:
     
     def __init__(self):
         self.queue = asyncio.Queue()
+        self.update_queue = asyncio.Queue()
         self.store_subject_indicator_bsm_implied_volatilty = StoreSubjectIndicatorBsmImpliedVolatilty()
         self.minimum_liquidity_threshold = os.environ.get('VSA_MINIMUM_LIQUIDITY_THRESHOLD', None)
         self.service_deribit_observer_bsm_implied_volatilty_manager = ServiceDeribitObserverBsmImpliedVolatilityManager()
         self.service_deribit_instruments_subscription_manager = ServiceDeribitInstrumentsSubscriptionManager(queue=self.queue)
+       
+    async def consume_subjects_view(self):
+        async for subject_view in self.store_subject_indicator_bsm_implied_volatilty.stream_subjects_view():
+            print(list(subject_view))
+
 
     async def run_strategy(self, currency: str, kind: str):
         index_currency_value = getattr(EnumIndexCurrency, currency.upper()).value
@@ -29,7 +35,7 @@ class ServiceImpliedVolatilitySurfaceAreaBuilderMain:
                                                                                                                   currency=currency,
                                                                                                                   minimum_liquidity_threshold=self.minimum_liquidity_threshold
                                                                                                                    ))  
-        
+                
         while True:
             try:
                 while self.queue.qsize() > 1:
@@ -45,8 +51,8 @@ class ServiceImpliedVolatilitySurfaceAreaBuilderMain:
                     observer_task = asyncio.create_task(self.service_deribit_observer_bsm_implied_volatilty_manager.manager_observers(index=index,
                                                                                                                                       subscribables=instruments_subscribe,
                                                                                                                                       unsubscribables=instruments_unsubscribe
-                                                                                                                                      ))    
-
+                                                                                                                                      ))
+                p = asyncio.create_task(self.consume_subjects_view())
             except Exception as e:
                 print(f"Exception in run_strategy: {e}")
                 break
