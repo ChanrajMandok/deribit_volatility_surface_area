@@ -17,9 +17,9 @@ from deribit_arb_app.services.retrievers.service_deribit_liquid_instruments_retr
 @singleton
 class ServiceDeribitInstrumentsSubscriptionManager():
     
-    def __init__(self, queue:asyncio.Queue):
-        self.queue = queue
+    def __init__(self, instruments_queue:asyncio.Queue):
         self.previous_instruments = None
+        self.instruments_queue = instruments_queue
         self.deribit_subscribe = ServiceDeribitSubscribe()
         self.instruments_refresh_increment = os.environ['INSTRUMENTS_REFRESH']
         self.liquid_instruments_retriever = ServiceDeribitLiquidInstrumentsRetriever()
@@ -39,7 +39,7 @@ class ServiceDeribitInstrumentsSubscriptionManager():
                                                                     currency=currency,
                                                                     minimum_liquidity_threshold=minimum_liquidity_threshold)
 
-            instrument_names = [instrument.instrument_name for instrument in instruments]
+            instrument_names = self.__get_instrument_names(instruments=instruments)
 
             if index and not index_subscribed:
                 instruments.insert(0, index)
@@ -50,16 +50,16 @@ class ServiceDeribitInstrumentsSubscriptionManager():
                 instruments_subscribables = instruments
                 instruments_unsubscribables = []
             else:
-                previous_instrument_names = [instrument.instrument_name for instrument in self.previous_instruments]
+                previous_instrument_names = self.__get_instrument_names(instruments=self.previous_instruments)
                 instruments_subscribables = [instrument for instrument in instruments if instrument.instrument_name not in previous_instrument_names]
                 instruments_unsubscribables = [instrument for instrument in self.previous_instruments if instrument.instrument_name not in instrument_names]
 
             self.previous_instruments = instruments
             # print(len(instruments_subscribables), len(instruments_unsubscribables))
-            await self.queue.put((instruments_subscribables, instruments_unsubscribables))
+            await self.instruments_queue.put((instruments_subscribables, instruments_unsubscribables))
             await asyncio.sleep(360)
             
-    def _get_instrument_names(self, instruments):
+    def __get_instrument_names(self, instruments):
         return [instrument.instrument_name for instrument in instruments]
 
     async def a_coroutine_subscribe(self, subscribables: List[ModelInstrument]):

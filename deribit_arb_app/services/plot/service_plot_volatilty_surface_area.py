@@ -36,7 +36,7 @@ class ServicePlotVolatilitySurfaceArea():
                 dte = int(round(float(iv_model_object.time_to_maturity) * 365, 0))
                 all_maturities.add(dte)
                 all_strikes.add(float(iv_model_object.strike))
-                all_vols.add(float(iv_model_object.Implied_volatilty))
+                all_vols.add(float(iv_model_object.implied_volatilty))
                 
         # Clear plot
         if self.surface:

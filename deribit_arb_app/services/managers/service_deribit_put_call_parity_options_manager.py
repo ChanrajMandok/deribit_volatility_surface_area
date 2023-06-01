@@ -4,6 +4,7 @@ import aiohttp
 
 from decimal import Decimal
 from typing import List, Optional
+from singleton_decorator import singleton
 
 from deribit_arb_app.model.model_instrument import ModelInstrument
 from deribit_arb_app.store.store_instruments import StoreInstruments
@@ -14,6 +15,7 @@ from deribit_arb_app.services.handlers.service_deribit_static_orderbook_handler 
     # Manager Manages Liquid instruments to Maturity Matching Put-Call Instruments #
     ################################################################################
 
+@singleton
 class ServiceDeribitPutCallParityOptionsManager():
 
     ## similar to observer manager assume that liquid instruments retriever is managing subset of available instruments, this service takes the 

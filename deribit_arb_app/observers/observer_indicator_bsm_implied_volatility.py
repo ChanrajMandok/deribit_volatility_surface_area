@@ -1,4 +1,5 @@
 import os
+import asyncio
 from typing import List
 from singleton_decorator import singleton
 from concurrent.futures import ThreadPoolExecutor
@@ -17,9 +18,10 @@ from deribit_arb_app.model.indicator_models.model_indicator_bsm_implied_volatilt
 @singleton
 class ObserverIndicatorBsmImpliedVolatility(ObserverInterface):
 
-    def __init__(self) -> None:
+    def __init__(self, iv_queue:asyncio.Queue) -> None:
         super().__init__()
         self.indicators = {}
+        self.iv_queue = iv_queue
         self.max_workers = os.environ.get('MAX_WORKERS', None)
         self.store_subject_order_books = StoreSubjectOrderBooks()
         self.store_subject_index_prices = StoreSubjectIndexPrices()
@@ -58,15 +60,15 @@ class ObserverIndicatorBsmImpliedVolatility(ObserverInterface):
                     result = future.result()
                     if result is not None:
                         self.store_subject_indicator_bsm_iv.update_subject(result)
+                        self.iv_queue.put_nowait(result)
                 except Exception as e:
                     print(f"Error updating indicator: {key}")
                     print(f"Error message: {str(e)}")
 
     def get(self) -> List[ModelIndicatorBsmImpliedVolatility]:
-        return list(self.indicators.values())
+        indicators =  list(self.indicators.values())
+        return indicators
 
     def detach_all(self):
         for key in list(self.indicators.keys()):
             self.detach_indicator(key)
-
-    ## cannot update many as bsm must be ran every single time

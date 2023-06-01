@@ -65,7 +65,7 @@ class ServiceImpliedVolatilityBsmBuilder():
             name=object_name,
             instrument=instrument, 
             index=index_instrument,
-            Implied_volatilty=implied_vol,
+            implied_volatilty=implied_vol,
             strike=k,
             time_to_maturity=t,
             spot=s

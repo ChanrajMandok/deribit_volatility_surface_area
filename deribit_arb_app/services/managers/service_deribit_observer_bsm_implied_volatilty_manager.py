@@ -1,9 +1,11 @@
+import time
+import asyncio
+
 from typing import Optional
+from singleton_decorator import singleton
 
 from deribit_arb_app.model.model_index import ModelIndex
 from deribit_arb_app.model.model_instrument import ModelInstrument
-from deribit_arb_app.enums.enum_index_currency import EnumIndexCurrency
-
 from deribit_arb_app.observers.observer_indicator_bsm_implied_volatility import ObserverIndicatorBsmImpliedVolatility
 from deribit_arb_app.store.store_subject_indicator_bsm_implied_volatilty import StoreSubjectIndicatorBsmImpliedVolatilty
 from deribit_arb_app.model.indicator_models.model_indicator_bsm_implied_volatilty import ModelIndicatorBsmImpliedVolatility    
@@ -12,10 +14,11 @@ from deribit_arb_app.model.indicator_models.model_indicator_bsm_implied_volatilt
     # Service Handles, Builds  & Manages Live Observers # 
     #####################################################
 
-class ServiceDeribitObserverBsmImpliedVolatilityManager():
-    
-    def __init__(self):
-        self.observer_indicator_bsm_implied_volatility = ObserverIndicatorBsmImpliedVolatility()
+@singleton
+class ServiceDeribitObserverBsmImpliedVolatilityManager:
+    def __init__(self, iv_queue: asyncio.Queue):
+        self.iv_queue = iv_queue
+        self.observer_indicator_bsm_implied_volatility = ObserverIndicatorBsmImpliedVolatility(iv_queue=self.iv_queue)
         self.store_subject_indicator_bsm_implied_volatilty = StoreSubjectIndicatorBsmImpliedVolatilty()
         
     async def manager_observers(self,
@@ -48,5 +51,6 @@ class ServiceDeribitObserverBsmImpliedVolatilityManager():
                         self.observer_indicator_bsm_implied_volatility.detach_indicator(key)
                         # print(f"{str(indicator.key)} observer detached")
                         ## remove if the indicator exists, else do nothing
+        
                         
         
