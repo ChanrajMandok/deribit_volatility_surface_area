@@ -1,4 +1,3 @@
-import time
 import asyncio
 
 from typing import Optional
@@ -16,9 +15,9 @@ from deribit_arb_app.model.indicator_models.model_indicator_bsm_implied_volatilt
 
 @singleton
 class ServiceDeribitObserverBsmImpliedVolatilityManager:
-    def __init__(self, iv_queue: asyncio.Queue):
-        self.iv_queue = iv_queue
-        self.observer_indicator_bsm_implied_volatility = ObserverIndicatorBsmImpliedVolatility(iv_queue=self.iv_queue)
+    def __init__(self, implied_volatility_queue: asyncio.Queue):
+        self.implied_volatility_queue = implied_volatility_queue
+        self.observer_indicator_bsm_implied_volatility = ObserverIndicatorBsmImpliedVolatility(implied_volatility_queue=self.implied_volatility_queue)
         self.store_subject_indicator_bsm_implied_volatilty = StoreSubjectIndicatorBsmImpliedVolatilty()
         
     async def manager_observers(self,

@@ -1,5 +1,4 @@
 import os
-import time
 import asyncio
 import threading
 
@@ -7,8 +6,9 @@ from deribit_arb_app.model.model_index import ModelIndex
 from deribit_arb_app.enums.enum_index_currency import EnumIndexCurrency
 from deribit_arb_app.store.store_subject_indicator_bsm_implied_volatilty import StoreSubjectIndicatorBsmImpliedVolatilty
 from deribit_arb_app.services.managers.service_deribit_instruments_subscription_manager import ServiceDeribitInstrumentsSubscriptionManager
-from deribit_arb_app.services.managers.service_deribit_observer_bsm_implied_volatilty_manager import ServiceDeribitObserverBsmImpliedVolatilityManager
 from deribit_arb_app.services.managers.service_deribit_implied_volatility_queue_manager import ServiceDeribitBsmImpliedVolatilityQueueManager
+
+from deribit_arb_app.services.managers.service_deribit_observer_bsm_implied_volatilty_manager import ServiceDeribitObserverBsmImpliedVolatilityManager
 
     ###########################################################################
     # Plot Subscribe, Observe and plot Asset Specific Volatility Surface Area #
@@ -17,12 +17,13 @@ from deribit_arb_app.services.managers.service_deribit_implied_volatility_queue_
 class ServiceImpliedVolatilitySurfaceAreaBuilderMain:
     
     def __init__(self):
-        self.iv_queue = asyncio.Queue()
+        
         self.instruments_queue = asyncio.Queue()
+        self.implied_volatility_queue = asyncio.Queue()
         self.minimum_liquidity_threshold = os.environ.get('VSA_MINIMUM_LIQUIDITY_THRESHOLD', None)
         self.store_subject_indicator_bsm_implied_volatilty = StoreSubjectIndicatorBsmImpliedVolatilty()
         self.service_deribit_implied_volatility_queue_manager = ServiceDeribitBsmImpliedVolatilityQueueManager()
-        self.service_deribit_observer_bsm_implied_volatilty_manager = ServiceDeribitObserverBsmImpliedVolatilityManager(iv_queue=self.iv_queue)
+        self.service_deribit_observer_bsm_implied_volatilty_manager = ServiceDeribitObserverBsmImpliedVolatilityManager(implied_volatility_queue=self.implied_volatility_queue)
         self.service_deribit_instruments_subscription_manager = ServiceDeribitInstrumentsSubscriptionManager(instruments_queue=self.instruments_queue)
 
     async def run_strategy(self, currency: str, kind: str):
@@ -54,8 +55,8 @@ class ServiceImpliedVolatilitySurfaceAreaBuilderMain:
                                                                                                                                                subscribables=instruments_subscribe,
                                                                                                                                                unsubscribables=instruments_unsubscribe
                                                                                                                                               ))
-                # This creates a subprocess which allows the iv_queue to be processed and returned 
-                inner_loop_thread = threading.Thread(target=lambda: self.service_deribit_implied_volatility_queue_manager.manage_iv_queue(self.iv_queue))
+                # This creates a subprocess which allows the implied_volatility_queue to be processed and returned 
+                inner_loop_thread = threading.Thread(target=lambda: self.service_deribit_implied_volatility_queue_manager.manage_implied_volatility_queue(self.implied_volatility_queue))
                 inner_loop_thread.start()
 
             except Exception as e:
