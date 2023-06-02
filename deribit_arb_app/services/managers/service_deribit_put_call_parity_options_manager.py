@@ -31,6 +31,6 @@ class ServiceDeribitPutCallParityOptionsManager():
         
         for instrument in subscribables:
             name = instrument.instrument_name
-            type = instrument.
+            pass
 
             ## use custom sorting algorith, look on stack overflow to ensure optimised searh and sorting

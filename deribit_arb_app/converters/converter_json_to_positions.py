@@ -26,7 +26,7 @@ class ConverterJsonToPositions():
                 return None
 
             json_result = self.json_obj[EnumFieldName.RESULT.value]
-
+            
             for position_json in json_result:
                 position = ConverterJsonObjectToPosition(position_json).convert()
                 positions.append(position)

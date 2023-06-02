@@ -1,19 +1,14 @@
-import numpy as np
-import matplotlib.cm as cm
 import matplotlib.pyplot as plt
-
-from typing import Dict, List
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib.animation import FuncAnimation
+import asyncio
+import numpy as np
 from scipy.interpolate import griddata
-
-from deribit_arb_app.enums.enum_option_type import EnumOptionType
-from deribit_arb_app.model.indicator_models.model_indicator_bsm_implied_volatilty import ModelIndicatorBsmImpliedVolatility
-
-    ######################################################################################
-    # Service Plots Volatility Surface Area from Indicator Bsm Implied Volatilty objects #
-    ######################################################################################
+from matplotlib import cm
+from IPython.terminal.pt_inputhooks import register
 
 class ServicePlotVolatilitySurfaceArea():
-
+    
     def __init__(self):
         plt.ion()
         self.fig = plt.figure(figsize=(12, 12))
@@ -25,19 +20,19 @@ class ServicePlotVolatilitySurfaceArea():
         self.ax.view_init(elev=30, azim=120)
         self.surface = None
 
-    def update_plot(self, implied_vol_dict_live:Dict[str, List[ModelIndicatorBsmImpliedVolatility]]):
+    def update_plot(self, implied_vol_queue: asyncio.Queue):
         # Initialize data arrays
         all_strikes = []
         all_maturities = []
         all_vols = []
 
-        for key, data in implied_vol_dict_live.items():
-            for iv_model_object in data:
-                dte = int(round(float(iv_model_object.time_to_maturity) * 365, 0))
-                all_maturities.add(dte)
-                all_strikes.add(float(iv_model_object.strike))
-                all_vols.add(float(iv_model_object.implied_volatilty))
-                
+        while not implied_vol_queue.empty():
+            iv_model_object = implied_vol_queue.get_nowait()
+            dte = int(round(float(iv_model_object.time_to_maturity) * 365, 0))
+            all_maturities.append(dte)
+            all_strikes.append(float(iv_model_object.strike))
+            all_vols.append(float(iv_model_object.implied_volatilty))
+            
         # Clear plot
         if self.surface:
             self.surface.remove()
@@ -53,7 +48,11 @@ class ServicePlotVolatilitySurfaceArea():
         plt.title(f" Okx Volatility Surface Area")
         self.fig.colorbar(self.surface, shrink=0.5, aspect=5)
 
-    def start_animation(self, implied_vol_dict_live, interval=1000):
-        # implied_vol_dict_live is your live data stream, interval is the delay between updates in ms
-        ani = animation.FuncAnimation(self.fig, self.update_plot, fargs=(implied_vol_dict_live,), interval=interval, blit=False)
+    def start_animation(self, implied_vol_queue, interval=1000):
+        ani = FuncAnimation(self.fig, self.update_plot, fargs=(implied_vol_queue,), interval=interval, blit=False)
         plt.show()
+
+    # Enable asyncio event loop support for matplotlib
+    @register
+    def inputhook(context):
+        asyncio.get_event_loop().run_until_complete(context.input_is_ready())

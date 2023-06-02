@@ -1,6 +1,5 @@
 import os
 import asyncio
-from typing import List
 from singleton_decorator import singleton
 from concurrent.futures import ThreadPoolExecutor
 
@@ -8,7 +7,6 @@ from deribit_arb_app.observers.observer_interface import ObserverInterface
 from deribit_arb_app.store.store_subject_order_books import StoreSubjectOrderBooks
 from deribit_arb_app.store.store_subject_index_prices import StoreSubjectIndexPrices
 from deribit_arb_app.services.builders.service_implied_volatilty_bsm_builder import ServiceImpliedVolatilityBsmBuilder
-from deribit_arb_app.store.store_subject_indicator_bsm_implied_volatilty import StoreSubjectIndicatorBsmImpliedVolatilty
 from deribit_arb_app.model.indicator_models.model_indicator_bsm_implied_volatilty import ModelIndicatorBsmImpliedVolatility
 
     ###################################################################################################
@@ -25,7 +23,6 @@ class ObserverIndicatorBsmImpliedVolatility(ObserverInterface):
         self.implied_volatility_queue = implied_volatility_queue
         self.store_subject_order_books = StoreSubjectOrderBooks()
         self.store_subject_index_prices = StoreSubjectIndexPrices()
-        self.store_subject_indicator_bsm_iv = StoreSubjectIndicatorBsmImpliedVolatilty()
         self.service_implied_volatilty_bsm_builder = ServiceImpliedVolatilityBsmBuilder()
 
     def attach_indicator(self, instance: ModelIndicatorBsmImpliedVolatility):
@@ -59,15 +56,10 @@ class ObserverIndicatorBsmImpliedVolatility(ObserverInterface):
                 try:
                     result = future.result()
                     if result is not None:
-                        self.store_subject_indicator_bsm_iv.update_subject(result)
                         self.implied_volatility_queue.put_nowait(result)
                 except Exception as e:
                     print(f"Error updating indicator: {key}")
                     print(f"Error message: {str(e)}")
-
-    def get(self) -> List[ModelIndicatorBsmImpliedVolatility]:
-        indicators =  list(self.indicators.values())
-        return indicators
 
     def detach_all(self):
         for key in list(self.indicators.keys()):
