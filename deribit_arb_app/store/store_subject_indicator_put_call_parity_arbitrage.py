@@ -5,7 +5,7 @@ from singleton_decorator import singleton
 
 from deribit_arb_app.subjects.subject_indicator import SubjectIndicator
 from deribit_arb_app.store.store_subjectable_interface import StoreSubjectableInterface
-from deribit_arb_app.model.indicator_models.model_indicator_put_call_parity_arbitrage import ModelIndicatorPutCallParityArbitrage
+from deribit_arb_app.model.indicator_models.model_indicator_put_call_parity_arbitrage import ModelIndicatorPutCallVolArbitrage
 
     ######################################################################
     # Store Manages & Stores Put Call Parity Arbitrage Indicator objects #
@@ -17,7 +17,7 @@ class StoreSubjectPutCallParityArbitrage(StoreSubjectableInterface):
     def __init__(self):
         self.__subject_indicator_put_call_parity_arbitrages = {}
 
-    def update_subject(self, indicator_put_call_parity_arbitrage: ModelIndicatorPutCallParityArbitrage):
+    def update_subject(self, indicator_put_call_parity_arbitrage: ModelIndicatorPutCallVolArbitrage):
         
         if indicator_put_call_parity_arbitrage is None:
             return
@@ -32,12 +32,12 @@ class StoreSubjectPutCallParityArbitrage(StoreSubjectableInterface):
             _, _, exc_traceback = sys.exc_info()
             traceback.print_tb(exc_traceback, limit=None, file=None)
 
-    def get_subject(self, indicator_put_call_parity_arbitrage: ModelIndicatorPutCallParityArbitrage):
+    def get_subject(self, indicator_put_call_parity_arbitrage: ModelIndicatorPutCallVolArbitrage):
         if not indicator_put_call_parity_arbitrage.key in self.__subject_indicator_put_call_parity_arbitrages:
             self.__subject_indicator_put_call_parity_arbitrages[indicator_put_call_parity_arbitrage.key] = SubjectIndicator(indicator_put_call_parity_arbitrage)
         return self.__subject_indicator_put_call_parity_arbitrages[indicator_put_call_parity_arbitrage.key]
     
-    def remove_subject(self, indicator_put_call_parity_arbitrage: ModelIndicatorPutCallParityArbitrage):
+    def remove_subject(self, indicator_put_call_parity_arbitrage: ModelIndicatorPutCallVolArbitrage):
         if indicator_put_call_parity_arbitrage is None:
             return
 

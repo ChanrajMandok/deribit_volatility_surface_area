@@ -15,7 +15,7 @@ from deribit_arb_app.services.retrievers.service_deribit_liquid_instruments_retr
     ##########################################################################
 
 @singleton
-class ServiceDeribitInstrumentsSubscriptionManager():
+class ServiceInstrumentsSubscriptionManager():
     
     def __init__(self, instruments_queue:asyncio.Queue):
         self.previous_instruments = None

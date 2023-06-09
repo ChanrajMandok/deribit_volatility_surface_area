@@ -19,6 +19,7 @@ class ObserverIndicatorBsmImpliedVolatility(ObserverInterface):
     def __init__(self, implied_volatility_queue:asyncio.Queue) -> None:
         super().__init__()
         self.indicators = {}
+        self.implied_volatility_dict = {}
         self.max_workers = os.environ.get('MAX_WORKERS', None)
         self.implied_volatility_queue = implied_volatility_queue
         self.store_subject_order_books = StoreSubjectOrderBooks()
@@ -56,7 +57,10 @@ class ObserverIndicatorBsmImpliedVolatility(ObserverInterface):
                 try:
                     result = future.result()
                     if result is not None:
-                        self.implied_volatility_queue.put_nowait(result)
+                        if result is not None:
+                            if result.name not in self.implied_volatility_dict or \
+                                    round(self.implied_volatility_dict[result.name].implied_volatility, 4) != round(result.implied_volatility, 4):
+                                self.implied_volatility_queue.put_nowait(result)
                 except Exception as e:
                     print(f"Error updating indicator: {key}")
                     print(f"Error message: {str(e)}")

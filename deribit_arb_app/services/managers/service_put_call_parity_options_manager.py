@@ -16,7 +16,7 @@ from deribit_arb_app.services.handlers.service_deribit_static_orderbook_handler 
     ################################################################################
 
 @singleton
-class ServiceDeribitPutCallParityOptionsManager():
+class ServicePutCallParityOptionsManager():
 
     ## similar to observer manager assume that liquid instruments retriever is managing subset of available instruments, this service takes the 
     # subscribables & unsubscribables and finds all mathcing put_call instruments  

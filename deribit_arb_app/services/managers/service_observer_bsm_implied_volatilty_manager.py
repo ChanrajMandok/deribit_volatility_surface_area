@@ -13,7 +13,7 @@ from deribit_arb_app.model.indicator_models.model_indicator_bsm_implied_volatilt
     #####################################################
 
 @singleton
-class ServiceDeribitObserverBsmImpliedVolatilityManager:
+class ServiceObserverBsmImpliedVolatilityManager:
     def __init__(self, implied_volatility_queue: asyncio.Queue):
         self.implied_volatility_queue = implied_volatility_queue
         self.observer_indicator_bsm_implied_volatility = ObserverIndicatorBsmImpliedVolatility(self.implied_volatility_queue)

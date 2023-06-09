@@ -6,7 +6,7 @@ from typing import Optional
 from deribit_arb_app.store.store_subject_order_books import StoreSubjectOrderBooks
 from deribit_arb_app.store.store_subject_index_prices import StoreSubjectIndexPrices
 from deribit_arb_app.services.pricers.service_pricer_black_scholes import ServicePricerBlackScholes
-from deribit_arb_app.model.indicator_models.model_indicator_put_call_parity_arbitrage import ModelIndicatorPutCallParityArbitrage
+from deribit_arb_app.model.indicator_models.model_indicator_put_call_parity_arbitrage import ModelIndicatorPutCallVolArbitrage
 
     #############################################################
     # Service Builds Put_call Parity Arbitrage relational Model #
@@ -19,7 +19,7 @@ class ServicePutCallParityAribtrageBuilder():
         self.store_subject_index_prices      = StoreSubjectIndexPrices()
         self.service_black_scholes_pricer    = ServicePricerBlackScholes()
 
-    def build(self, indicator_put_call_parity_arbtirage: ModelIndicatorPutCallParityArbitrage) -> Optional[ModelIndicatorPutCallParityArbitrage]:
+    def build(self, indicator_put_call_parity_arbtirage: ModelIndicatorPutCallVolArbitrage) -> Optional[ModelIndicatorPutCallVolArbitrage]:
         ## instruments will already be maturity & strike matched
      
         call_instrument       = indicator_put_call_parity_arbtirage.call_instrument
@@ -85,7 +85,7 @@ class ServicePutCallParityAribtrageBuilder():
         put_call_parity_diff = call_value + pvk - put_value - S
         arbitrage = abs(put_call_parity_diff) > threshold  # replace 'threshold' with an appropriate value
 
-        return ModelIndicatorPutCallParityArbitrage(
+        return ModelIndicatorPutCallVolArbitrage(
             put_instrument=put_instrument, 
             call_instrument=call_instrument,
             index=index,

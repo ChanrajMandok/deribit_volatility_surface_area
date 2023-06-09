@@ -8,7 +8,7 @@ from deribit_arb_app.model.model_subjectable import ModelSubjectable
     # Model for Put-Call Arbitrage (subjectable) Objects #
     ######################################################
 
-class ModelIndicatorPutCallParityArbitrage(ModelSubjectable, models.Model):
+class ModelIndicatorPutCallVolArbitrage(ModelSubjectable, models.Model):
 
     put_instrument   = models.ForeignKey(ModelInstrument, on_delete=models.CASCADE, related_name='put_instrument_PCP')
     call_instrument  = models.ForeignKey(ModelInstrument, on_delete=models.CASCADE, related_name='call_instrument_PCP')
