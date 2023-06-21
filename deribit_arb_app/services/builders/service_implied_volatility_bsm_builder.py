@@ -6,10 +6,10 @@ from typing import Optional
 from deribit_arb_app.store.store_observable_order_books import StoreObservableOrderBooks
 from deribit_arb_app.store.store_observable_index_prices import StoreObservableIndexPrices
 from deribit_arb_app.services.pricers.service_pricer_black_scholes import ServicePricerBlackScholes
-from deribit_arb_app.model.indicator_models.model_indicator_bsm_implied_volatilty import ModelIndicatorBsmImpliedVolatility
+from deribit_arb_app.model.indicator_models.model_indicator_bsm_implied_volatility import ModelIndicatorBsmImpliedVolatility
 
     #################################################################
-    # Service Builds implied Volatilty mesure which can be observed #
+    # Service Builds implied Volatility mesure which can be observed #
     #################################################################
 
 class ServiceImpliedVolatilityBsmBuilder():
@@ -64,7 +64,7 @@ class ServiceImpliedVolatilityBsmBuilder():
             name=object_name,
             instrument=instrument, 
             index=index_instrument,
-            implied_volatilty=implied_vol,
+            implied_volatility=implied_vol,
             strike=k,
             time_to_maturity=t,
             spot=s

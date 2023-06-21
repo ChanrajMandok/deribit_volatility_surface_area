@@ -6,7 +6,7 @@ from singleton_decorator import singleton
 from deribit_arb_app.model.model_index import ModelIndex
 from deribit_arb_app.model.model_instrument import ModelInstrument
 from deribit_arb_app.observers.observer_indicator_bsm_implied_volatility import ObserverIndicatorBsmImpliedVolatility
-from deribit_arb_app.model.indicator_models.model_indicator_bsm_implied_volatilty import ModelIndicatorBsmImpliedVolatility    
+from deribit_arb_app.model.indicator_models.model_indicator_bsm_implied_volatility import ModelIndicatorBsmImpliedVolatility    
 
     #####################################################
     # Service Handles, Builds  & Manages Live Observers # 
