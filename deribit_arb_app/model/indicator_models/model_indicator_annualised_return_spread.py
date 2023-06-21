@@ -2,13 +2,13 @@ from django.db import models
 
 from deribit_arb_app.model.model_index import ModelIndex
 from deribit_arb_app.model.model_instrument import ModelInstrument
-from deribit_arb_app.model.model_subjectable import ModelSubjectable
+from deribit_arb_app.model.model_observable import ModelObservable
 
     ############################################################
-    # Model for Annualised Return Spread (subjectable) Objects #
+    # Model for Annualised Return Spread (Observable) Objects #
     ############################################################
 
-class ModelIndicatorAnnualisedReturnSpread(ModelSubjectable, models.Model):
+class ModelIndicatorAnnualisedReturnSpread(ModelObservable, models.Model):
     
     name            = models.CharField(max_length=50, null=False)
     instrument_1    =  models.ForeignKey(ModelInstrument, on_delete=models.CASCADE, related_name='instrument_1_IASR')

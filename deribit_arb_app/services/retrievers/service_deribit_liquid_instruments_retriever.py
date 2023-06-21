@@ -80,11 +80,13 @@ class ServiceDeribitLiquidInstrumentsRetriever():
                 (best_bid_size, best_bid_price) = (Decimal(result.get('best_bid_amount', 0)), Decimal(result.get('best_bid_price', 0)))
                 (best_ask_size, best_ask_price) = (Decimal(result.get('best_ask_amount', 0)), Decimal(result.get('best_ask_price', 0)))
                 if (best_bid_size != 0 and best_bid_price != 0) or (best_ask_size != 0 and best_ask_price != 0):
+                    spread_percentage = (best_ask_price-best_bid_price/(best_ask_price+best_bid_price/2)*100) 
                 ##check that instrument is not trading as spot underlying_price != index price  
                     if index_price != Decimal('0') and abs(underlying_price - index_price) / index_price > Decimal('0.00025'):
-                        instrument_names.append(instrument_name)
-                        if populate:
-                            results.append({key: result.get(key, 0) for key in keys})
+                        if spread_percentage < 1:
+                            instrument_names.append(instrument_name)
+                            if populate:
+                                results.append({key: result.get(key, 0) for key in keys})
 
         if populate:
             ## if populate use static orderbook screenshots to populate orderbook stores, providing base before subscription

@@ -2,13 +2,13 @@ from django.db import models
 
 from deribit_arb_app.model.model_index import ModelIndex
 from deribit_arb_app.model.model_instrument import ModelInstrument
-from deribit_arb_app.model.model_subjectable import ModelSubjectable
+from deribit_arb_app.model.model_observable import ModelObservable
 
     ######################################################
-    # Model for Put-Call Arbitrage (subjectable) Objects #
+    # Model for Put-Call Arbitrage (Observable) Objects #
     ######################################################
 
-class ModelIndicatorPutCallVolArbitrage(ModelSubjectable, models.Model):
+class ModelIndicatorPutCallVolArbitrage(ModelObservable, models.Model):
 
     put_instrument   = models.ForeignKey(ModelInstrument, on_delete=models.CASCADE, related_name='put_instrument_PCP')
     call_instrument  = models.ForeignKey(ModelInstrument, on_delete=models.CASCADE, related_name='call_instrument_PCP')

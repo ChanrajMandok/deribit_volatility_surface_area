@@ -4,8 +4,8 @@ from singleton_decorator import singleton
 from concurrent.futures import ThreadPoolExecutor
 
 from deribit_arb_app.observers.observer_interface import ObserverInterface
-from deribit_arb_app.store.store_subject_order_books import StoreSubjectOrderBooks
-from deribit_arb_app.store.store_subject_index_prices import StoreSubjectIndexPrices
+from deribit_arb_app.store.store_observable_order_books import StoreObservableOrderBooks
+from deribit_arb_app.store.store_observable_index_prices import StoreObservableIndexPrices
 from deribit_arb_app.services.builders.service_implied_volatilty_bsm_builder import ServiceImpliedVolatilityBsmBuilder
 from deribit_arb_app.model.indicator_models.model_indicator_bsm_implied_volatilty import ModelIndicatorBsmImpliedVolatility
 
@@ -22,8 +22,8 @@ class ObserverIndicatorBsmImpliedVolatility(ObserverInterface):
         self.implied_volatility_dict = {}
         self.max_workers = os.environ.get('MAX_WORKERS', None)
         self.implied_volatility_queue = implied_volatility_queue
-        self.store_subject_order_books = StoreSubjectOrderBooks()
-        self.store_subject_index_prices = StoreSubjectIndexPrices()
+        self.store_observable_order_books = StoreObservableOrderBooks()
+        self.store_observable_index_prices = StoreObservableIndexPrices()
         self.service_implied_volatilty_bsm_builder = ServiceImpliedVolatilityBsmBuilder()
 
     def attach_indicator(self, instance: ModelIndicatorBsmImpliedVolatility):
@@ -33,8 +33,8 @@ class ObserverIndicatorBsmImpliedVolatility(ObserverInterface):
         self.indicators[key] = instance
 
         # Attach observer to instrument order book and index
-        self.store_subject_order_books.get_subject(instrument).attach(self)
-        self.store_subject_index_prices.get_subject(index).attach(self)
+        self.store_observable_order_books.get_observable(instrument).attach(self)
+        self.store_observable_index_prices.get_observable(index).attach(self)
 
     def detach_indicator(self, key):
         instance = self.indicators.get(key)
@@ -43,8 +43,8 @@ class ObserverIndicatorBsmImpliedVolatility(ObserverInterface):
             index = instance.index
 
             # Detach observer from instrument order book and index
-            self.store_subject_order_books.get_subject(instrument).detach(self)
-            self.store_subject_index_prices.get_subject(index).detach(self)
+            self.store_observable_order_books.get_observable(instrument).detach(self)
+            self.store_observable_index_prices.get_observable(index).detach(self)
 
             del self.indicators[key]
 

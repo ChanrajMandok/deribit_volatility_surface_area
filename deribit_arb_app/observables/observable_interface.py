@@ -1,18 +1,18 @@
 from abc import ABC
 from typing import Generic, TypeVar
-from deribit_arb_app.model.model_subjectable import ModelSubjectable
+from deribit_arb_app.model.model_observable import ModelObservable
 from deribit_arb_app.observers.observer_interface import ObserverInterface
 
-T=TypeVar('T', ModelSubjectable, ModelSubjectable)
+T=TypeVar('T', ModelObservable, ModelObservable)
 
-    ###############################################################################################
-    # Subject interface declaring set of methods which manage subscriptions and observer subjects #
-    ###############################################################################################
+    ################################################################################################################
+    # Observable interface declaring set of methods which manage subscriptions and observer subjects (Observables) #
+    ################################################################################################################
 
-class SubjectInterface(ABC, Generic[T]):
+class ObservableInterface(ABC, Generic[T]):
 
     """
-    The Subject interface declares a set of methods for managing subscribers.
+    The Observable interface declares a set of methods for managing subscribers.
     """
 
     def __init__(self, instance: T) -> None:

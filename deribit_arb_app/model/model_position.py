@@ -1,11 +1,11 @@
 from django.db import models
-from deribit_arb_app.model.model_subjectable import ModelSubjectable
+from deribit_arb_app.model.model_observable import ModelObservable
 
     ############################################
-    # Model for position (subjectable) Objects #
+    # Model for position (Observable) Objects #
     ############################################=
 
-class ModelPosition(ModelSubjectable, models.Model):
+class ModelPosition(ModelObservable, models.Model):
 
     instrument_name                  = models.CharField(max_length=50)
     kind                             = models.CharField(max_length=10, null=True)

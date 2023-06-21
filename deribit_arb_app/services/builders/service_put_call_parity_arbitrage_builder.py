@@ -3,8 +3,8 @@ import datetime
 
 from typing import Optional
 
-from deribit_arb_app.store.store_subject_order_books import StoreSubjectOrderBooks
-from deribit_arb_app.store.store_subject_index_prices import StoreSubjectIndexPrices
+from deribit_arb_app.store.store_observable_order_books import StoreObservableOrderBooks
+from deribit_arb_app.store.store_observable_index_prices import StoreObservableIndexPrices
 from deribit_arb_app.services.pricers.service_pricer_black_scholes import ServicePricerBlackScholes
 from deribit_arb_app.model.indicator_models.model_indicator_put_call_parity_arbitrage import ModelIndicatorPutCallVolArbitrage
 
@@ -15,8 +15,8 @@ from deribit_arb_app.model.indicator_models.model_indicator_put_call_parity_arbi
 class ServicePutCallParityAribtrageBuilder():
     
     def __init__(self):
-        self.store_subject_order_books       = StoreSubjectOrderBooks()
-        self.store_subject_index_prices      = StoreSubjectIndexPrices()
+        self.store_observable_order_books       = StoreObservableOrderBooks()
+        self.store_observable_index_prices      = StoreObservableIndexPrices()
         self.service_black_scholes_pricer    = ServicePricerBlackScholes()
 
     def build(self, indicator_put_call_parity_arbtirage: ModelIndicatorPutCallVolArbitrage) -> Optional[ModelIndicatorPutCallVolArbitrage]:
@@ -26,15 +26,15 @@ class ServicePutCallParityAribtrageBuilder():
         put_instrument        = indicator_put_call_parity_arbtirage.put_instrument
         index_instrument      = indicator_put_call_parity_arbtirage.index
         
-        index                 = self.store_subject_index_prices.get_subject(index_instrument).get_instance()
+        index                 = self.store_observable_index_prices.get_observable(index_instrument).get_instance()
         index_price           = index.price
 
-        call_instrument_book  = self.store_subject_order_books.get_subject(call_instrument).get_instance()
+        call_instrument_book  = self.store_observable_order_books.get_observable(call_instrument).get_instance()
         call_instrument_name  = call_instrument.instrument_name
         call_instrument_ask   = call_instrument_book.best_ask_price
         call_instrument_bid   = call_instrument_book.best_bid_price
 
-        put_instrument_book   = self.store_subject_order_books.get_subject(put_instrument).get_instance()
+        put_instrument_book   = self.store_observable_order_books.get_observable(put_instrument).get_instance()
         put_instrument_name   = put_instrument.instrument_name
         put_instrument_ask   = put_instrument_book.best_ask_price
         put_instrument_bid   = put_instrument_book.best_bid_price

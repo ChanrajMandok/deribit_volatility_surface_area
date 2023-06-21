@@ -1,11 +1,11 @@
 from django.db import models
-from deribit_arb_app.model.model_subjectable import ModelSubjectable
+from deribit_arb_app.model.model_observable import ModelObservable
 
     ###############################################
-    # Model for Index Price (subjectable) Objects #
+    # Model for Index Price (Observable) Objects #
     ###############################################
 
-class ModelIndexPrice(ModelSubjectable, models.Model):
+class ModelIndexPrice(ModelObservable, models.Model):
 
     index_name      = models.CharField(max_length=255, null=False)
     price           = models.FloatField(null=False)

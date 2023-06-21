@@ -7,7 +7,7 @@ from deribit_arb_app.store.store_instruments import StoreInstruments
 from deribit_arb_app.enums.enum_instrument_kind import EnumInstrumentKind
 from deribit_arb_app.tasks.task_instruments_pull import TaskInstrumentsPull
 from deribit_arb_app.store.store_deribit_open_orders import StoreDeribitOpenOrders
-from deribit_arb_app.store.store_subject_order_books import StoreSubjectOrderBooks
+from deribit_arb_app.store.store_observable_order_books import StoreObservableOrderBooks
 from deribit_arb_app.services.deribit_api.service_api_deribit import ServiceApiDeribit
 from deribit_arb_app.services.deribit_api.service_deribit_orders import ServiceDeribitOrders
 from deribit_arb_app.services.deribit_api.service_deribit_subscribe import ServiceDeribitSubscribe
@@ -27,7 +27,7 @@ class TestDeribitOrderCancelAllOpenOrderTestCase(asynctest.TestCase):
         self.store_instrument = StoreInstruments()
         self.instrument = self.store_instrument.get_deribit_instrument('BTC-PERPETUAL')
         self.deribit_api = ServiceApiDeribit()
-        self.store_subject_order_books = StoreSubjectOrderBooks()
+        self.store_observablet_order_books = StoreObservableOrderBooks()
         self.deribit_subscribe = ServiceDeribitSubscribe()
         self.deribit_orders = ServiceDeribitOrders()
         self.deribit_messaging = ServiceDeribitMessaging()
@@ -39,7 +39,7 @@ class TestDeribitOrderCancelAllOpenOrderTestCase(asynctest.TestCase):
         await asyncio.wait_for(self.deribit_subscribe.subscribe(subscribables=[self.instrument], snapshot=True), timeout=25.0)
 
     async def a_coroutine_buy(self):
-        price = self.store_subject_order_books.get_subject(self.instrument).get_instance().best_bid_price
+        price = self.store_observable_order_books.get_observable(self.instrument).get_instance().best_bid_price
         limit_price = round(0.98 * price,0)
         
         await self.deribit_orders.buy_async(

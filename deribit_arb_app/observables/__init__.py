@@ -1,7 +1,7 @@
 import logging
 
 # create logger
-logger = logging.getLogger('subjects')
+logger = logging.getLogger('observables')
 logger.setLevel(logging.DEBUG)
 
 logger.propagate = 0

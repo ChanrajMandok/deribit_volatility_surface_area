@@ -1,7 +1,7 @@
 from singleton_decorator import singleton
 
-from deribit_arb_app.store.store_subject_order_books import StoreSubjectOrderBooks
-from deribit_arb_app.store.store_subject_index_prices import StoreSubjectIndexPrices
+from deribit_arb_app.store.store_observable_order_books import StoreObservableOrderBooks
+from deribit_arb_app.store.store_observable_index_prices import StoreObservableIndexPrices
 
     #########################################################
     # Service Handles Deribit Unsubscriptions via Websocket #
@@ -11,8 +11,8 @@ from deribit_arb_app.store.store_subject_index_prices import StoreSubjectIndexPr
 class ServiceDeribitUnsubscriptionHandler():
 
     def __init__(self):
-        self.store_subject_order_books = StoreSubjectOrderBooks()
-        self.store_subject_index_prices = StoreSubjectIndexPrices()
+        self.store_observable_order_books = StoreObservableOrderBooks()
+        self.store_observable_index_prices = StoreObservableIndexPrices()
 
     def handle(self, result):
 
@@ -27,8 +27,8 @@ class ServiceDeribitUnsubscriptionHandler():
 
             if unsub_channel.split('.')[0] == "quote":
         
-                self.store_subject_order_books.remove_subject_by_key(unsub_channel.split('.')[1])    
+                self.store_observable_order_books.remove_observable_by_key(unsub_channel.split('.')[1])    
                 
             elif unsub_channel.split('.')[0] ==  "deribit_price_index":    
             
-                self.store_subject_index_prices.remove_subject_by_key(unsub_channel.split('.')[1])
+                self.store_observable_index_prices.remove_observable_by_key(unsub_channel.split('.')[1])

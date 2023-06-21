@@ -2,8 +2,8 @@ import datetime
 
 from typing import Optional
 
-from deribit_arb_app.store.store_subject_order_books import StoreSubjectOrderBooks
-from deribit_arb_app.store.store_subject_index_prices import StoreSubjectIndexPrices
+from deribit_arb_app.store.store_observable_order_books import StoreObservableOrderBooks
+from deribit_arb_app.store.store_observable_index_prices import StoreObservableIndexPrices
 from deribit_arb_app.model.indicator_models.model_indicator_annualised_return_spread import ModelIndicatorAnnualisedReturnSpread
 
     #########################################################
@@ -13,17 +13,17 @@ from deribit_arb_app.model.indicator_models.model_indicator_annualised_return_sp
 class ServiceIndicatorAnnualisedReturnSpreadBuilder():
 
     def __init__(self):
-        self.store_subject_order_books = StoreSubjectOrderBooks()
-        self.store_subject_index_prices = StoreSubjectIndexPrices()
+        self.store_observable_order_books = StoreObservableOrderBooks()
+        self.store_observable_index_prices = StoreObservableIndexPrices()
 
     def build(self, indicator_annualised_return_spread: ModelIndicatorAnnualisedReturnSpread) -> Optional[ModelIndicatorAnnualisedReturnSpread]:
         instrument_1 = indicator_annualised_return_spread.instrument_1
         instrument_2 = indicator_annualised_return_spread.instrument_2
         index = indicator_annualised_return_spread.index
 
-        book1 = self.store_subject_order_books.get_subject(instrument_1).get_instance()
-        book2 = self.store_subject_order_books.get_subject(instrument_2).get_instance()
-        index_price = self.store_subject_index_prices.get_subject(index).get_instance()
+        book1 = self.store_observable_order_books.get_observable(instrument_1).get_instance()
+        book2 = self.store_observable_order_books.get_observable(instrument_2).get_instance()
+        index_price = self.store_observable_index_prices.get_observable(index).get_instance()
 
         instrument_1_ask = book1.best_ask_price
         instrument_2_bid = book2.best_bid_price

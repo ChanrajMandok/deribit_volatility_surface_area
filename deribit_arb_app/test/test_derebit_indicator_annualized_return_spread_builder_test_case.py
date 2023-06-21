@@ -11,7 +11,7 @@ from deribit_arb_app.tasks.task_instruments_pull import TaskInstrumentsPull
 from deribit_arb_app.services.deribit_api.service_deribit_subscribe import ServiceDeribitSubscribe
 from deribit_arb_app.observers.observer_indicator_annualised_return_spread import ObserverIndicatorAnnualisedReturnSpread
 from deribit_arb_app.model.indicator_models.model_indicator_annualised_return_spread import ModelIndicatorAnnualisedReturnSpread
-from deribit_arb_app.store.store_subject_indicator_annualized_return_spreads import StoreSubjectIndicatorAnnualizedReturnSpreads
+from deribit_arb_app.store.store_observable_indicator_annualized_return_spreads import StoreObservableIndicatorAnnualizedReturnSpreads
 
     #########################################################################################################
     # TestCase Testing funcitonality to calculate aned subscribe to internally calculated Annualised Spread #
@@ -42,7 +42,7 @@ class TestDeribitIndicatorAnnualizedReturnSpreadBuilderTestCase(asynctest.TestCa
         # add the indicator to the observer
         self.observer_indicator_annualised_return_spread.attach_indicator(indicator)
         
-        self.store_subject_indicator_annualized_return_spreads = StoreSubjectIndicatorAnnualizedReturnSpreads()
+        self.store_observable_indicator_annualized_return_spreads = StoreObservableIndicatorAnnualizedReturnSpreads()
         self.my_loop = asyncio.new_event_loop()
 
     async def a_coroutine(self):

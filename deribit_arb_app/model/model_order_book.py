@@ -1,11 +1,11 @@
 from django.db import models
-from deribit_arb_app.model.model_subjectable import ModelSubjectable
+from deribit_arb_app.model.model_observable import ModelObservable
 
     #############################################
-    # Model for Orderbook (subjectable) Objects #
+    # Model for Orderbook (Observable) Objects #
     #############################################
 
-class ModelOrderBook(ModelSubjectable , models.Model):
+class ModelOrderBook(ModelObservable , models.Model):
 
     instrument_name       = models.CharField(null=False, max_length=100)
     best_bid_price        = models.DecimalField(max_digits=20, decimal_places=8, null=True)
