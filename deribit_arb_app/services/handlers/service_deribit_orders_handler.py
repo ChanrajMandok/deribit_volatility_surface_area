@@ -4,7 +4,7 @@ from singleton_decorator import singleton
 
 from deribit_arb_app.model.model_order import ModelOrder
 from deribit_arb_app.store.store_deribit_open_orders import StoreDeribitOpenOrders
-from deribit_arb_app.converters.converter_json_to_order import ConverterJsonToOrder
+from deribit_arb_app.converters.converter_json_to_model_order import ConverterJsonToModelOrder
 from deribit_arb_app.converters.converter_json_to_open_orders import ConverterJsonToOpenOrders
 from deribit_arb_app.converters.converter_json_to_cancelled_order import ConverterJsonToCancelledOrder
 
@@ -19,7 +19,7 @@ class ServiceDeribitOrdersHandler():
         self.store_deribit_open_orders = StoreDeribitOpenOrders()
 
     def set_order(self, result) -> ModelOrder:
-        order = ConverterJsonToOrder(json.dumps(result)).convert()   
+        order = ConverterJsonToModelOrder(json.dumps(result)).convert()   
         if order.order_state in ["filled", "rejected", "cancelled"]:
             self.store_deribit_open_orders.pop(order.order_id, None)
         else:

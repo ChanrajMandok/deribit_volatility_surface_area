@@ -4,13 +4,13 @@ from typing import Optional
 from deribit_arb_app.model.model_order import ModelOrder
 from deribit_arb_app.enums.enum_field_name import EnumFieldName
 
-from deribit_arb_app.converters.converter_json_object_to_order import ConverterJsonObjectToOrder
+from deribit_arb_app.converters.converter_json_object_to_model_order import ConverterJsonObjectToModelOrder
 
     ################################################
     # Converter Converts Json object to ModelOrder #
     ################################################
 
-class ConverterJsonToOrder():
+class ConverterJsonToModelOrder():
 
     def __init__(self, json_string):
 
@@ -30,7 +30,7 @@ class ConverterJsonToOrder():
 
             json_order = json_result[EnumFieldName.ORDER.value]
 
-            return ConverterJsonObjectToOrder().convert(json_order)
+            return ConverterJsonObjectToModelOrder().convert(json_order)
 
         except Exception as e:
             raise

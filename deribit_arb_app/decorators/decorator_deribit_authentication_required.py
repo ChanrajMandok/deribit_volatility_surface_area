@@ -1,7 +1,7 @@
 from deribit_arb_app.services.deribit_api.service_deribit_authentication import ServiceDeribitAuthentication
 
     #############################################
-    # Decorator Provides Derebit Authentication #
+    # Decorator Provides Deribit Authentication #
     #############################################
 
 def decorator_deribit_authenticated(func):

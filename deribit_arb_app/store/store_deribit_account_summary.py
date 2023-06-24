@@ -4,7 +4,7 @@ from singleton_decorator import singleton
 from deribit_arb_app.model.model_account_summary import ModelAccountSummary
 
     ##################################################
-    # Store Manages & stores Derebit Account Summary #
+    # Store Manages & stores Deribit Account Summary #
     ##################################################
 
 @singleton

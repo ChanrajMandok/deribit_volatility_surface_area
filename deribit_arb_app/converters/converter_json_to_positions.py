@@ -4,13 +4,13 @@ from typing import Optional
 from deribit_arb_app.model.model_position import ModelPosition
 from deribit_arb_app.enums.enum_field_name import EnumFieldName
 
-from deribit_arb_app.converters.converter_json_object_to_position import ConverterJsonObjectToPosition
+from deribit_arb_app.converters.converter_json_object_to_model_position import ConverterJsonObjectToModelPosition
 
     ###################################################
     # Converter Converts Json object to ModelPosition #
     ###################################################
 
-class ConverterJsonToPositions():
+class ConverterJsonToModelPositions():
     
     def __init__(self, json_string):
 
@@ -28,7 +28,7 @@ class ConverterJsonToPositions():
             json_result = self.json_obj[EnumFieldName.RESULT.value]
             
             for position_json in json_result:
-                position = ConverterJsonObjectToPosition(position_json).convert()
+                position = ConverterJsonObjectToModelPosition(position_json).convert()
                 positions.append(position)
 
             return positions

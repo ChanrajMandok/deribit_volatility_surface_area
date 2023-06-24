@@ -7,7 +7,7 @@ from deribit_arb_app.model.model_position import ModelPosition
     # Converter Converts Json object to Model Position #
     ####################################################
 
-class ConverterJsonObjectToPosition():
+class ConverterJsonObjectToModelPosition():
 
     def __init__(self, json_obj):
         self.json_obj = json_obj

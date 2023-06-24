@@ -4,7 +4,7 @@ from singleton_decorator import singleton
 
 from deribit_arb_app.model.model_account_summary import ModelAccountSummary
 from deribit_arb_app.store.store_deribit_account_summary import StoreDeribitAccountSummary
-from deribit_arb_app.converters.converter_json_to_account_summary import ConverterJsonToAccountSummary
+from deribit_arb_app.converters.converter_json_to_account_model_summary import ConverterJsonToAccountModelSummary
 
     ##############################################
     # Service Implements Account Summary Handler #
@@ -20,7 +20,7 @@ class ServiceDeribitAccountSummaryHandler():
         
     def set_account_summary(self, result) -> Optional[ModelAccountSummary]:
 
-        self.account_summary = ConverterJsonToAccountSummary(json.dumps(result)).convert()
+        self.account_summary = ConverterJsonToAccountModelSummary(json.dumps(result)).convert()
         account_summary = self.store_deribit_account_summary.set_deribit_account_summary(self.account_summary)
         return account_summary
 

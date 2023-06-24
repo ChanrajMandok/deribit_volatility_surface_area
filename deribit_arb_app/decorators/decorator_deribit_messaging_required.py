@@ -3,7 +3,7 @@ from deribit_arb_app.services.deribit_api.service_deribit_messaging import Servi
 deribit_messaging = ServiceDeribitMessaging
 
     ####################################################
-    # Decorator imports derebit messaging for services #
+    # Decorator imports deribit messaging for services #
     ####################################################
 
 def decorator_deribit_messaging(func):

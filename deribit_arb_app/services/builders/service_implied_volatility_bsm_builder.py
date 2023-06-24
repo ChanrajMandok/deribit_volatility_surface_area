@@ -14,15 +14,19 @@ from deribit_arb_app.model.indicator_models.model_indicator_bsm_implied_volatili
 class ServiceImpliedVolatilityBsmBuilder():
     
     def __init__(self):
-        self.store_observable_order_books    = Stores.store_observable_orderbooks
-        self.store_observable_index_prices   = Stores.store_observable_index_prices
-        self.service_black_scholes_pricer    = ServicePricerBlackScholes()
+        self.store_observable_order_books      = Stores.store_observable_orderbooks
+        self.store_observable_index_prices     = Stores.store_observable_index_prices
+        self.store_observable_volatility_index =  Stores.store_observable_volatility_index
+        self.service_black_scholes_pricer      = ServicePricerBlackScholes()
 
     def build(self, indicator_implied_volatility: ModelIndicatorBsmImpliedVolatility) -> Optional[ModelIndicatorBsmImpliedVolatility]:
         instrument       = indicator_implied_volatility.instrument
         index_instrument = indicator_implied_volatility.index
+        hvol_instrument  = indicator_implied_volatility.volatility_index
         index            = self.store_observable_index_prices.get_observable(index_instrument).get_instance()
         index_price      = index.price if hasattr(index, 'price') else None
+        volatility_index = self.store_observable_volatility_index.get_observable(hvol_instrument).get_instance()
+        hvol_value       = volatility_index.volatility
         book             = self.store_observable_order_books.get_observable(instrument).get_instance()
         instument_name   = instrument.name if hasattr(instrument, 'name') else None
         instrument_ask   = book.best_ask_price if hasattr(book, 'best_ask_price') else None
@@ -32,7 +36,7 @@ class ServiceImpliedVolatilityBsmBuilder():
         current_date     = datetime.datetime.utcnow()
 
         ## preventing unecessary overhead of BSM calculation
-        if any(not var for var in [index, index_price, book, instument_name, (instrument_ask or instrument_bid), expiry_date]):
+        if any(not var for var in [index, index_price, book, instument_name, hvol_value, (instrument_ask or instrument_bid), expiry_date]):
             return None
 
         # BSM inputs
@@ -41,6 +45,7 @@ class ServiceImpliedVolatilityBsmBuilder():
         k = float(instument_name.split('-')[2])
         t = (expiry_date - current_date).total_seconds() / 31536000.0
         option_type = instrument.option_type
+        h = hvol_value
         
         target = (instrument_ask + instrument_bid) / 2 if instrument_ask and instrument_bid \
                     else instrument_ask or instrument_bid
@@ -51,6 +56,7 @@ class ServiceImpliedVolatilityBsmBuilder():
             K=k, 
             T=t, 
             r=r, 
+            h=h,
             option_type=option_type)
         
         if math.isnan(implied_vol) or implied_vol < 0:

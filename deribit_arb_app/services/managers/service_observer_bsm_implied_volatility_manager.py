@@ -5,6 +5,7 @@ from singleton_decorator import singleton
 
 from deribit_arb_app.model.model_subscribable_index import ModelSubscribableIndex
 from deribit_arb_app.model.model_subscribable_instrument import ModelSubscribableInstrument
+from deribit_arb_app.model.model_subscribable_volatility_index import ModelSubscribableVolatilityIndex
 from deribit_arb_app.observers.observer_indicator_bsm_implied_volatility import ObserverIndicatorBsmImpliedVolatility
 from deribit_arb_app.model.indicator_models.model_indicator_bsm_implied_volatility import ModelIndicatorBsmImpliedVolatility    
 
@@ -20,6 +21,7 @@ class ServiceObserverBsmImpliedVolatilityManager:
         
     async def manager_observers(self,
                                 index :ModelSubscribableIndex,
+                                volatility_index:ModelSubscribableVolatilityIndex,
                                 subscribables: Optional[list[ModelSubscribableInstrument]],
                                 unsubscribables: Optional[list[ModelSubscribableInstrument]]):
 
@@ -40,8 +42,8 @@ class ServiceObserverBsmImpliedVolatilityManager:
             for instrument in unsubscribables:
                 # only detach index from unsubscribables if their are no live observers
                 if len(self.observer_indicator_bsm_implied_volatility) == 0:
-                    unsubscribables.append(index)
-                if instrument != index:
+                    unsubscribables.extend([index, volatility_index])
+                if instrument != index & instrument != volatility_index:
                     key = ModelIndicatorBsmImpliedVolatility.generate_key(instrument)
                     self.observer_indicator_bsm_implied_volatility.detach_indicator(key)
                         # print(f"{str(indicator.key)} observer detached")

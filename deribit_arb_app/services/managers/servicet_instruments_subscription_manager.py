@@ -8,6 +8,7 @@ from singleton_decorator import singleton
 from deribit_arb_app.model.model_subscribable_index import ModelSubscribableIndex
 from deribit_arb_app.model.model_subscribable_instrument import ModelSubscribableInstrument
 from deribit_arb_app.services.deribit_api.service_deribit_subscribe import ServiceDeribitSubscribe
+from deribit_arb_app.model.model_subscribable_volatility_index import ModelSubscribableVolatilityIndex
 from deribit_arb_app.services.retrievers.service_deribit_liquid_instruments_retriever import ServiceDeribitLiquidInstrumentsRetriever
     
     ##########################################################################
@@ -28,10 +29,14 @@ class ServiceInstrumentsSubscriptionManager():
                                               currency: str,
                                               kind: str,
                                               index: Optional[ModelSubscribableIndex],
+                                              volatility_index: Optional[ModelSubscribableVolatilityIndex],
                                               minimum_liquidity_threshold: int
                                               ) -> Tuple[List[ModelSubscribableIndex], List[ModelSubscribableIndex], List[ModelSubscribableIndex]]:
         if index:
             index_subscribed = False
+            
+        if volatility_index:
+            volatility_index_subscribed = False
 
         while True:
             instruments = await self.liquid_instruments_retriever.main(kind=kind,
@@ -41,10 +46,12 @@ class ServiceInstrumentsSubscriptionManager():
 
             instrument_names = self.__get_instrument_names(instruments=instruments)
 
-            if index and not index_subscribed:
-                instruments.insert(0, index)
-                instrument_names.insert(0, index.name)
-                index_subscribed = True
+            subscriptions = [(index_subscribed, index), (volatility_index_subscribed, volatility_index)]
+            for subscribed, index in subscriptions:
+                if not subscribed:
+                    instruments.insert(0, index)
+                    instrument_names.insert(0, index.name)
+                    subscribed = True
 
             if self.previous_instruments is None:
                 instruments_subscribables = instruments

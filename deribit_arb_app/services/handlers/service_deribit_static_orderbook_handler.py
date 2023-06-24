@@ -2,7 +2,7 @@ import json
 from singleton_decorator import singleton
 
 from deribit_arb_app.store.stores import Stores
-from deribit_arb_app.converters.converter_json_to_order_book import ConverterJsonToOrderBook
+from deribit_arb_app.converters.converter_json_to_model_observable_order_book import ConverterJsonToModelObservableOrderBook
 
     ####################################################################
     # Service handles Deribit orderbook instances retrived via aiohttp #
@@ -18,5 +18,5 @@ class ServiceDeribitStaticOrderbookHandler():
         
     def set_orderbooks(self, result):
 
-        self.orderbook = ConverterJsonToOrderBook(json.dumps(result)).convert_request_data()
+        self.orderbook = ConverterJsonToModelObservableOrderBook(json.dumps(result)).convert_request_data()
         self.store_observable_order_books.update_observable(self.orderbook)

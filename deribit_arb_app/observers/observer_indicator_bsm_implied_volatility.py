@@ -23,28 +23,31 @@ class ObserverIndicatorBsmImpliedVolatility(ObserverInterface):
         self.implied_volatility_queue = implied_volatility_queue
         self.store_observable_order_books = Stores.store_observable_orderbooks
         self.store_observable_index_prices = Stores.store_observable_index_prices
+        self.store_observable_volatility_index =  Stores.store_observable_volatility_index
         self.service_implied_volatility_bsm_builder = ServiceImpliedVolatilityBsmBuilder()
 
     def attach_indicator(self, instance: ModelIndicatorBsmImpliedVolatility):
         key = instance.key
         instrument = instance.instrument
         index = instance.index
+        volatility_index = instance.volatility_index
         self.indicators[key] = instance
 
         # Attach observer to instrument order book and index
         self.store_observable_order_books.get_observable(instrument).attach(self)
         self.store_observable_index_prices.get_observable(index).attach(self)
+        self.store_observable_volatility_index.get_observable(volatility_index).attach(self)
 
     def detach_indicator(self, key):
         instance = self.indicators.get(key)
         if instance:
             instrument = instance.instrument
             index = instance.index
-
+            volatility_index = instance.volatility_index
             # Detach observer from instrument order book and index
             self.store_observable_order_books.get_observable(instrument).detach(self)
             self.store_observable_index_prices.get_observable(index).detach(self)
-
+            self.store_observable_volatility_index.get_observable(volatility_index).detach(self)
             del self.indicators[key]
 
     def update(self) -> None:

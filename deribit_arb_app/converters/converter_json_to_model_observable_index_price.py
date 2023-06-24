@@ -8,7 +8,7 @@ from deribit_arb_app.model.model_observable_index_price import ModelObservableIn
     # Converter Converts Json object to ModelIndexPrice #
     #####################################################
 
-class ConverterJsonToIndexPrice():
+class ConverterJsonToModelObservableIndexPrice():
 
     def __init__(self, json_string):
 

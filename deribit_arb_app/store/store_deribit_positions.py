@@ -6,7 +6,7 @@ from deribit_arb_app.model.model_position import ModelPosition
 from deribit_arb_app.model.model_subscribable_instrument import ModelSubscribableInstrument
 
     ############################################
-    # Store Manages & Stores Derebit Positions #
+    # Store Manages & Stores Deribit Positions #
     ############################################
 
 @singleton

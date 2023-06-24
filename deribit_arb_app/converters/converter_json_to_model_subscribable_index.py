@@ -8,7 +8,7 @@ from deribit_arb_app.model.model_subscribable_index import ModelSubscribableInde
     # Converter Converts Json object to ModelIndex #
     ################################################
 
-class ConverterJsonToIndex():
+class ConverterJsonToModelSubscribableIndex():
 
     def __init__(self, json_string):
 

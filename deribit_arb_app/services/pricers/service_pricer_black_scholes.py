@@ -26,10 +26,10 @@ class ServicePricerBlackScholes():
         d1 = round((np.log(S/K)+(r+0.5*sigma*sigma)*T)/(sigma*np.sqrt(T)),8)
         return round((S*norm.pdf(d1)*np.sqrt(T)),8)
 
-    def find_vol(self, target_value, S, K, T, r, option_type, *args) -> Optional[float]:
+    def find_vol(self, target_value, S, K, T, r, h,option_type, *args) -> Optional[float]:
         MAX_ITERATIONS = 200
         PRECISION = 1.0e-10
-        sigma = 1.0
+        sigma = h
         try:
             for i in range(0, MAX_ITERATIONS):
                 if option_type == EnumOptionType.CALL.value:
