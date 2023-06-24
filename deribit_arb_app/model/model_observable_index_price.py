@@ -5,15 +5,15 @@ from deribit_arb_app.model.model_observable import ModelObservable
     # Model for Index Price (Observable) Objects #
     ###############################################
 
-class ModelIndexPrice(ModelObservable, models.Model):
+class ModelObservableIndexPrice(ModelObservable, models.Model):
 
-    index_name      = models.CharField(max_length=255, null=False)
+    name            = models.CharField(max_length=255, null=False)
     price           = models.FloatField(null=False)
     timestamp       = models.IntegerField(null=False)
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.index_name = self.index_name
+        key = f"index_price {kwargs.get('name')}"
+        super().__init__(key=key, *args, **kwargs)
 
     class Meta:
         managed = False

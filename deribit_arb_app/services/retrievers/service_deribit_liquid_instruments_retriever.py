@@ -5,9 +5,9 @@ import aiohttp
 from decimal import Decimal
 from typing import List, Optional
 
-from deribit_arb_app.model.model_instrument import ModelInstrument
-from deribit_arb_app.store.store_instruments import StoreInstruments
+from deribit_arb_app.store.stores import Stores
 from deribit_arb_app.tasks.task_instruments_pull import TaskInstrumentsPull
+from deribit_arb_app.model.model_subscribable_instrument import ModelSubscribableInstrument
 from deribit_arb_app.services.handlers.service_deribit_static_orderbook_handler import ServiceDeribitStaticOrderbookHandler
 
     ##########################################
@@ -24,19 +24,19 @@ class ServiceDeribitLiquidInstrumentsRetriever():
     
     async def async_setup(self, currency:str, kind:str):
         await TaskInstrumentsPull().run(currency=currency, kind=kind)
-        self.store_instrument = StoreInstruments()
+        self.store_subscribable_instruments = Stores.store_subscribable_instruments
         
-    async def main(self, populate:bool, currency:str, kind:str, minimum_liquidity_threshold:int) -> List[ModelInstrument]:
+    async def main(self, populate:bool, currency:str, kind:str, minimum_liquidity_threshold:int) -> List[ModelSubscribableInstrument]:
         await self.async_setup(currency=currency, kind=kind)
-        store_instruments = self.store_instrument.get_deribit_instruments()
-        instruments = list(filter(lambda x: x.kind == kind and x.base_currency == currency, store_instruments.values()))
+        store_subscribable_instruments = self.store_subscribable_instruments.get_subscribables()
+        instruments = list(filter(lambda x: x.kind == kind and x.base_currency == currency, store_subscribable_instruments.values()))
         liquid_instrument_names = await self.fetch_all(instruments=instruments, populate=populate, minimum_liquidity_threshold=minimum_liquidity_threshold)
-        result_instrument_names = [x for x in instruments if x.instrument_name in liquid_instrument_names]
+        result_instrument_names = [x for x in instruments if x.name in liquid_instrument_names]
         return result_instrument_names
         
-    async def fetch(self, instrument:ModelInstrument) -> Optional[List]:
+    async def fetch(self, instrument:ModelSubscribableInstrument) -> Optional[List]:
         async with aiohttp.ClientSession() as session:
-            async with session.get(url= f'{self.base_url}/public/get_order_book?depth=10&instrument_name={instrument.instrument_name}') as response:
+            async with session.get(url= f'{self.base_url}/public/get_order_book?depth=10&instrument_name={instrument.name}') as response:
                 if response.status not in (200, 429):
                     print(f"HTTP response status: {response.status}")
                     return None
@@ -44,10 +44,10 @@ class ServiceDeribitLiquidInstrumentsRetriever():
                     data = await response.json()
                     return data
                 except aiohttp.client_exceptions.ContentTypeError as e:
-                    print(f"ContentTypeError occurred for instrument {instrument.instrument_name} with error: {e}")
+                    print(f"ContentTypeError occurred for instrument {instrument.name} with error: {e}")
                     return None
             
-    async def fetch_all(self, instruments:List[ModelInstrument], populate:bool, minimum_liquidity_threshold:int) -> List[str]:
+    async def fetch_all(self, instruments:List[ModelSubscribableInstrument], populate:bool, minimum_liquidity_threshold:int) -> List[str]:
         batch_size = 20
         tasks = []
         sem = asyncio.Semaphore(20)  # Adjust this number to limit concurrent tasks

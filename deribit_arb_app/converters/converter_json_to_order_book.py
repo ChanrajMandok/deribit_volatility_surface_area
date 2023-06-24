@@ -1,7 +1,7 @@
 import json
 from typing import Optional
 
-from deribit_arb_app.model.model_order_book import ModelOrderBook
+from deribit_arb_app.model.model_observable_order_book import ModelObservableOrderBook
 
     ####################################################
     # Converter Converts Json object to ModelOrderBook #
@@ -12,7 +12,7 @@ class ConverterJsonToOrderBook():
     def __init__(self, json_string):
         self.json_obj = json.loads(json_string)
 
-    def convert(self) -> Optional[ModelOrderBook]:
+    def convert(self) -> Optional[ModelObservableOrderBook]:
 
         try:
 
@@ -26,8 +26,8 @@ class ConverterJsonToOrderBook():
 
             json_data = json_obj_params["data"]
 
-            orderbook =  ModelOrderBook(
-                                        instrument_name   = json_data["instrument_name"],
+            orderbook =  ModelObservableOrderBook(
+                                        name              = json_data["instrument_name"],
                                         best_bid_price    = json_data["best_bid_price"],
                                         best_ask_price    = json_data["best_ask_price"],
                                         best_bid_amount   = json_data["best_bid_amount"],
@@ -39,12 +39,12 @@ class ConverterJsonToOrderBook():
         except Exception as e:
             raise
 
-    def convert_request_data(self) -> Optional[ModelOrderBook]:
+    def convert_request_data(self) -> Optional[ModelObservableOrderBook]:
 
         json_data = self.json_obj
 
-        orderbook =  ModelOrderBook(
-                                    instrument_name   = json_data["instrument_name"],
+        orderbook =  ModelObservableOrderBook(
+                                    name              = json_data["instrument_name"],
                                     best_bid_price    = json_data["best_bid_price"],
                                     best_ask_price    = json_data["best_ask_price"],
                                     best_bid_amount   = json_data["best_bid_amount"],

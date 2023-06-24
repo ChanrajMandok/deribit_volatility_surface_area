@@ -3,8 +3,7 @@ import datetime
 
 from typing import Optional
 
-from deribit_arb_app.store.store_observable_order_books import StoreObservableOrderBooks
-from deribit_arb_app.store.store_observable_index_prices import StoreObservableIndexPrices
+from deribit_arb_app.store.stores import Stores
 from deribit_arb_app.services.pricers.service_pricer_black_scholes import ServicePricerBlackScholes
 from deribit_arb_app.model.indicator_models.model_indicator_put_call_parity_arbitrage import ModelIndicatorPutCallVolArbitrage
 
@@ -15,9 +14,10 @@ from deribit_arb_app.model.indicator_models.model_indicator_put_call_parity_arbi
 class ServicePutCallParityAribtrageBuilder():
     
     def __init__(self):
-        self.store_observable_order_books       = StoreObservableOrderBooks()
-        self.store_observable_index_prices      = StoreObservableIndexPrices()
         self.service_black_scholes_pricer    = ServicePricerBlackScholes()
+        self.store_observable_order_books = Stores.store_observable_orderbooks
+        self.store_observable_index_prices = Stores.store_observable_index_prices
+        
 
     def build(self, indicator_put_call_parity_arbtirage: ModelIndicatorPutCallVolArbitrage) -> Optional[ModelIndicatorPutCallVolArbitrage]:
         ## instruments will already be maturity & strike matched
@@ -30,14 +30,14 @@ class ServicePutCallParityAribtrageBuilder():
         index_price           = index.price
 
         call_instrument_book  = self.store_observable_order_books.get_observable(call_instrument).get_instance()
-        call_instrument_name  = call_instrument.instrument_name
+        call_instrument_name  = call_instrument.name
         call_instrument_ask   = call_instrument_book.best_ask_price
         call_instrument_bid   = call_instrument_book.best_bid_price
 
         put_instrument_book   = self.store_observable_order_books.get_observable(put_instrument).get_instance()
-        put_instrument_name   = put_instrument.instrument_name
-        put_instrument_ask   = put_instrument_book.best_ask_price
-        put_instrument_bid   = put_instrument_book.best_bid_price
+        put_instrument_name   = put_instrument.name
+        put_instrument_ask    = put_instrument_book.best_ask_price
+        put_instrument_bid    = put_instrument_book.best_bid_price
 
         expiry_timestamp      = put_instrument.expiration_timestamp
         expiry_date           = datetime.datetime.fromtimestamp((expiry_timestamp/1000))
@@ -48,7 +48,7 @@ class ServicePutCallParityAribtrageBuilder():
                 (put_instrument_ask or put_instrument_bid),(call_instrument_ask or call_instrument_bid), expiry_date]):
             return None
         
-        k = float(call_instrument.instrument_name.split('-')[2])
+        k = float(call_instrument.name.split('-')[2])
         t = (expiry_date - current_date).days / 365.0
         r = 0.0
 
@@ -75,7 +75,7 @@ class ServicePutCallParityAribtrageBuilder():
             option_type=put_instrument.option_type)
 
         if math.isnan(call_implied_vol) or math.isnan(put_implied_vol):
-            # print(f"{self.instrument.instrument_name} iv is none ")
+            # print(f"{self.instrument.name} iv is none ")
             return None
         
         # Calculate present value of strike price

@@ -2,7 +2,7 @@ import json
 
 from typing import List
 
-from deribit_arb_app.model.model_index import ModelIndex
+from deribit_arb_app.model.model_subscribable_index import ModelSubscribableIndex
 
     ################################################
     # Converter Converts Json object to ModelIndex #
@@ -14,7 +14,7 @@ class ConverterJsonToIndex():
 
         self.json_obj = json.loads(json_string)
 
-    def convert(self) -> List[ModelIndex]:
+    def convert(self) -> List[ModelSubscribableIndex]:
 
         if not "params" in self.json_obj:
             return None
@@ -28,6 +28,6 @@ class ConverterJsonToIndex():
 
         index_name = data["index_name"]
 
-        return ModelIndex(
-            index_name  = index_name
+        return ModelSubscribableIndex(
+            name  = index_name
         )

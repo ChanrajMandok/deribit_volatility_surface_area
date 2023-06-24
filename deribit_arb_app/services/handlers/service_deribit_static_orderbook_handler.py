@@ -1,7 +1,7 @@
 import json
 from singleton_decorator import singleton
 
-from deribit_arb_app.store.store_observable_order_books import StoreObservableOrderBooks
+from deribit_arb_app.store.stores import Stores
 from deribit_arb_app.converters.converter_json_to_order_book import ConverterJsonToOrderBook
 
     ####################################################################
@@ -13,7 +13,7 @@ class ServiceDeribitStaticOrderbookHandler():
 
     def __init__(self):
 
-        self.store_observable_order_books = StoreObservableOrderBooks()
+        self.store_observable_order_books = Stores.store_observable_orderbooks
         self.orderbook = None
         
     def set_orderbooks(self, result):

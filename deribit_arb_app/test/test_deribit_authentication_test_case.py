@@ -1,4 +1,4 @@
-import asynctest
+import unittest
 
 from deribit_arb_app.store.store_deribit_authorization import StoreDeribitAuthorization
 from deribit_arb_app.services.deribit_api.service_deribit_messaging import ServiceDeribitMessaging
@@ -9,7 +9,7 @@ from deribit_arb_app.services.deribit_api.service_deribit_websocket_connector im
     # TestCase Testing Authentication Object in StoreDeribitAuthorization #
     #######################################################################
 
-class TestDeribitAuthenticationTestCase(asynctest.TestCase):
+class TestDeribitAuthenticationTestCase(unittest.IsolatedAsyncioTestCase):
 
     def setUp(self):
         super().setUp()
@@ -29,15 +29,15 @@ class TestDeribitAuthenticationTestCase(asynctest.TestCase):
                 self.deribit_messaging.message_handle(response)
                 break
 
-    def test_authenticate(self):
+    async def test_authenticate(self):
         # If Auth object already exists in store then check that it is has Auth Token 
         auth = self.store_deribit_authorization.get_authorization()
         # Else create Auth object and check that it is has Auth Token
         if not auth:
             try:
-                self.loop.run_until_complete(self.a_coroutine())
-            finally:
-                self.loop.close()
+                await self.a_coroutine()
                 self.assertTrue(self.store_deribit_authorization.is_authorized())
+            except Exception as e:
+                self.fail(f"Test failed due to exception: {str(e)}")
         else:
             self.assertTrue(self.store_deribit_authorization.is_authorized())

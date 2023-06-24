@@ -1,8 +1,7 @@
 import json
 from singleton_decorator import singleton
 
-from deribit_arb_app.store.store_observable_order_books import StoreObservableOrderBooks
-from deribit_arb_app.store.store_observable_index_prices import StoreObservableIndexPrices
+from deribit_arb_app.store.stores import Stores
 from deribit_arb_app.converters.converter_json_to_order_book import ConverterJsonToOrderBook
 from deribit_arb_app.converters.converter_json_to_index_price import ConverterJsonToIndexPrice
 
@@ -14,8 +13,8 @@ from deribit_arb_app.converters.converter_json_to_index_price import ConverterJs
 class ServiceDeribitSubscriptionHandler():
 
     def __init__(self):
-        self.store_observable_order_books = StoreObservableOrderBooks()
-        self.store_observable_index_prices = StoreObservableIndexPrices()
+        self.store_observable_order_books = Stores.store_observable_orderbooks
+        self.store_observable_index_prices = Stores.store_observable_index_prices
 
     def handle(self, result):
 

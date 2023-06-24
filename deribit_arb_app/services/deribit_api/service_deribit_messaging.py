@@ -13,6 +13,7 @@ from deribit_arb_app.services.handlers.service_deribit_subscription_handler impo
 from deribit_arb_app.services.handlers.service_deribit_unsubcription_handler import ServiceDeribitUnsubscriptionHandler
 from deribit_arb_app.services.handlers.service_deribit_authentication_handler import ServiceDeribitAuthenticationHandler
 from deribit_arb_app.services.handlers.service_deribit_account_summary_handler import ServiceDeribitAccountSummaryHandler
+from deribit_arb_app.services.handlers.service_deribit_cancel_all_positions_handler import ServiceDeribitCancelAllPositionsHandler
 
     ###################################################
     # Service provides Interface for Deribit messages #
@@ -56,6 +57,8 @@ class ServiceDeribitMessaging():
                 ServiceDeribitTestHandler().check_response(response_json)
             elif message_type == 10:
                 data = ServiceDeribitOrdersHandler().set_cancelled_order(response_json)
+            elif message_type == 11:
+                data = ServiceDeribitCancelAllPositionsHandler().cancel_all(response_json)
             elif method == "subscription":
                 ServiceDeribitSubscriptionHandler().handle(response_json)    
             else:
@@ -98,6 +101,8 @@ class ServiceDeribitMessaging():
             msg_id = 900000 + msg_id
         elif method == "private/cancel":
             msg_id = 1000000 + msg_id
+        elif method == "private/cancel_all":
+            msg_id = 1100000 + msg_id
 
         return msg_id
 

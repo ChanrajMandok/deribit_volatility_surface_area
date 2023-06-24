@@ -1,18 +1,48 @@
-from abc import ABC, abstractmethod
+from typing import Dict, Mapping, TypeVar, Iterator
+from deribit_arb_app.observables.observable_indicator import ObservableIndicator
 
-from deribit_arb_app.model.model_observable import ModelObservable
-from deribit_arb_app.observables.observable_interface import ObservableInterface
+M = TypeVar('M')
+E = TypeVar('E')
 
-    ######################################
-    # Observable Object Store Interface #
-    ######################################
+    ########################################################
+    # Store Observable Manages & Stores observable Objects #
+    ########################################################
 
-class StoreObservableInterface(ABC):
+class StoreObservableInterface(Mapping[E, M]):
 
-    @abstractmethod
-    def update_observable(self, observable: ModelObservable):
-        pass
+    def __init__(self):
+        self.d = {}
+
+    def __init__(self):
+        self.d: Dict[E, M] = dict()
+
+    def __getitem__(self, item: E) -> M:
+        value = str(item)
+        return self.d[value]
+
+    def __len__(self) -> int:
+        return len(self.d)
+
+    def __iter__(self) -> Iterator[E]:
+        return iter(self.d)
+
+    def update_observable(self, observable_instance: M):
+        if observable_instance is None:
+            return
         
-    @abstractmethod
-    def get_observable(self, observable: ModelObservable) -> ObservableInterface:
-        pass
+        if not observable_instance.name in self.d:
+            self.d[observable_instance.name] = ObservableIndicator(observable_instance)
+        self.d[observable_instance.name].set_instance(observable_instance)
+
+    def get_observable(self, observable_instance: M):
+        if not observable_instance.name in self.d:
+            self.d[observable_instance.name] = ObservableIndicator(observable_instance.__class__(name=observable_instance.name))
+        return self.d[observable_instance.name]
+    
+    def remove_observable(self, observable_instance: M):
+        if observable_instance.name in self.d:
+            del self.d[observable_instance.name]
+            
+    def remove_observable_by_key(self, key: E):
+        if key in self.d:
+            del self.d[key]       

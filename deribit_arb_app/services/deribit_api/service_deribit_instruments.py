@@ -3,7 +3,7 @@ import json
 from typing import Dict
 
 from deribit_arb_app.model.model_message import ModelMessage
-from deribit_arb_app.model.model_instrument import ModelInstrument
+from deribit_arb_app.model.model_subscribable_instrument import ModelSubscribableInstrument
 from deribit_arb_app.services.deribit_api.service_deribit_messaging import ServiceDeribitMessaging
 from deribit_arb_app.services.deribit_api.service_deribit_websocket_connector import ServiceDeribitWebsocketConnector
 
@@ -33,7 +33,7 @@ class ServiceDeribitInstruments():
             params=self.params
         )
 
-    async def get(self) -> Dict[str, ModelInstrument]:
+    async def get(self) -> Dict[str, ModelSubscribableInstrument]:
 
         async with ServiceDeribitWebsocketConnector() as websocket:
             await websocket.send(json.dumps(self.msg.build_message()))

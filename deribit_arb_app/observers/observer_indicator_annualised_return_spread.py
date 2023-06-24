@@ -1,9 +1,7 @@
 from singleton_decorator import singleton
 
+from deribit_arb_app.store.stores import Stores
 from deribit_arb_app.observers.observer_interface import ObserverInterface
-from deribit_arb_app.store.store_observable_order_books import StoreObservableOrderBooks
-from deribit_arb_app.store.store_observable_index_prices import StoreObservableIndexPrices
-from deribit_arb_app.store.store_observable_indicator_annualized_return_spreads import StoreObservableIndicatorAnnualizedReturnSpreads
 from deribit_arb_app.model.indicator_models.model_indicator_annualised_return_spread import ModelIndicatorAnnualisedReturnSpread
 from deribit_arb_app.services.builders.service_indicator_annualised_return_spread_builder import ServiceIndicatorAnnualisedReturnSpreadBuilder
 
@@ -17,10 +15,10 @@ class ObserverIndicatorAnnualisedReturnSpread(ObserverInterface):
     def __init__(self) -> None:
         super().__init__()
         self.indicators = {}
-        self.store_observable_order_books = StoreObservableOrderBooks()
-        self.store_observable_index_prices = StoreObservableIndexPrices()
+        self.store_observable_order_books = Stores.store_observable_orderbooks
+        self.store_observable_index_prices = Stores.store_observable_index_prices
         self.service_builder = ServiceIndicatorAnnualisedReturnSpreadBuilder()
-        self.store_observable_indicator_annualized_return_spreads = StoreObservableIndicatorAnnualizedReturnSpreads()
+        self.store_observable_indicator_annualised_spread = Stores.store_indicator_annualised_return_spreads
 
     def attach_indicator(self, instance: ModelIndicatorAnnualisedReturnSpread):
         key = instance.key
@@ -36,7 +34,7 @@ class ObserverIndicatorAnnualisedReturnSpread(ObserverInterface):
             try:
                 indicator = self.service_builder.build(instance)
                 if indicator is not None:
-                    self.store_observable_indicator_annualized_return_spreads.update_observable(indicator)
+                    self.store_observable_indicator_annualised_spread.update_observable(indicator)
             except Exception as e:
                 print(f"Error updating indicator: {instance.key}")
                 print(f"Error message: {str(e)}")

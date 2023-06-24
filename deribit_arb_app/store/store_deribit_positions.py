@@ -1,9 +1,9 @@
 from typing import Dict, List, Optional
 from singleton_decorator import singleton
 
+from deribit_arb_app.store.stores import Stores
 from deribit_arb_app.model.model_position import ModelPosition
-from deribit_arb_app.model.model_instrument import ModelInstrument
-from deribit_arb_app.store.store_instruments import StoreInstruments
+from deribit_arb_app.model.model_subscribable_instrument import ModelSubscribableInstrument
 
     ############################################
     # Store Manages & Stores Derebit Positions #
@@ -16,12 +16,15 @@ class StoreDeribitPositions():
 
     def __init__(self):
         self.__positions = {}
-        self.store_instruments = StoreInstruments()
+        self.store_subscribable_instruments = Stores.store_subscribable_instruments
 
-    def get_deribit_position(self, instrument: ModelInstrument) -> Optional[ModelPosition]:
+    def __len__(self) -> int:
+        return len(self.__positions)
+
+    def get_deribit_position(self, instrument: ModelSubscribableInstrument) -> Optional[ModelPosition]:
         if instrument.base_currency in self.__positions.keys():
             ccy_positions = self.positions[instrument.base_currency]
-            return ccy_positions[instrument.instrument_name]
+            return ccy_positions[instrument.name]
         else:
             return None
 
@@ -32,11 +35,14 @@ class StoreDeribitPositions():
 
     def set_deribit_positions(self, positions: List[ModelPosition]) -> Dict[str,Dict[str, ModelPosition]]:
         for position in positions:
-            instrument = self.store_instruments.get_deribit_instrument(position.instrument_name)
+            instrument = self.store_subscribable_instruments.get_subscribable_via_key(position.instrument_name)
             if instrument:
                 if not instrument.base_currency in self.__positions:
                     self.__positions[instrument.base_currency] = {}
-                self.__positions[instrument.base_currency][instrument.instrument_name] = position
+                self.__positions[instrument.base_currency][instrument.name] = position
         return self.__positions
+    
+    def clear_store(self):
+        self.__positions = {}
 
 

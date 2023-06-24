@@ -2,8 +2,7 @@ import datetime
 
 from typing import Optional
 
-from deribit_arb_app.store.store_observable_order_books import StoreObservableOrderBooks
-from deribit_arb_app.store.store_observable_index_prices import StoreObservableIndexPrices
+from deribit_arb_app.store.stores import Stores
 from deribit_arb_app.model.indicator_models.model_indicator_annualised_return_spread import ModelIndicatorAnnualisedReturnSpread
 
     #########################################################
@@ -13,8 +12,8 @@ from deribit_arb_app.model.indicator_models.model_indicator_annualised_return_sp
 class ServiceIndicatorAnnualisedReturnSpreadBuilder():
 
     def __init__(self):
-        self.store_observable_order_books = StoreObservableOrderBooks()
-        self.store_observable_index_prices = StoreObservableIndexPrices()
+        self.store_observable_order_books = Stores.store_observable_orderbooks
+        self.store_observable_index_prices = Stores.store_observable_index_prices
 
     def build(self, indicator_annualised_return_spread: ModelIndicatorAnnualisedReturnSpread) -> Optional[ModelIndicatorAnnualisedReturnSpread]:
         instrument_1 = indicator_annualised_return_spread.instrument_1
@@ -25,9 +24,9 @@ class ServiceIndicatorAnnualisedReturnSpreadBuilder():
         book2 = self.store_observable_order_books.get_observable(instrument_2).get_instance()
         index_price = self.store_observable_index_prices.get_observable(index).get_instance()
 
-        instrument_1_ask = book1.best_ask_price
-        instrument_2_bid = book2.best_bid_price
-        index_price_val = index_price.price
+        instrument_1_ask = book1.best_ask_price  if hasattr(book1, 'best_ask_price') else None
+        instrument_2_bid = book2.best_bid_price if hasattr(book2, 'best_bid_price') else None
+        index_price_val = index_price.price if hasattr(index_price, 'price') else None
 
         if (not instrument_1_ask) or (not instrument_2_bid) or (not index_price_val):
             return None

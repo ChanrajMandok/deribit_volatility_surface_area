@@ -29,5 +29,5 @@ class ServiceImpliedVolatilityQueueManager():
                     if not isinstance(model_iv_object, ModelIndicatorBsmImpliedVolatility):
                         continue
                     self.implied_volatility_dict[(model_iv_object.strike, model_iv_object.time_to_maturity)] = model_iv_object.implied_volatility
-                    print(self.implied_volatility_dict)
+                    print(f'{model_iv_object.name} : {model_iv_object.implied_volatility}')
             time.sleep(0)

@@ -6,9 +6,9 @@ from decimal import Decimal
 from typing import List, Optional
 from singleton_decorator import singleton
 
-from deribit_arb_app.model.model_instrument import ModelInstrument
-from deribit_arb_app.store.store_instruments import StoreInstruments
+from deribit_arb_app.store.stores import Stores
 from deribit_arb_app.tasks.task_instruments_pull import TaskInstrumentsPull
+from deribit_arb_app.model.model_subscribable_instrument import ModelSubscribableInstrument
 from deribit_arb_app.services.handlers.service_deribit_static_orderbook_handler import ServiceDeribitStaticOrderbookHandler
 
     ################################################################################
@@ -25,12 +25,12 @@ class ServicePutCallParityOptionsManager():
         pass 
 
     async def manager_subscriptables(self,
-                                     subscribables: Optional[list[ModelInstrument]],
-                                     unsubscribables: Optional[list[ModelInstrument]]):
+                                     subscribables: Optional[list[ModelSubscribableInstrument]],
+                                     unsubscribables: Optional[list[ModelSubscribableInstrument]]):
     
         
         for instrument in subscribables:
-            name = instrument.instrument_name
+            name = instrument.name
             pass
 
             ## use custom sorting algorith, look on stack overflow to ensure optimised searh and sorting

@@ -3,8 +3,8 @@ import asyncio
 from typing import Optional
 from singleton_decorator import singleton
 
-from deribit_arb_app.model.model_index import ModelIndex
-from deribit_arb_app.model.model_instrument import ModelInstrument
+from deribit_arb_app.model.model_subscribable_index import ModelSubscribableIndex
+from deribit_arb_app.model.model_subscribable_instrument import ModelSubscribableInstrument
 from deribit_arb_app.observers.observer_indicator_bsm_implied_volatility import ObserverIndicatorBsmImpliedVolatility
 from deribit_arb_app.model.indicator_models.model_indicator_bsm_implied_volatility import ModelIndicatorBsmImpliedVolatility    
 
@@ -19,15 +19,15 @@ class ServiceObserverBsmImpliedVolatilityManager:
         self.observer_indicator_bsm_implied_volatility = ObserverIndicatorBsmImpliedVolatility(self.implied_volatility_queue)
         
     async def manager_observers(self,
-                                index :ModelIndex,
-                                subscribables: Optional[list[ModelInstrument]],
-                                unsubscribables: Optional[list[ModelInstrument]]):
+                                index :ModelSubscribableIndex,
+                                subscribables: Optional[list[ModelSubscribableInstrument]],
+                                unsubscribables: Optional[list[ModelSubscribableInstrument]]):
 
     # observers are internally generated & managed so no corountine is required
         if subscribables is not None:
             for instrument in subscribables:
                 if instrument != index:
-                    object_name = f"BSM Implied Volatility-{instrument.instrument_name}"
+                    object_name = f"BSM Implied Volatility-{instrument.name}"
                     indicator = ModelIndicatorBsmImpliedVolatility(
                         name=object_name,
                         instrument=instrument,

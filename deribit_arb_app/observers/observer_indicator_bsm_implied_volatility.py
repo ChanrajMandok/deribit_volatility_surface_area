@@ -3,9 +3,8 @@ import asyncio
 from singleton_decorator import singleton
 from concurrent.futures import ThreadPoolExecutor
 
+from deribit_arb_app.store.stores import Stores
 from deribit_arb_app.observers.observer_interface import ObserverInterface
-from deribit_arb_app.store.store_observable_order_books import StoreObservableOrderBooks
-from deribit_arb_app.store.store_observable_index_prices import StoreObservableIndexPrices
 from deribit_arb_app.services.builders.service_implied_volatility_bsm_builder import ServiceImpliedVolatilityBsmBuilder
 from deribit_arb_app.model.indicator_models.model_indicator_bsm_implied_volatility import ModelIndicatorBsmImpliedVolatility
 
@@ -22,8 +21,8 @@ class ObserverIndicatorBsmImpliedVolatility(ObserverInterface):
         self.implied_volatility_dict = {}
         self.max_workers = os.environ.get('MAX_WORKERS', None)
         self.implied_volatility_queue = implied_volatility_queue
-        self.store_observable_order_books = StoreObservableOrderBooks()
-        self.store_observable_index_prices = StoreObservableIndexPrices()
+        self.store_observable_order_books = Stores.store_observable_orderbooks
+        self.store_observable_index_prices = Stores.store_observable_index_prices
         self.service_implied_volatility_bsm_builder = ServiceImpliedVolatilityBsmBuilder()
 
     def attach_indicator(self, instance: ModelIndicatorBsmImpliedVolatility):

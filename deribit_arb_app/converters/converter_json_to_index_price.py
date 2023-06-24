@@ -2,7 +2,7 @@ import json
 
 from typing import Optional
 
-from deribit_arb_app.model.model_index_price import ModelIndexPrice
+from deribit_arb_app.model.model_observable_index_price import ModelObservableIndexPrice
 
     #####################################################
     # Converter Converts Json object to ModelIndexPrice #
@@ -14,7 +14,7 @@ class ConverterJsonToIndexPrice():
 
         self.json_obj = json.loads(json_string)
 
-    def convert(self)  -> Optional[ModelIndexPrice]:
+    def convert(self)  -> Optional[ModelObservableIndexPrice]:
 
         if not "params" in self.json_obj:
              return None
@@ -30,8 +30,8 @@ class ConverterJsonToIndexPrice():
         price        = data["price"]
         timestamp    = data["timestamp"]
 
-        return ModelIndexPrice(
-            index_name  =index_name,
+        return ModelObservableIndexPrice(
+            name        =index_name,
             price       =price,
             timestamp   =timestamp
         )

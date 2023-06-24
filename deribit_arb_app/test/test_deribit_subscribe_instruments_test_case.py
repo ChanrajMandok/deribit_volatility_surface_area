@@ -1,12 +1,15 @@
 import sys
 import asyncio
 import traceback
-import asynctest
+import unittest
 
+
+from deribit_arb_app.store.stores import Stores
 from deribit_arb_app.enums.enum_currency import EnumCurrency
-from deribit_arb_app.store.store_instruments import StoreInstruments
+from deribit_arb_app.enums.enum_index_currency import EnumIndexCurrency
 from deribit_arb_app.enums.enum_instrument_kind import EnumInstrumentKind
 from deribit_arb_app.tasks.task_instruments_pull import TaskInstrumentsPull
+from deribit_arb_app.model.model_subscribable_index import ModelSubscribableIndex
 from deribit_arb_app.services.deribit_api.service_api_deribit import ServiceApiDeribit
 from deribit_arb_app.services.deribit_api.service_deribit_subscribe import ServiceDeribitSubscribe
 
@@ -14,23 +17,22 @@ from deribit_arb_app.services.deribit_api.service_deribit_subscribe import Servi
     # TestCase Testing funcitonality to subscribe to Instrument Price Stream #
     ##########################################################################
 
-class TestDeribitSubscribeInstrumentsTestCase(asynctest.TestCase):
+class TestDeribitSubscribeInstrumentsTestCase(unittest.IsolatedAsyncioTestCase):
 
-    async def setUp(self):
-        super().setUp()
+    async def asyncSetUp(self):
         self.currency = EnumCurrency.BTC.value
         self.instrument_kind = EnumInstrumentKind.FUTURE.value
         await TaskInstrumentsPull().run(currency=self.currency, kind=self.instrument_kind)
-        self.store_instrument = StoreInstruments()
-        self.instrument = self.store_instrument.get_deribit_instrument('BTC-PERPETUAL')
+        self.store_subscribable_instrument = Stores.store_subscribable_instruments
+        self.instrument = self.store_subscribable_instrument.get_subscribable_via_key('BTC-PERPETUAL')
+        self.index = ModelSubscribableIndex(name=EnumIndexCurrency.BTC.value)
         self.deribit_subscribe = ServiceDeribitSubscribe()
-        self.my_loop = asyncio.new_event_loop()
         self.deribit_api = ServiceApiDeribit()
         
     async def a_coroutine_subscribe(self):
         try:
             await asyncio.wait_for(self.deribit_subscribe.subscribe(
-                    subscribables=[self.instrument], snapshot=False), timeout=10)
+                    subscribables=[self.instrument, self.index], snapshot=False), timeout=10)
         except asyncio.exceptions.TimeoutError:
             pass
         except Exception as e:
@@ -40,8 +42,5 @@ class TestDeribitSubscribeInstrumentsTestCase(asynctest.TestCase):
     async def a_coroutine_unsubscribe(self):
         await self.deribit_subscribe.unsubscribe([self.instrument], snapshot=False)
 
-    def test_subscribe(self):
-        try:
-            self.my_loop.run_until_complete(self.a_coroutine_subscribe())
-        finally:
-            self.my_loop.close()
+    async def test_subscribe(self):
+        await self.a_coroutine_subscribe()

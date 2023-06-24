@@ -3,7 +3,7 @@ import json
 from typing import List
 from decimal import Decimal
 
-from deribit_arb_app.model.model_instrument import ModelInstrument
+from deribit_arb_app.model.model_subscribable_instrument import ModelSubscribableInstrument
 
     #############################################################
     # Converter Converts Json object to list of ModelInstrument #
@@ -15,7 +15,7 @@ class ConverterJsonToInstruments():
 
         self.json_obj = json.loads(json_string)
 
-    def convert(self) -> List[ModelInstrument]:
+    def convert(self) -> List[ModelSubscribableInstrument]:
 
         instruments = []
 
@@ -47,7 +47,7 @@ class ConverterJsonToInstruments():
             contract_size          = json_instrument['contract_size']
             base_currency          = json_instrument['base_currency']
 
-            instruments.append(ModelInstrument(
+            instruments.append(ModelSubscribableInstrument(
                 tick_size                = tick_size,
                 taker_commission         = taker_commission,
                 settlement_period        = settlement_period,
@@ -58,7 +58,7 @@ class ConverterJsonToInstruments():
                 max_leverage             = max_leverage,
                 kind                     = kind,
                 is_active                = is_active,
-                instrument_name          = instrument_name,
+                name                     = instrument_name,
                 expiration_timestamp     = expiration_timestamp,
                 creation_timestamp       = creation_timestamp,
                 contract_size            = contract_size,

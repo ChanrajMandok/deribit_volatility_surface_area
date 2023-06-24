@@ -2,8 +2,8 @@ import json
 from typing import Dict
 from singleton_decorator import singleton
 
-from deribit_arb_app.model.model_instrument import ModelInstrument
-from deribit_arb_app.store.store_instruments import StoreInstruments
+from deribit_arb_app.store.stores import Stores
+from deribit_arb_app.model.model_subscribable_instrument import ModelSubscribableInstrument
 from deribit_arb_app.converters.converter_json_to_instruments import ConverterJsonToInstruments
     
     #######################################
@@ -15,11 +15,11 @@ class ServiceDeribitInstrumentsHandler():
 
     def __init__(self):
 
-        self.store_instruments = StoreInstruments()
+        self.store_subscribable_instruments = Stores.store_subscribable_instruments
 
-    def set_instruments(self, result) -> Dict[str, ModelInstrument]:
+    def set_instruments(self, result) -> Dict[str, ModelSubscribableInstrument]:
 
         self.instruments = ConverterJsonToInstruments(json.dumps(result)).convert()
-        instruments = self.store_instruments.set_deribit_instruments(self.instruments)
+        instruments = self.store_subscribable_instruments.set_subscribables(self.instruments)
         return instruments
 

@@ -2,8 +2,8 @@ import os
 import asyncio
 
 from singleton_decorator import singleton
-from deribit_arb_app.model.model_index import ModelIndex
 from deribit_arb_app.enums.enum_index_currency import EnumIndexCurrency
+from deribit_arb_app.model.model_subscribable_index import ModelSubscribableIndex
 from deribit_arb_app.services.managers.service_implied_volatility_queue_manager import ServiceImpliedVolatilityQueueManager
 from deribit_arb_app.services.managers.servicet_instruments_subscription_manager import ServiceInstrumentsSubscriptionManager
 from deribit_arb_app.services.managers.service_observer_bsm_implied_volatility_manager import ServiceObserverBsmImpliedVolatilityManager
@@ -25,7 +25,7 @@ class ServiceImpliedVolatilitySurfaceAreaManager():
         
     async def build_vsa(self, currency: str, kind: str):
         index_currency_value = getattr(EnumIndexCurrency, currency.upper()).value
-        index = ModelIndex(index_name=index_currency_value)
+        index = ModelSubscribableIndex(name=index_currency_value)
 
         # This triggers the producer in the self.instruments_queue -> asyncio.Queue() object 
         asyncio.create_task(self.service_deribit_instruments_subscription_manager.manage_instrument_subscribables(kind=kind,

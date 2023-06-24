@@ -3,7 +3,7 @@ from typing import Dict, List, Optional
 from deribit_arb_app.model.model_order import ModelOrder
 from deribit_arb_app.model.model_position import ModelPosition
 from deribit_arb_app.enums.enum_direction import EnumDirection
-from deribit_arb_app.model.model_instrument import ModelInstrument
+from deribit_arb_app.model.model_subscribable_instrument import ModelSubscribableInstrument
 from deribit_arb_app.model.model_subscribable import ModelSubscribable
 from deribit_arb_app.services.deribit_api.service_api_interface import ServiceApiInterface
 from deribit_arb_app.services.deribit_api.service_deribit_orders import ServiceDeribitOrders
@@ -21,7 +21,7 @@ class ServiceApiDeribit(ServiceApiInterface):
     async def get_instruments(
                               self,
                               currency: str, 
-                              kind: str) -> Dict[str, ModelInstrument]:
+                              kind: str) -> Dict[str, ModelSubscribableInstrument]:
 
         deribit_instruments = ServiceDeribitInstruments(currency=currency, kind=kind)
 
@@ -41,7 +41,7 @@ class ServiceApiDeribit(ServiceApiInterface):
 
     async def send_order(
         self,
-        instrument: ModelInstrument, 
+        instrument: ModelSubscribableInstrument, 
         direction: EnumDirection, 
         amount: float, 
         price: float) -> Optional[ModelOrder]:
@@ -50,13 +50,13 @@ class ServiceApiDeribit(ServiceApiInterface):
 
         if direction == EnumDirection.BUY:
             order = await deribit_orders.buy_async(
-                    instrument_name=instrument.instrument_name, 
+                    instrument_name=instrument.name, 
                     amount=amount, 
                     price=price)
             
         elif direction == EnumDirection.SELL:
             order = await deribit_orders.sell_async(
-                    instrument_name=instrument.instrument_name, 
+                    instrument_name=instrument.name, 
                     amount=amount, 
                     price=price)
 

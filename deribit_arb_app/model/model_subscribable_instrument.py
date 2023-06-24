@@ -5,9 +5,9 @@ from deribit_arb_app.model.model_subscribable import ModelSubscribable
     # Model for BSM implied Volatility (subscribable) Objects #
     ###########################################################
 
-class ModelInstrument(ModelSubscribable, models.Model):
+class ModelSubscribableInstrument(ModelSubscribable, models.Model):
 
-    instrument_name             = models.CharField(max_length=255)
+    name                        = models.CharField(max_length=255)
     tick_size                   = models.DecimalField(max_digits=20, decimal_places=8, null=False)
     taker_commission            = models.DecimalField(max_digits=20, decimal_places=8, null=False)
     settlement_period           = models.CharField(max_length=255, null=True)
@@ -25,7 +25,7 @@ class ModelInstrument(ModelSubscribable, models.Model):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.channel_name = "quote." + self.instrument_name
+        self.channel_name = "quote." + f"{kwargs.get('name')}"
 
     class Meta:
         managed = False

@@ -2,7 +2,7 @@ from typing import Dict, List, Optional
 from singleton_decorator import singleton
 
 from deribit_arb_app.model.model_order import ModelOrder
-from deribit_arb_app.model.model_instrument import ModelInstrument
+from deribit_arb_app.model.model_subscribable_instrument import ModelSubscribableInstrument
 
     ##############################################
     # Store Manages & Stores Derebit open orders #
@@ -15,13 +15,16 @@ class StoreDeribitOpenOrders():
 
     def __init__(self):
         self.__deribit_open_orders = {}
+
+    def __len__(self) -> int:
+        return len(self.__deribit_open_orders)
        
-    def get_deribit_open_order(self, instrument: ModelInstrument, order_id: str) -> Optional[ModelOrder]:
-        if not instrument.instrument_name in self.__deribit_open_orders.keys():
+    def get_deribit_open_order(self, instrument: ModelSubscribableInstrument, order_id: str) -> Optional[ModelOrder]:
+        if not instrument.name in self.__deribit_open_orders.keys():
             return None
-        if not order_id in self.__deribit_open_orders[instrument.instrument_name]:
+        if not order_id in self.__deribit_open_orders[instrument.name]:
             return None
-        return self.__deribit_open_orders[instrument.instrument_name][order_id]
+        return self.__deribit_open_orders[instrument.name][order_id]
 
     def set_deribit_open_order(self, order: ModelOrder):
         if not order.instrument_name in self.__deribit_open_orders:
@@ -42,6 +45,9 @@ class StoreDeribitOpenOrders():
             self.__deribit_open_orders[order.instrument_name][order.order_id] = order
         return self.__deribit_open_orders
 
-    def get_deribit_open_orders(self, instrument: ModelInstrument) -> Optional[Dict[str, ModelOrder]]:
-        return self.__deribit_open_orders[instrument.instrument_name] if instrument.instrument_name in self.__deribit_open_orders.keys() else None
+    def get_deribit_open_orders(self, instrument: ModelSubscribableInstrument) -> Optional[Dict[str, ModelOrder]]:
+        return self.__deribit_open_orders[instrument.name] if instrument.name in self.__deribit_open_orders.keys() else None
+    
+    def clear_store(self):
+        self.__deribit_open_orders = {}
         

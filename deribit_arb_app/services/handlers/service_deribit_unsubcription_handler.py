@@ -1,7 +1,6 @@
 from singleton_decorator import singleton
 
-from deribit_arb_app.store.store_observable_order_books import StoreObservableOrderBooks
-from deribit_arb_app.store.store_observable_index_prices import StoreObservableIndexPrices
+from deribit_arb_app.store.stores import Stores
 
     #########################################################
     # Service Handles Deribit Unsubscriptions via Websocket #
@@ -11,8 +10,8 @@ from deribit_arb_app.store.store_observable_index_prices import StoreObservableI
 class ServiceDeribitUnsubscriptionHandler():
 
     def __init__(self):
-        self.store_observable_order_books = StoreObservableOrderBooks()
-        self.store_observable_index_prices = StoreObservableIndexPrices()
+        self.store_observable_order_books = Stores.store_observable_orderbooks
+        self.store_observable_index_prices = Stores.store_observable_index_prices
 
     def handle(self, result):
 

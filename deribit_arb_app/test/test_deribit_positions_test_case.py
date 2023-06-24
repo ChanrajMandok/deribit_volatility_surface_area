@@ -1,7 +1,7 @@
 import sys
 import asyncio
 import traceback
-import asynctest
+import unittest
 
 from deribit_arb_app.store.store_deribit_positions import StoreDeribitPositions
 from deribit_arb_app.services.deribit_api.service_deribit_positions import ServiceDeribitPositions
@@ -10,23 +10,19 @@ from deribit_arb_app.services.deribit_api.service_deribit_positions import Servi
     # TestCase Testing StoreDeribitPositions().get() to see open Positions #
     ########################################################################
 
-class TestDeribitPositionsTestCase(asynctest.TestCase):
+class TestDeribitPositionsTestCase(unittest.IsolatedAsyncioTestCase):
 
-    async def setUp(self):
+    async def asyncSetUp(self):
         super().setUp()
         self.deribit_positions = ServiceDeribitPositions(currency="BTC")
         self.store_deribit_positions = StoreDeribitPositions()
-        self.my_loop = asyncio.new_event_loop()
 
     async def positions_coroutine(self):
         await asyncio.wait_for(self.deribit_positions.get(), timeout=10) 
 
-    def test_positions_get(self):
+    async def test_positions_get(self):
         try:
-            self.my_loop.run_until_complete(self.positions_coroutine())
-        except Exception as e:
-            _, _, exc_traceback = sys.exc_info()
-            traceback.print_tb(exc_traceback, limit=None, file=None)
-        finally:
-            self.my_loop.close()
+            await self.positions_coroutine()
             self.assertTrue(len(self.store_deribit_positions.get_deribit_positions(currency="BTC")) > 0)
+        except Exception as e:
+            self.fail(f"Test failed due to exception: {str(e)}")

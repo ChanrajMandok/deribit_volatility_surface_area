@@ -55,8 +55,9 @@ class ServiceDeribitSubscribe(ModelSubscribable):
         for subscribable in subscribables:
             params["channels"].append(subscribable.channel_name)
             # print(f"SUBSCRIBED {subscribable.channel_name}")
-            self.subscriptions.append(subscribable)
-
+            if snapshot==False:
+                self.subscriptions.append(subscribable)
+        
         try:
             await self.send_instructions(method, params, snapshot)
         except Exception as e:
