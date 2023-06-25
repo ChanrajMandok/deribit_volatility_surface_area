@@ -1,6 +1,6 @@
 import math
 import datetime
-
+import numpy as np 
 from typing import Optional
 
 from deribit_arb_app.store.stores import Stores
@@ -26,7 +26,7 @@ class ServiceImpliedVolatilityBsmBuilder():
         index            = self.store_observable_index_prices.get_observable(index_instrument).get_instance()
         index_price      = index.price if hasattr(index, 'price') else None
         volatility_index = self.store_observable_volatility_index.get_observable(hvol_instrument).get_instance()
-        hvol_value       = volatility_index.volatility
+        hvol_value       = volatility_index.volatility if hasattr(volatility_index, 'volatility') else None
         book             = self.store_observable_order_books.get_observable(instrument).get_instance()
         instument_name   = instrument.name if hasattr(instrument, 'name') else None
         instrument_ask   = book.best_ask_price if hasattr(book, 'best_ask_price') else None
@@ -45,10 +45,12 @@ class ServiceImpliedVolatilityBsmBuilder():
         k = float(instument_name.split('-')[2])
         t = (expiry_date - current_date).total_seconds() / 31536000.0
         option_type = instrument.option_type
-        h = hvol_value
-        
-        target = (instrument_ask + instrument_bid) / 2 if instrument_ask and instrument_bid \
+        h = min(hvol_value * np.sqrt(t / 30), 2)
+
+        target_in_ccy = (instrument_ask + instrument_bid) / 2 if instrument_ask and instrument_bid \
                     else instrument_ask or instrument_bid
+        
+        target = target_in_ccy*s
             
         implied_vol = self.service_black_scholes_pricer.find_vol(
             target_value=target, 

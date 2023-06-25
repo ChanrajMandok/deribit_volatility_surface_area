@@ -28,22 +28,26 @@ class ServiceObserverBsmImpliedVolatilityManager:
     # observers are internally generated & managed so no corountine is required
         if subscribables is not None:
             for instrument in subscribables:
-                if instrument != index:
+                if type(instrument) == ModelSubscribableInstrument:
                     object_name = f"BSM Implied Volatility-{instrument.name}"
-                    indicator = ModelIndicatorBsmImpliedVolatility(
-                        name=object_name,
-                        instrument=instrument,
-                        index=index
-                    )
-                    self.observer_indicator_bsm_implied_volatility.attach_indicator(indicator)
-                    # print(f"{str(indicator.key)} observer attached")
-
+                    try:
+                        indicator = ModelIndicatorBsmImpliedVolatility(
+                            name=object_name,
+                            instrument=instrument,
+                            index=index,
+                            volatility_index=volatility_index
+                        )
+                        self.observer_indicator_bsm_implied_volatility.attach_indicator(indicator)
+                        # print(f"{str(indicator.key)} observer attached")
+                    except Exception as e:
+                        print(f"Error while populating model instance: {str(e)}")
+                    
         if unsubscribables is not None:
             for instrument in unsubscribables:
                 # only detach index from unsubscribables if their are no live observers
                 if len(self.observer_indicator_bsm_implied_volatility) == 0:
                     unsubscribables.extend([index, volatility_index])
-                if instrument != index & instrument != volatility_index:
+                if type(instrument) == ModelSubscribableInstrument:
                     key = ModelIndicatorBsmImpliedVolatility.generate_key(instrument)
                     self.observer_indicator_bsm_implied_volatility.detach_indicator(key)
                         # print(f"{str(indicator.key)} observer detached")
