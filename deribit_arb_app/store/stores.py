@@ -1,3 +1,6 @@
+from deribit_arb_app.model.model_authorization import ModelAuthorization
+from deribit_arb_app.model.model_account_summary import ModelAccountSummary
+from deribit_arb_app.store.store_deribit_interface import StoreDeribitInterface
 from deribit_arb_app.model.model_subscribable_index import ModelSubscribableIndex
 from deribit_arb_app.store.store_observable_interface import StoreObservableInterface
 from deribit_arb_app.model.model_observable_order_book import ModelObservableOrderBook
@@ -14,6 +17,8 @@ from deribit_arb_app.model.indicator_models.model_indicator_put_call_parity_arbi
     ############################################################################
 
 class Stores:
+    store_model_authorization                   = StoreDeribitInterface()
+    store_model_account_summary                 = StoreDeribitInterface()
 
     store_subscribable_indexes                  = StoreSubscribableInterface[str, ModelSubscribableIndex]() 
     store_subscribable_instruments              = StoreSubscribableInterface[str, ModelSubscribableInstrument]()

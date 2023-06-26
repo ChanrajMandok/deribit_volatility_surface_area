@@ -31,7 +31,7 @@
 |DATABASE_PORT|
 |BASE_WS_URL|wss://www.test.deribit.com/ws/api/v2 |
 |BASE_HTTP_URL|https://test.deribit.com/api/v2/public |
-
+|MAX_WORKERSL|6|
 
 ## Disclaimer
 This trading Execution repository was created as a proof of theory/concept and should not be utilized in a trading environment. The code in this repository is provided for educational purposes only, and it is the sole responsibility of the user to determine whether the code is suitable for their intended use. The author of this repository does not make any representation or warranty as to the accuracy, completeness, or reliability of the information & performance contained herein. The user should be aware that there are risks associated with trading and that trading decisions should only be made after careful consideration of all relevant factors. The author of this repository will not be held responsible for any losses that may result from the use of this code.

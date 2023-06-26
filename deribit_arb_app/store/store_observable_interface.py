@@ -11,9 +11,6 @@ E = TypeVar('E')
 class StoreObservableInterface(Mapping[E, M]):
 
     def __init__(self):
-        self.d = {}
-
-    def __init__(self):
         self.d: Dict[E, M] = dict()
 
     def __getitem__(self, item: E) -> M:
