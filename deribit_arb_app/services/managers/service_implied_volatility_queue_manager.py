@@ -17,10 +17,6 @@ class ServiceImpliedVolatilityQueueManager():
         self.implied_volatility_dict = {}
         self.implied_volatility_queue = implied_volatility_queue
         
-    def create_consumer(self) -> asyncio.Queue[ModelIndicatorBsmImpliedVolatility]:
-        inner_loop_thread = threading.Thread(target=lambda: self.manage_implied_volatility_queue())
-        inner_loop_thread.start()
-        
     def manage_implied_volatility_queue(self) -> asyncio.Queue[ModelIndicatorBsmImpliedVolatility]:
         while True:
             if self.implied_volatility_queue.qsize() > 0:

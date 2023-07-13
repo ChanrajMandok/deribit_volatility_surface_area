@@ -3,9 +3,9 @@ from typing import Dict, List, Optional
 from deribit_arb_app.model.model_order import ModelOrder
 from deribit_arb_app.model.model_position import ModelPosition
 from deribit_arb_app.enums.enum_direction import EnumDirection
-from deribit_arb_app.model.model_subscribable_instrument import ModelSubscribableInstrument
 from deribit_arb_app.model.model_subscribable import ModelSubscribable
 from deribit_arb_app.services.deribit_api.service_api_interface import ServiceApiInterface
+from deribit_arb_app.model.model_subscribable_instrument import ModelSubscribableInstrument
 from deribit_arb_app.services.deribit_api.service_deribit_orders import ServiceDeribitOrders
 from deribit_arb_app.services.deribit_api.service_deribit_positions import ServiceDeribitPositions
 from deribit_arb_app.services.deribit_api.service_deribit_subscribe import ServiceDeribitSubscribe
