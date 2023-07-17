@@ -32,10 +32,9 @@ class ServiceImpliedVolatilitySurfaceAreaTaskManager():
         inner_loop_thread = threading.Thread(target=lambda: asyncio.run(self.build_vsa_tasks(currency="BTC")))
         inner_loop_thread.start()
         self.service_implied_volatility_queue_manager.manage_implied_volatility_queue()
-
+        
     async def build_vsa_tasks(self, currency: str, kind="option"):
         # function construct all task to then stream VSA via asyncio Queue to be captured by the service_implied_volatility_queue_manager
-
         index_currency_value = getattr(EnumIndexCurrency, currency.upper()).value
         volatility_index_currency_value = getattr(EnumVolatilityIndexCurrency, currency.upper()).value
         index = ModelSubscribableIndex(name=index_currency_value)
