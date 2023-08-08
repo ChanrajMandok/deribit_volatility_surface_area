@@ -14,7 +14,7 @@ from deribit_arb_app.services.handlers.service_deribit_static_orderbook_handler 
     # Retriever Retrieves Liquid Instruments #
     ##########################################
 
-class ServiceDeribitLiquidInstrumentsRetriever():
+class ServiceDeribitVsaInstrumentsRetriever():
 
     ## retrieved instruments list does not include the index instrumet (eg. btc_usd), this must be added at the execution service. 
 
@@ -26,7 +26,9 @@ class ServiceDeribitLiquidInstrumentsRetriever():
         await TaskInstrumentsPull().run(currency=currency, kind=kind)
         self.store_subscribable_instruments = Stores.store_subscribable_instruments
         
-    async def main(self, populate:bool, currency:str, kind:str, minimum_liquidity_threshold:int) -> List[ModelSubscribableInstrument]:
+    async def main(self, populate:bool, currency:str, kind:str, 
+                         minimum_liquidity_threshold:int) -> List[ModelSubscribableInstrument]:
+        
         await self.async_setup(currency=currency, kind=kind)
         store_subscribable_instruments = self.store_subscribable_instruments.get_subscribables()
         instruments = list(filter(lambda x: x.kind == kind and x.base_currency == currency, store_subscribable_instruments.values()))
@@ -47,7 +49,9 @@ class ServiceDeribitLiquidInstrumentsRetriever():
                     print(f"ContentTypeError occurred for instrument {instrument.name} with error: {e}")
                     return None
             
-    async def fetch_all(self, instruments:List[ModelSubscribableInstrument], populate:bool, minimum_liquidity_threshold:int) -> List[str]:
+    async def fetch_all(self, instruments:List[ModelSubscribableInstrument], 
+                              populate:bool, minimum_liquidity_threshold:int) -> List[str]:
+        
         batch_size = 20
         tasks = []
         sem = asyncio.Semaphore(20)  # Adjust this number to limit concurrent tasks

@@ -1,5 +1,4 @@
-from deribit_arb_app.model.model_authorization import ModelAuthorization
-from deribit_arb_app.model.model_account_summary import ModelAccountSummary
+from deribit_arb_app.store.store_simple_interface import StoreSimpleInterface
 from deribit_arb_app.store.store_deribit_interface import StoreDeribitInterface
 from deribit_arb_app.model.model_subscribable_index import ModelSubscribableIndex
 from deribit_arb_app.store.store_observable_interface import StoreObservableInterface
@@ -13,10 +12,12 @@ from deribit_arb_app.model.indicator_models.model_indicator_annualised_return_sp
 from deribit_arb_app.model.indicator_models.model_indicator_put_call_parity_arbitrage import ModelIndicatorPutCallVolArbitrage
 
     ############################################################################
-    # Stores Declares Store instances utilising Modularity of Store Interfaces #
+    # Stores Declares Store instances utilising modularity of Store Interfaces #
     ############################################################################
 
 class Stores:
+    store_instrument_list                       = StoreSimpleInterface()
+    
     store_model_authorization                   = StoreDeribitInterface()
     store_model_account_summary                 = StoreDeribitInterface()
 

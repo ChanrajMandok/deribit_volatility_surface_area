@@ -4,7 +4,9 @@ from typing import Awaitable
 
 background_tasks = set()
 
-def asyncio_create_task_log_exception(awaitable: Awaitable, logger: Logger, origin: str = "") -> asyncio.Task:
+def asyncio_create_task_log_exception(awaitable: Awaitable, logger: Logger,
+                                      origin: str = "") -> asyncio.Task:
+    
     async def _log_exception(awaitable):
         try:
             return await awaitable
@@ -23,7 +25,9 @@ def asyncio_create_task_log_exception(awaitable: Awaitable, logger: Logger, orig
     
     return task
 
-def loop_create_task_log_exception(loop: any, awaitable: Awaitable, logger: Logger, origin: str = "") -> asyncio.Task:
+def loop_create_task_log_exception(loop: any, awaitable: Awaitable,
+                                   logger: Logger, origin: str = "") -> asyncio.Task:
+    
     async def _log_exception(awaitable):
         try:
             return await awaitable
@@ -43,6 +47,24 @@ def loop_create_task_log_exception(loop: any, awaitable: Awaitable, logger: Logg
     task.add_done_callback(background_tasks.discard)
     
     return task
+
+def loop_run_forever_log_exception(loop: asyncio.AbstractEventLoop, awaitable: Awaitable,
+                                   logger: Logger, origin: str = "") -> None:
+
+    async def _log_exception(awaitable):
+        try:
+            return await awaitable
+        except Exception as e:
+            logger.error(f"{origin}: Unexpected exception: {str(e)}")
+            if "no close frame received or sent" in str(e):
+                raise Exception(str(e))
+            return None
+
+    # Create the task with your logging wrapper
+    loop.create_task(_log_exception(awaitable))
+
+    # Run the loop forever
+    loop.run_forever()
 
 def get_or_create_eventloop():
     try:

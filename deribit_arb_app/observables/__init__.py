@@ -1,7 +1,7 @@
 import logging
 
 # create logger
-logger = logging.getLogger('observables')
+logger = logging.getLogger('deribit_arb_app.observables')
 logger.setLevel(logging.DEBUG)
 
 logger.propagate = 0

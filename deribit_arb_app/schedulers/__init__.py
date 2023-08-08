@@ -1,7 +1,7 @@
 import logging
 
 # create logger
-logger = logging.getLogger('deribit_arb_app.converters')
+logger = logging.getLogger('deribit_arb_app.schedulers')
 logger.setLevel(logging.DEBUG)
 
 logger.propagate = 0
