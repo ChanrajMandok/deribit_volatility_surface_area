@@ -11,6 +11,7 @@ from deribit_arb_app.services.deribit_api.service_deribit_positions import Servi
 from deribit_arb_app.services.deribit_api.service_deribit_subscribe import ServiceDeribitSubscribe
 from deribit_arb_app.services.deribit_api.service_deribit_instruments import ServiceDeribitInstruments
 from deribit_arb_app.services.deribit_api.service_deribit_account_summary import ServiceDeribitAccountSummary
+from deribit_arb_app.services.deribit_api.service_deribit_get_orderbook_summary import ServiceDeribitGetOrderbookSummary
 
     ################################################################################
     # Service Implements Deribit API to provide Framework to trade via Deribit API #
@@ -104,3 +105,10 @@ class ServiceApiDeribit(ServiceApiInterface):
 
         await task
 
+    async def get_orderbook_summary_via_currency(self, currency:str, kind:str):
+
+        service_deribit_get_orderbook_summary = ServiceDeribitGetOrderbookSummary(currency=currency, kind=kind)        
+        
+        orderbook_summary_retriever = await service_deribit_get_orderbook_summary.get()
+
+        return orderbook_summary_retriever

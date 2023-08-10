@@ -70,13 +70,3 @@ class ServiceInstrumentsSubscriptionManager():
     def __get_instrument_names(self, instruments):
         return [instrument.name for instrument in instruments]
 
-    async def a_coroutine_subscribe(self, subscribables: List[ModelSubscribableInstrument]):
-        try:
-            await self.deribit_subscribe.subscribe(subscribables=subscribables, snapshot=False)
-        except asyncio.exceptions.TimeoutError:
-            pass
-        except Exception:
-            traceback.print_exc()
-
-    async def a_coroutine_unsubscribe(self, unsubscribables: List[ModelSubscribableInstrument]): 
-        await self.deribit_subscribe.unsubscribe(unsubscribables=unsubscribables)

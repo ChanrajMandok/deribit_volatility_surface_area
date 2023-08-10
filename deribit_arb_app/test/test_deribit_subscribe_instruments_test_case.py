@@ -11,8 +11,8 @@ from deribit_arb_app.tasks.task_instruments_pull import TaskInstrumentsPull
 from deribit_arb_app.model.model_subscribable_index import ModelSubscribableIndex
 from deribit_arb_app.services.deribit_api.service_api_deribit import ServiceApiDeribit
 from deribit_arb_app.enums.enum_volatility_index_currency import EnumVolatilityIndexCurrency
-from deribit_arb_app.model.model_subscribable_volatility_index import ModelSubscribableVolatilityIndex
 from deribit_arb_app.services.deribit_api.service_deribit_subscribe import ServiceDeribitSubscribe
+from deribit_arb_app.model.model_subscribable_volatility_index import ModelSubscribableVolatilityIndex
 
     ##########################################################################
     # TestCase Testing funcitonality to subscribe to Instrument Price Stream #

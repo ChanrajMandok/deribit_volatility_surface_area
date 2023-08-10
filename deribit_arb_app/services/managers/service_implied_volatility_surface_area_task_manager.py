@@ -7,12 +7,15 @@ from deribit_arb_app.services import logger
 from deribit_arb_app.enums.enum_index_currency import EnumIndexCurrency
 from deribit_arb_app.model.model_subscribable_index import ModelSubscribableIndex
 from deribit_arb_app.enums.enum_volatility_index_currency import EnumVolatilityIndexCurrency
+from deribit_arb_app.services.deribit_api.service_api_deribit_utils import ServiceApiDeribitUtils
 from deribit_arb_app.schedulers.scheduler_instrument_refresh import SchedulerVsaInstrumentsRefresh
 from deribit_arb_app.model.model_subscribable_volatility_index import ModelSubscribableVolatilityIndex
 from deribit_arb_app.services.managers.service_implied_volatility_queue_manager import ServiceImpliedVolatilityQueueManager
 from deribit_arb_app.services.managers.service_instruments_subscription_manager import ServiceInstrumentsSubscriptionManager
 from deribit_arb_app.services.managers.service_implied_volatility_observer_manager import ServiceImpliedVolatilityObserverManager
 from deribit_arb_app.utils.utils_asyncio import (asyncio_create_task_log_exception, loop_run_forever_log_exception, loop_create_task_log_exception)
+
+
 
     ########################################################################################################################
     # Service runs all tasks to construct Volatility Surface area -> Instument subscriptions, Observers and Asyncio Queues #
@@ -24,7 +27,8 @@ class ServiceImpliedVolatilitySurfaceAreaTaskManager():
     def __init__(self):
         self.instruments_queue = asyncio.Queue()
         self.implied_volatility_queue = asyncio.Queue()
-        self.minimum_liquidity_threshold = os.environ.get('VSA_MINIMUM_LIQUIDITY_THRESHOLD', None)
+        self.service_api_deribit_utils = ServiceApiDeribitUtils()
+        self.minimum_liquidity_threshold = int(os.environ.get('VSA_MINIMUM_LIQUIDITY_THRESHOLD', None))
         self.scheduler_instrument_refresh = SchedulerVsaInstrumentsRefresh(self.instruments_queue)
         self.service_implied_volatility_queue_manager = ServiceImpliedVolatilityQueueManager(self.implied_volatility_queue)
         self.service_deribit_instruments_subscription_manager = ServiceInstrumentsSubscriptionManager(self.instruments_queue)
@@ -74,14 +78,14 @@ class ServiceImpliedVolatilitySurfaceAreaTaskManager():
 
                 instruments_subscribe, instruments_unsubscribe = await self.instruments_queue.get()
                 if len(instruments_subscribe) > 0:
-                    asyncio_create_task_log_exception(self.service_deribit_instruments_subscription_manager.a_coroutine_subscribe(subscribables=instruments_subscribe), logger, "a_coroutine_subscribe")
+                    asyncio_create_task_log_exception(self.service_api_deribit_utils.a_coroutine_subscribe(subscribables=instruments_subscribe), logger, "a_coroutine_subscribe")
                 if len(instruments_unsubscribe) > 0:
-                    asyncio_create_task_log_exception(self.service_deribit_instruments_subscription_manager.a_coroutine_unsubscribe(unsubscribables=instruments_unsubscribe), logger, "a_coroutine_unsubscribe")
+                    asyncio_create_task_log_exception(self.service_api_deribit_utils.a_coroutine_unsubscribe(unsubscribables=instruments_unsubscribe), logger, "a_coroutine_unsubscribe")
                 if len(instruments_subscribe) > 0 or len(instruments_unsubscribe) > 0:
                     asyncio_create_task_log_exception(self.service_deribit_observer_bsm_implied_volatility_manager.manager_observers(index=index,
-                                                                                                                                            volatility_index=volatility_index,
-                                                                                                                                            subscribables=instruments_subscribe,
-                                                                                                                                            unsubscribables=instruments_unsubscribe), logger, "manager_observers")
+                                                                                                                                     volatility_index=volatility_index,
+                                                                                                                                     subscribables=instruments_subscribe,
+                                                                                                                                     unsubscribables=instruments_unsubscribe), logger, "manager_observers")
 
             except Exception as e:
                 print(f"Exception in run_strategy: {e}")

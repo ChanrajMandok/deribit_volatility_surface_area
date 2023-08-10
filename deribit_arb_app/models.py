@@ -11,6 +11,7 @@ from deribit_arb_app.model.model_observable import ModelObservable
 from deribit_arb_app.model.model_subscribable import ModelSubscribable
 from deribit_arb_app.model.model_authorization import ModelAuthorization
 from deribit_arb_app.model.model_account_summary import ModelAccountSummary
+from deribit_arb_app.model.model_orderbook_summary import ModelOrderbookSummary
 from deribit_arb_app.model.model_subscribable_index import ModelSubscribableIndex
 from deribit_arb_app.model.model_observable_order_book import ModelObservableOrderBook
 from deribit_arb_app.model.model_observable_index_price import ModelObservableIndexPrice
