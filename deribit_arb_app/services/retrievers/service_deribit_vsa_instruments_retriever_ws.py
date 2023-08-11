@@ -1,19 +1,14 @@
-import os
-
 from decimal import Decimal
-from typing import List, Optional
+from typing import List
 
-from deribit_arb_app.services import logger
 from deribit_arb_app.store.stores import Stores
 from deribit_arb_app.tasks.task_instruments_pull import TaskInstrumentsPull
-from deribit_arb_app.utils.utils_asyncio import asyncio_create_task_log_exception
 from deribit_arb_app.services.deribit_api.service_api_deribit import ServiceApiDeribit
 from deribit_arb_app.model.model_subscribable_instrument import ModelSubscribableInstrument
 
-
-    ##################################################################
-    # Retriever Retrieves Liquid Instruments  Markets to Make up VSA #
-    ##################################################################
+    #################################################################
+    # Retriever Retrieves Liquid Instruments Markets to Make up VSA #
+    #################################################################
 
 class ServiceDeribitVsaInstrumentsRetrieverWs():
 
@@ -35,8 +30,8 @@ class ServiceDeribitVsaInstrumentsRetrieverWs():
         orderbook_summaries = await self.service_api_deribit.get_orderbook_summary_via_currency(currency=currency, kind=kind)
         liquid_instrument_names = [x.instrument_name for x in orderbook_summaries if \
                           x.volume_usd is not None and x.volume_usd > Decimal(str(minimum_liquidity_threshold))]
-        result_instrument_names = [x for x in instruments if x.name in liquid_instrument_names]
-        print(result_instrument_names)
+        result = [x for x in instruments if x.name in liquid_instrument_names]
+        return result
         
         
         

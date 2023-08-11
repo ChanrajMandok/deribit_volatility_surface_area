@@ -1,6 +1,5 @@
 import time
 import asyncio
-import threading
 
 from singleton_decorator import singleton
 

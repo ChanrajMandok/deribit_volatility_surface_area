@@ -5,13 +5,15 @@ import traceback
 from typing import List, Tuple,Optional
 from singleton_decorator import singleton
 
+from deribit_arb_app.services import logger
 from deribit_arb_app.store.stores import Stores
 from deribit_arb_app.model.model_subscribable_index import ModelSubscribableIndex
-from deribit_arb_app.model.model_subscribable_instrument import ModelSubscribableInstrument
-from deribit_arb_app.services.deribit_api.service_deribit_subscribe import ServiceDeribitSubscribe
+from deribit_arb_app.utils.utils_asyncio import (asyncio_create_task_log_exception)
+from deribit_arb_app.services.deribit_api.service_api_deribit_utils import ServiceApiDeribitUtils
 from deribit_arb_app.model.model_subscribable_volatility_index import ModelSubscribableVolatilityIndex
-from deribit_arb_app.services.retrievers.service_deribit_vsa_instruments_retriever import ServiceDeribitVsaInstrumentsRetriever
-    
+from deribit_arb_app.services.retrievers.service_deribit_vsa_instruments_retriever_ws import ServiceDeribitVsaInstrumentsRetrieverWs
+from deribit_arb_app.services.managers.service_implied_volatility_observer_manager import ServiceImpliedVolatilityObserverManager    
+
     ##########################################################################
     # Service Handles & Manages instrument subscriptions and Unsubscriptions # 
     ##########################################################################
@@ -19,11 +21,12 @@ from deribit_arb_app.services.retrievers.service_deribit_vsa_instruments_retriev
 @singleton
 class ServiceInstrumentsSubscriptionManager():
     
-    def __init__(self, instruments_queue:asyncio.Queue):
-        self.instruments_queue = instruments_queue
-        self.deribit_subscribe = ServiceDeribitSubscribe()
+    def __init__(self, implied_volatility_queue: asyncio.Queue):
+        self.service_api_deribit_utils  = ServiceApiDeribitUtils()
+        self.implied_volatility_queue   = implied_volatility_queue
         self.previous_instruments_store = Stores.store_instrument_list
-        self.liquid_instruments_retriever = ServiceDeribitVsaInstrumentsRetriever()
+        self.vsa_instruments_retriever  = ServiceDeribitVsaInstrumentsRetrieverWs()
+        self.service_deribit_observer_bsm_implied_volatility_manager = ServiceImpliedVolatilityObserverManager(self.implied_volatility_queue)
         
     async def manage_instrument_subscribables(self, 
                                               kind: str,
@@ -41,19 +44,18 @@ class ServiceInstrumentsSubscriptionManager():
         if volatility_index:
             volatility_index_subscribed = False
 
-        instruments = await self.liquid_instruments_retriever.main(kind=kind,
-                                                                populate=False,
+        instruments = await self.vsa_instruments_retriever.main(kind=kind,
                                                                 currency=currency,
                                                                 minimum_liquidity_threshold=minimum_liquidity_threshold)
 
         instrument_names = self.__get_instrument_names(instruments=instruments)
 
         subscriptions = [(index_subscribed, index), (volatility_index_subscribed, volatility_index)]
-        for subscribed, index in subscriptions:
-            if not subscribed:
-                instruments.insert(0, index)
-                instrument_names.insert(0, index.name)
-                subscribed = True
+        for subs, indexes in subscriptions:
+            if not subs:
+                instruments.insert(0, indexes)
+                instrument_names.insert(0, indexes.name)
+                subs = True
 
         if len(previous_instruments) == 0:
             instruments_subscribables = instruments
@@ -65,8 +67,20 @@ class ServiceInstrumentsSubscriptionManager():
 
         self.previous_instruments_store.update(instrument_names)
         print(len(instruments_subscribables), len(instruments_unsubscribables))
-        await self.instruments_queue.put((instruments_subscribables, instruments_unsubscribables))
-            
+        
+        try:
+            if len(instruments_subscribables) > 0:
+                asyncio_create_task_log_exception(self.service_api_deribit_utils.a_coroutine_subscribe(subscribables=instruments_subscribables), logger, "a_coroutine_subscribe")
+            if len(instruments_unsubscribables) > 0:
+                asyncio_create_task_log_exception(self.service_api_deribit_utils.a_coroutine_unsubscribe(unsubscribables=instruments_unsubscribables), logger, "a_coroutine_unsubscribe")
+            if len(instruments_subscribables) > 0 or len(instruments_unsubscribables) > 0:
+                asyncio_create_task_log_exception(self.service_deribit_observer_bsm_implied_volatility_manager.manager_observers(index=index,
+                                                                                                                                 volatility_index=volatility_index,
+                                                                                                                                 subscribables=instruments_subscribables,
+                                                                                                                                 unsubscribables=instruments_unsubscribables), logger, "manager_observers")
+        except Exception as e:
+            print(f"Exception in run_strategy: {e}")
+                 
     def __get_instrument_names(self, instruments):
         return [instrument.name for instrument in instruments]
 

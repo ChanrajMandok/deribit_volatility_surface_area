@@ -18,11 +18,11 @@ from deribit_arb_app.services.managers.service_instruments_subscription_manager 
 @singleton
 class SchedulerVsaInstrumentsRefresh():
     
-    def __init__(self, instruments_queue:asyncio.Queue) -> None:
-        self.instruments_queue = instruments_queue
+    def __init__(self, implied_volatility_queue: asyncio.Queue) -> None:
+        self.implied_volatility_queue = implied_volatility_queue
         self.__sched = BackgroundScheduler(timezone=str(tzlocal.get_localzone()))
         self.__refresh_increment_mins = int(os.environ['INSTRUMENTS_REFRESH_MINS'])
-        self.instruments_subscription_manager = ServiceInstrumentsSubscriptionManager(self.instruments_queue)
+        self.instruments_subscription_manager = ServiceInstrumentsSubscriptionManager(self.implied_volatility_queue)
 
     def scheduled_task(self, 
                     currency: str,

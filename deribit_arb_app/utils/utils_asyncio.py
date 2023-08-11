@@ -17,7 +17,7 @@ def asyncio_create_task_log_exception(awaitable: Awaitable, logger: Logger,
             else:
                 # logger.info(f"no origin: {str(e)}")
                 pass
-    task = asyncio.create_task(_log_exception(awaitable))
+    task = asyncio.create_task(_log_exception(awaitable), name=origin)
     
     # Add task to the set. This creates a strong reference.
     background_tasks.add(task)
@@ -40,7 +40,7 @@ def loop_create_task_log_exception(loop: any, awaitable: Awaitable,
             if "no close frame received or sent" in str(e):
                 raise Exception(str(e))
           
-    task = loop.create_task(_log_exception(awaitable))
+    task = loop.create_task(_log_exception(awaitable), name=origin)
     
     # Add task to the set. This creates a strong reference.
     background_tasks.add(task)
@@ -61,7 +61,7 @@ def loop_run_forever_log_exception(loop: asyncio.AbstractEventLoop, awaitable: A
             return None
 
     # Create the task with your logging wrapper
-    loop.create_task(_log_exception(awaitable))
+    loop.create_task(_log_exception(awaitable), name=origin)
 
     # Run the loop forever
     loop.run_forever()
