@@ -66,6 +66,28 @@ def loop_run_forever_log_exception(loop: asyncio.AbstractEventLoop, awaitable: A
     # Run the loop forever
     loop.run_forever()
 
+def loop_run_until_complete_log_exception(loop: asyncio.AbstractEventLoop, awaitable: Awaitable,
+                                          logger: Logger, origin: str = "") -> None:
+
+    async def _log_exception(awaitable):
+        try:
+            return await awaitable
+        except Exception as e:
+            logger.error(f"{origin}: Unexpected exception: {str(e)}")
+            if "no close frame received or sent" in str(e):
+                raise Exception(str(e))
+            return None
+
+    # Create the task with your logging wrapper
+    task = loop.create_task(_log_exception(awaitable), name=origin)
+
+    # Run the loop until the task completes
+    loop.run_until_complete(task)
+
+    # Wait for all other pending tasks to complete as well
+    pending = asyncio.all_tasks(loop=loop)
+    loop.run_until_complete(asyncio.gather(*pending))
+
 def get_or_create_eventloop():
     try:
         return asyncio.get_event_loop()

@@ -80,3 +80,7 @@ class ServiceDeribitSubscribe(ModelSubscribable):
             # print(f"UNSUBSCRIBED {unsubscribable.channel_name}")
             
         await self.send_instructions(method, params)
+        
+    def get_subscriptions(self):
+        subscriptions = self.subscriptions
+        return subscriptions

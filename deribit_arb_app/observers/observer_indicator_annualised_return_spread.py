@@ -21,6 +21,7 @@ class ObserverIndicatorAnnualisedReturnSpread(ObserverInterface):
         self.store_observable_indicator_annualised_spread = Stores.store_indicator_annualised_return_spreads
 
     def attach_indicator(self, instance: ModelIndicatorAnnualisedReturnSpread):
+        """ Attach this observer to the instance """
         key = instance.key
         self.indicators[key] = instance
 
@@ -43,6 +44,7 @@ class ObserverIndicatorAnnualisedReturnSpread(ObserverInterface):
         return self.indicators.get(key)
 
     def detach_indicator(self, key):
+        """ Detach this observer from the instance """
         instance = self.indicators[key]
         for instrument in [instance.instrument_1, instance.instrument_2]:
             self.store_observable_order_books.get_observable(instrument).detach(self)

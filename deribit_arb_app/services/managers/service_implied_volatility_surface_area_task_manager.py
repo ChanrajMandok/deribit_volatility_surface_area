@@ -14,8 +14,6 @@ from deribit_arb_app.services.managers.service_implied_volatility_queue_manager 
 from deribit_arb_app.services.managers.service_implied_volatility_observer_manager import ServiceImpliedVolatilityObserverManager
 from deribit_arb_app.utils.utils_asyncio import (asyncio_create_task_log_exception, loop_run_forever_log_exception, loop_create_task_log_exception)
 
-
-
     ########################################################################################################################
     # Service runs all tasks to construct Volatility Surface area -> Instument subscriptions, Observers and Asyncio Queues #
     ########################################################################################################################
@@ -29,7 +27,6 @@ class ServiceImpliedVolatilitySurfaceAreaTaskManager():
         self.minimum_liquidity_threshold = int(os.environ.get('VSA_MINIMUM_LIQUIDITY_THRESHOLD', None))
         self.scheduler_instrument_refresh = SchedulerVsaInstrumentsRefresh(self.implied_volatility_queue)
         self.service_implied_volatility_queue_manager = ServiceImpliedVolatilityQueueManager(self.implied_volatility_queue)
-        self.service_deribit_observer_bsm_implied_volatility_manager = ServiceImpliedVolatilityObserverManager(self.implied_volatility_queue)
         
     def create_producer(self, currency: str):
         inner_loop_thread = threading.Thread(target=self.run_scheduler(currency=currency), name='vsa_producer')

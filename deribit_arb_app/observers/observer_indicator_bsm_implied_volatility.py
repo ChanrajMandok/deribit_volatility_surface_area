@@ -1,5 +1,6 @@
 import os
 import asyncio
+
 from singleton_decorator import singleton
 from concurrent.futures import ThreadPoolExecutor
 
@@ -27,6 +28,7 @@ class ObserverIndicatorBsmImpliedVolatility(ObserverInterface):
         self.service_implied_volatility_bsm_builder = ServiceImpliedVolatilityBsmBuilder()
 
     def attach_indicator(self, instance: ModelIndicatorBsmImpliedVolatility):
+        """ Attach this observer to the instance """
         key = instance.key
         instrument = instance.instrument
         index = instance.index
@@ -39,6 +41,7 @@ class ObserverIndicatorBsmImpliedVolatility(ObserverInterface):
         self.store_observable_volatility_index.get_observable(volatility_index).attach(self)
 
     def detach_indicator(self, key):
+        """ Detach this observer from the instance """
         instance = self.indicators.get(key)
         if instance:
             instrument = instance.instrument

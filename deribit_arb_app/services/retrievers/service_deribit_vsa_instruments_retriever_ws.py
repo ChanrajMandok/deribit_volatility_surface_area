@@ -1,5 +1,5 @@
-from decimal import Decimal
 from typing import List
+from decimal import Decimal
 
 from deribit_arb_app.store.stores import Stores
 from deribit_arb_app.tasks.task_instruments_pull import TaskInstrumentsPull
