@@ -54,7 +54,6 @@ class SchedulerVsaInstrumentsRefresh():
         moil = self.convert_inst_list.convert(instruments=instruments)
         
         self.instruments_queue.put_nowait(moil)
-        print('queue_updated')
 
     def run(self, 
             currency: str,

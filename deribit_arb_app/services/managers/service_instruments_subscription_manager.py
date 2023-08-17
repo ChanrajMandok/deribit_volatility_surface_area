@@ -11,6 +11,7 @@ from deribit_arb_app.model.model_subscribable_instrument import ModelSubscribabl
 from deribit_arb_app.model.model_observable_instrument_list import ModelObservableInstrumentList
 from deribit_arb_app.services.deribit_api.service_api_deribit_utils import ServiceApiDeribitUtils
 from deribit_arb_app.model.model_subscribable_volatility_index import ModelSubscribableVolatilityIndex
+from deribit_arb_app.services.managers.service_implied_volatility_observer_manager import ServiceImpliedVolatilityObserverManager
 from deribit_arb_app.services.retrievers.service_deribit_vsa_instruments_retriever_ws import ServiceDeribitVsaInstrumentsRetrieverWs
 from deribit_arb_app.utils.utils_asyncio import loop_create_task_log_exception, get_or_create_eventloop, asyncio_create_task_log_exception 
 
@@ -28,6 +29,7 @@ class ServiceInstrumentsSubscriptionManager():
         self.service_api_deribit_utils        = ServiceApiDeribitUtils()
         self.vsa_instruments_retriever        = ServiceDeribitVsaInstrumentsRetrieverWs()
         self.store_observable_instrument_list = Stores.store_observable_instrument_list
+        self.service_bsm_observer_manager     = ServiceImpliedVolatilityObserverManager(self.implied_volatility_queue)
         
     async def manage_instruments_queue(self):
         logger.info(f"{self.__class__.__name__} running ")
@@ -84,7 +86,6 @@ class ServiceInstrumentsSubscriptionManager():
             raise Exception(f"{self.__class__.__name__}: {e}")
 
         # self.previous_instruments_store.update(instrument_names)
-        print(len(instruments_subscribables), len(instruments_unsubscribables))
         
         try:
             if len(instruments_subscribables) > 0:
@@ -94,11 +95,11 @@ class ServiceInstrumentsSubscriptionManager():
                 asyncio_create_task_log_exception(awaitable=self.service_api_deribit_utils.a_coroutine_unsubscribe(unsubscribables=instruments_unsubscribables),
                                                                                                                 logger=logger, origin="a_coroutine_unsubscribe")
             if len(instruments_subscribables) > 0 or len(instruments_unsubscribables) > 0:
-                asyncio_create_task_log_exception(awaitable=self.service_deribit_observer_bsm_implied_volatility_manager.manager_observers(index=index,
-                                                                                                                                 volatility_index=volatility_index,
-                                                                                                                                 subscribables=instruments_subscribables,
-                                                                                                                                 unsubscribables=instruments_unsubscribables),
-                                                                                                                                    logger=logger, origin="manager_observers")
+                asyncio_create_task_log_exception(awaitable=self.service_bsm_observer_manager.manager_observers(index=index,
+                                                                                                                volatility_index=volatility_index,
+                                                                                                                subscribables=instruments_subscribables,
+                                                                                                                unsubscribables=instruments_unsubscribables),
+                                                                                                                logger=logger, origin="manager_observers")
         except Exception as e:
             raise Exception(f"{self.__class__.__name__}: {e}")
                  
