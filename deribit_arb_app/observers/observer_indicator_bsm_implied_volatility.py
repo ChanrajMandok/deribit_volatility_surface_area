@@ -67,8 +67,7 @@ class ObserverIndicatorBsmImpliedVolatility(ObserverInterface):
                                     round(self.implied_volatility_dict[result.name].implied_volatility, 4) != round(result.implied_volatility, 4):
                                 self.implied_volatility_queue.put_nowait(result)
                 except Exception as e:
-                    print(f"Error updating indicator: {key}")
-                    print(f"Error message: {str(e)}")
+                    raise Exception(f"{self.__class__.__name__}: {e}")
 
     def detach_all(self):
         for key in list(self.indicators.keys()):

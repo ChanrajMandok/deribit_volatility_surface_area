@@ -43,31 +43,34 @@ class ConverterJsonObjectToModelOrder():
         api                     = json_order[EnumFieldName.API.value]
         amount                  = json_order[EnumFieldName.AMOUNT.value]
 
-        order = ModelOrder(
-            web                    = web,
-            time_in_force          = time_in_force,
-            replaced               = replaced,
-            reduce_only            = reduce_only,
-            profit_loss            = profit_loss,
-            price                  = price,
-            post_only              = post_only,
-            order_type             = order_type,
-            order_state            = order_state,
-            order_id               = order_id,
-            max_show               = max_show,
-            last_update_timestamp  = last_update_timestamp,
-            label                  = label,
-            is_liquidation         = is_liquidation,
-            instrument_name        = instrument_name,
-            filled_amount          = filled_amount,
-            direction              = direction,
-            creation_timestamp     = creation_timestamp,
-            commission             = commission,
-            average_price          = average_price,
-            api                    = api,
-            amount                 = amount
-        )
-        
+        try:    
+            order = ModelOrder(
+                web                    = web,
+                time_in_force          = time_in_force,
+                replaced               = replaced,
+                reduce_only            = reduce_only,
+                profit_loss            = profit_loss,
+                price                  = price,
+                post_only              = post_only,
+                order_type             = order_type,
+                order_state            = order_state,
+                order_id               = order_id,
+                max_show               = max_show,
+                last_update_timestamp  = last_update_timestamp,
+                label                  = label,
+                is_liquidation         = is_liquidation,
+                instrument_name        = instrument_name,
+                filled_amount          = filled_amount,
+                direction              = direction,
+                creation_timestamp     = creation_timestamp,
+                commission             = commission,
+                average_price          = average_price,
+                api                    = api,
+                amount                 = amount)
+
+        except Exception as e:
+            raise Exception(f"{self.__class__.__name__}: {e}")
+
         if EnumFieldName.TRADES.value in json_order:
             for trade_data in json_order[EnumFieldName.TRADES.value]:
                 trade = ModelTrade(**trade_data)

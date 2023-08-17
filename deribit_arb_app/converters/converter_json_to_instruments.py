@@ -47,7 +47,8 @@ class ConverterJsonToInstruments():
             contract_size          = json_instrument['contract_size']
             base_currency          = json_instrument['base_currency']
 
-            instruments.append(ModelSubscribableInstrument(
+            instruments.append(
+                ModelSubscribableInstrument(
                 tick_size                = tick_size,
                 taker_commission         = taker_commission,
                 settlement_period        = settlement_period,

@@ -37,8 +37,7 @@ class ObserverIndicatorAnnualisedReturnSpread(ObserverInterface):
                 if indicator is not None:
                     self.store_observable_indicator_annualised_spread.update_observable(indicator)
             except Exception as e:
-                print(f"Error updating indicator: {instance.key}")
-                print(f"Error message: {str(e)}")
+                raise Exception(f"{self.__class__.__name__}: {e}")
 
     def get(self, key) -> ModelIndicatorAnnualisedReturnSpread:
         return self.indicators.get(key)
