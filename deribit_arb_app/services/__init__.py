@@ -1,7 +1,7 @@
 import logging
 
 # create logger
-logger = logging.getLogger('deribit_arb_app.services')
+logger = logging.getLogger('deribit_arb_app.services   ')
 logger.setLevel(logging.DEBUG)
 
 logger.propagate = 0

@@ -38,7 +38,7 @@ class ServiceImpliedVolatilityObserverManager:
                             volatility_index=volatility_index
                         )
                         self.observer_indicator_bsm_implied_volatility.attach_indicator(indicator)
-                        # print(f"{str(indicator.key)} observer attached")
+                        print(f"{str(indicator.key)} observer attached")
                     except Exception as e:
                         print(f"Error while populating model instance: {str(e)}")
                     

@@ -30,4 +30,4 @@ class ConverterJsonToHeartbeat():
             return None
 
         except Exception as e:
-            raise
+            raise Exception(f"{self.__class__.__name__}: {e}")

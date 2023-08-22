@@ -45,27 +45,31 @@ class ConverterJsonToAccountModelSummary():
         projected_delta_total         = json_obj_result['projected_delta_total']
         projected_maintenance_margin  = json_obj_result['projected_maintenance_margin']
 
-        account_summary = ModelAccountSummary(
-                                              available_funds              = available_funds, 
-                                              balance                      = balance, 
-                                              currency                     = currency, 
-                                              delta_total                  = delta_total, 
-                                              equity                       = equity, 
-                                              futures_pl                   = futures_pl, 
-                                              options_pl                   = options_pl, 
-                                              options_delta                = options_delta, 
-                                              options_gamma                = options_gamma, 
-                                              options_theta                = options_theta, 
-                                              options_session_rpl          = options_session_rpl, 
-                                              futures_session_rpl          = futures_session_rpl, 
-                                              futures_session_upl          = futures_session_upl, 
-                                              margin_balance               = margin_balance, 
-                                              projected_initial_margin     = projected_initial_margin, 
-                                              total_pl                     = total_pl, 
-                                              initial_margin               = initial_margin, 
-                                              maintenance_margin           = maintenance_margin, 
-                                              projected_delta_total        = projected_delta_total, 
-                                              projected_maintenance_margin = projected_maintenance_margin, 
-                                            )
-        
+        try:
+            account_summary = ModelAccountSummary(
+                                                available_funds              = available_funds, 
+                                                balance                      = balance, 
+                                                currency                     = currency, 
+                                                delta_total                  = delta_total, 
+                                                equity                       = equity, 
+                                                futures_pl                   = futures_pl, 
+                                                options_pl                   = options_pl, 
+                                                options_delta                = options_delta, 
+                                                options_gamma                = options_gamma, 
+                                                options_theta                = options_theta, 
+                                                options_session_rpl          = options_session_rpl, 
+                                                futures_session_rpl          = futures_session_rpl, 
+                                                futures_session_upl          = futures_session_upl, 
+                                                margin_balance               = margin_balance, 
+                                                projected_initial_margin     = projected_initial_margin, 
+                                                total_pl                     = total_pl, 
+                                                initial_margin               = initial_margin, 
+                                                maintenance_margin           = maintenance_margin, 
+                                                projected_delta_total        = projected_delta_total, 
+                                                projected_maintenance_margin = projected_maintenance_margin, 
+                                                )
+        except Exception as e:
+            raise Exception(f"{self.__class__.__name__}: {e}")
+
+
         return account_summary

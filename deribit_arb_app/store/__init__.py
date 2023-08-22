@@ -1,7 +1,7 @@
 import logging
 
-# create logger
-logger = logging.getLogger('store')
+# create logger            deribit_arb_app.backtesting'
+logger = logging.getLogger('deribit_arb_app.store     ')
 logger.setLevel(logging.DEBUG)
 
 logger.propagate = 0

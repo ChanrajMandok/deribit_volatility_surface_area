@@ -18,4 +18,4 @@ class ConverterJsonObjectToModelPosition():
             position = ModelPosition(**self.json_obj)
             return position
         except Exception as e:
-            raise
+            raise Exception(f"{self.__class__.__name__}: {e}")
