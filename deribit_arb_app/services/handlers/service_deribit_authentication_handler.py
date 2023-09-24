@@ -1,8 +1,10 @@
 import json
+
 from singleton_decorator import singleton
 
 from deribit_arb_app.store.stores import Stores
-from deribit_arb_app.converters.converter_json_to_model_authorization import ConverterJsonToModelAuthorization
+from deribit_arb_app.converters.converter_json_to_model_authorization import \
+                                             ConverterJsonToModelAuthorization
 
     ##########################################
     # Service Handels Deribit Authentication #

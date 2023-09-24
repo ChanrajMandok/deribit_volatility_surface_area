@@ -1,8 +1,9 @@
 import unittest
+
 from deribit_arb_app.store.stores import Stores
 from deribit_arb_app.enums.enum_currency import EnumCurrency
 from deribit_arb_app.enums.enum_instrument_kind import EnumInstrumentKind
-from deribit_arb_app.tasks.task_instruments_pull import TaskInstrumentsPull  
+from deribit_arb_app.tasks.task_instruments_pull import TaskInstrumentsPull
 
     ###########################################
     # TestCase Testing funcitonality of Tasks #

@@ -1,18 +1,26 @@
 import asyncio
-import threading
 
-from typing import List, Optional
+from typing import Optional
 from singleton_decorator import singleton
 
 from deribit_arb_app.services import logger
 from deribit_arb_app.store.stores import Stores
+from deribit_arb_app.model.model_subscribable_instrument import \
+                                      ModelSubscribableInstrument
+from deribit_arb_app.model.model_observable_instrument_list import \
+                                       ModelObservableInstrumentList
+from deribit_arb_app.model.model_subscribable_volatility_index import \
+                                       ModelSubscribableVolatilityIndex
+from deribit_arb_app.services.deribit_api.service_api_deribit_utils import \
+                                                      ServiceApiDeribitUtils
 from deribit_arb_app.model.model_subscribable_index import ModelSubscribableIndex
-from deribit_arb_app.model.model_subscribable_instrument import ModelSubscribableInstrument
-from deribit_arb_app.model.model_observable_instrument_list import ModelObservableInstrumentList
-from deribit_arb_app.services.deribit_api.service_api_deribit_utils import ServiceApiDeribitUtils
-from deribit_arb_app.model.model_subscribable_volatility_index import ModelSubscribableVolatilityIndex
-from deribit_arb_app.services.managers.service_implied_volatility_observer_manager import ServiceImpliedVolatilityObserverManager
-from deribit_arb_app.services.retrievers.service_deribit_vsa_instruments_retriever_ws import ServiceDeribitVsaInstrumentsRetrieverWs
+from deribit_arb_app.services.managers.service_implied_volatility_observer_manager import \
+                                                    ServiceImpliedVolatilityObserverManager
+from deribit_arb_app.services.retrievers.service_deribit_vsa_instruments_retriever_ws import \
+                                                       ServiceDeribitVsaInstrumentsRetrieverWs
+
+
+
 from deribit_arb_app.utils.utils_asyncio import loop_create_task_log_exception, get_or_create_eventloop, asyncio_create_task_log_exception 
 
     ##########################################################################
@@ -52,7 +60,7 @@ class ServiceInstrumentsSubscriptionManager():
                 await asyncio.sleep(1)
 
     async def manage_instrument_subscribables(self,
-                                              instruments: Optional[List[ModelSubscribableInstrument]], 
+                                              instruments: Optional[list[ModelSubscribableInstrument]], 
                                               index: Optional[ModelSubscribableIndex],
                                               volatility_index: Optional[ModelSubscribableVolatilityIndex]):
         try:      

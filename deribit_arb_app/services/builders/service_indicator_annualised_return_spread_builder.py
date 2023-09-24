@@ -3,7 +3,8 @@ import datetime
 from typing import Optional
 
 from deribit_arb_app.store.stores import Stores
-from deribit_arb_app.model.indicator_models.model_indicator_annualised_return_spread import ModelIndicatorAnnualisedReturnSpread
+from deribit_arb_app.model.indicator_models.model_indicator_annualised_return_spread import \
+                                                         ModelIndicatorAnnualisedReturnSpread
 
     #########################################################
     # Service Builds annualised spread with can be observed #

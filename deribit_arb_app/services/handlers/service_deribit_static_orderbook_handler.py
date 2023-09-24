@@ -1,9 +1,11 @@
 import json
+
 from singleton_decorator import singleton
 
 from deribit_arb_app.store.stores import Stores
-from deribit_arb_app.converters.converter_json_to_model_observable_order_book import ConverterJsonToModelObservableOrderBook
-
+from deribit_arb_app.converters.converter_json_to_model_observable_order_book import \
+                                               ConverterJsonToModelObservableOrderBook
+                                               
     ####################################################################
     # Service handles Deribit orderbook instances retrived via aiohttp #
     ####################################################################

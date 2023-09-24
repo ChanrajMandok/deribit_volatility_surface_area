@@ -1,7 +1,10 @@
+from deribit_arb_app.model.model_subscribable_instrument import \
+                                      ModelSubscribableInstrument
+from deribit_arb_app.model.model_observable_instrument_list import \
+                                       ModelObservableInstrumentList
+from deribit_arb_app.model.model_subscribable_volatility_index import \
+                                       ModelSubscribableVolatilityIndex
 from deribit_arb_app.model.model_subscribable_index import ModelSubscribableIndex
-from deribit_arb_app.model.model_subscribable_instrument import ModelSubscribableInstrument
-from deribit_arb_app.model.model_observable_instrument_list import ModelObservableInstrumentList
-from deribit_arb_app.model.model_subscribable_volatility_index import ModelSubscribableVolatilityIndex
 
     #####################################################################
     # Converts Instruments List object to ModelObservableInstrumentList #

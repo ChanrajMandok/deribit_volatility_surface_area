@@ -1,10 +1,14 @@
 import json
+
 from singleton_decorator import singleton
 
 from deribit_arb_app.store.stores import Stores
-from deribit_arb_app.converters.converter_json_to_model_observable_order_book import ConverterJsonToModelObservableOrderBook
-from deribit_arb_app.converters.converter_json_to_model_observable_index_price import ConverterJsonToModelObservableIndexPrice
-from deribit_arb_app.converters.convert_json_to_model_observable_volatility_index import ConverterJsonToModelObservableVolatilityIndex
+from deribit_arb_app.converters.converter_json_to_model_observable_order_book import \
+                                               ConverterJsonToModelObservableOrderBook
+from deribit_arb_app.converters.converter_json_to_model_observable_index_price import \
+                                               ConverterJsonToModelObservableIndexPrice
+from deribit_arb_app.converters.convert_json_to_model_observable_volatility_index import \
+                                             ConverterJsonToModelObservableVolatilityIndex
 
     #######################################################
     # Service Handles Deribit Subscriptions via Websocket #

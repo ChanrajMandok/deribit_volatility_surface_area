@@ -1,13 +1,17 @@
 import json
-from typing import Dict
+
 from singleton_decorator import singleton
 
 from deribit_arb_app.model.model_order import ModelOrder
-from deribit_arb_app.store.store_deribit_open_orders import StoreDeribitOpenOrders
-from deribit_arb_app.converters.converter_json_to_model_order import ConverterJsonToModelOrder
-from deribit_arb_app.converters.converter_json_to_open_orders import ConverterJsonToOpenOrders
-from deribit_arb_app.converters.converter_json_to_cancelled_order import ConverterJsonToCancelledOrder
-
+from deribit_arb_app.store.store_deribit_open_orders import \
+                                       StoreDeribitOpenOrders
+from deribit_arb_app.converters.converter_json_to_model_order import \
+                                             ConverterJsonToModelOrder
+from deribit_arb_app.converters.converter_json_to_open_orders import \
+                                             ConverterJsonToOpenOrders
+from deribit_arb_app.converters.converter_json_to_cancelled_order import \
+                                             ConverterJsonToCancelledOrder
+                                             
     ##################################
     # Service Handles Deribit orders #
     ##################################
@@ -31,7 +35,7 @@ class ServiceDeribitOrdersHandler():
         self.store_deribit_open_orders.remove_deribit_open_order(order)
         return order
 
-    def set_open_orders(self, result) -> Dict[str, Dict[str, ModelOrder]]:
+    def set_open_orders(self, result) -> dict[str, dict[str, ModelOrder]]:
         orders = ConverterJsonToOpenOrders(json.dumps(result)).convert()
         open_orders_list = self.store_deribit_open_orders.set_deribit_open_orders_list(orders)
         return open_orders_list

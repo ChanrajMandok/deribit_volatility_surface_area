@@ -1,10 +1,11 @@
 import sys
 import asyncio
-import traceback
 import unittest
+import traceback
 
+from deribit_arb_app.services.deribit_api.service_deribit_positions import \
+                                                     ServiceDeribitPositions
 from deribit_arb_app.store.store_deribit_positions import StoreDeribitPositions
-from deribit_arb_app.services.deribit_api.service_deribit_positions import ServiceDeribitPositions
 
     ########################################################################
     # TestCase Testing StoreDeribitPositions().get() to see open Positions #

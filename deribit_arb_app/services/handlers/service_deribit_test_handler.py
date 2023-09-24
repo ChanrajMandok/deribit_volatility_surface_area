@@ -1,8 +1,10 @@
 import json
+
 from singleton_decorator import singleton
 
 from deribit_arb_app.enums.enum_field_name import EnumFieldName
-from deribit_arb_app.converters.converter_json_to_test_response import ConverterJsonToTestResponse
+from deribit_arb_app.converters.converter_json_to_test_response import \
+                                             ConverterJsonToTestResponse
 
     ##################################################
     # Service Checks Deribit response from websocket #

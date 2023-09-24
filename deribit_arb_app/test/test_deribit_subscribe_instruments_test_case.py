@@ -1,19 +1,22 @@
 import sys
 import asyncio
-import traceback
 import unittest
+import traceback
 
 from deribit_arb_app.store.stores import Stores
 from deribit_arb_app.enums.enum_currency import EnumCurrency
+from deribit_arb_app.enums.enum_volatility_index_currency import \
+                                       EnumVolatilityIndexCurrency
 from deribit_arb_app.enums.enum_index_currency import EnumIndexCurrency
+from deribit_arb_app.services.deribit_api.service_api_deribit import \
+                                                     ServiceApiDeribit
+from deribit_arb_app.model.model_subscribable_volatility_index import \
+                                       ModelSubscribableVolatilityIndex
 from deribit_arb_app.enums.enum_instrument_kind import EnumInstrumentKind
 from deribit_arb_app.tasks.task_instruments_pull import TaskInstrumentsPull
+from deribit_arb_app.services.deribit_api.service_deribit_subscribe import \
+                                                     ServiceDeribitSubscribe
 from deribit_arb_app.model.model_subscribable_index import ModelSubscribableIndex
-from deribit_arb_app.services.deribit_api.service_api_deribit import ServiceApiDeribit
-from deribit_arb_app.enums.enum_volatility_index_currency import EnumVolatilityIndexCurrency
-from deribit_arb_app.services.deribit_api.service_deribit_subscribe import ServiceDeribitSubscribe
-from deribit_arb_app.model.model_subscribable_volatility_index import ModelSubscribableVolatilityIndex
-
     ##########################################################################
     # TestCase Testing funcitonality to subscribe to Instrument Price Stream #
     ##########################################################################

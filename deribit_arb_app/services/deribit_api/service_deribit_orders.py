@@ -1,13 +1,14 @@
 import json
 import uuid
 
-from typing import Dict
-
 from deribit_arb_app.model.model_order import ModelOrder
 from deribit_arb_app.model.model_message import ModelMessage
-from deribit_arb_app.services.deribit_api.service_deribit_messaging import ServiceDeribitMessaging
-from deribit_arb_app.services.deribit_api.service_deribit_authentication import ServiceDeribitAuthentication
-from deribit_arb_app.services.deribit_api.service_deribit_websocket_connector import ServiceDeribitWebsocketConnector
+from deribit_arb_app.services.deribit_api.service_deribit_messaging import \
+                                                     ServiceDeribitMessaging
+from deribit_arb_app.services.deribit_api.service_deribit_authentication import \
+                                                     ServiceDeribitAuthentication
+from deribit_arb_app.services.deribit_api.service_deribit_websocket_connector import \
+                                                      ServiceDeribitWebsocketConnector
 
     #################################################
     # Service sends orders to Deribit via Websocket #
@@ -19,7 +20,7 @@ class ServiceDeribitOrders():
         
         self.deribit_messaging = ServiceDeribitMessaging()
 
-    async def send_instruction(self, params: Dict, method: str):
+    async def send_instruction(self, params: dict, method: str):
 
         msg_id = self.deribit_messaging.generate_id(method)
 

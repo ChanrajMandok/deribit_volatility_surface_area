@@ -1,8 +1,7 @@
 import json
 
-from typing import List
-
-from deribit_arb_app.model.model_subscribable_volatility_index import ModelSubscribableVolatilityIndex
+from deribit_arb_app.model.model_subscribable_volatility_index import \
+                                        ModelSubscribableVolatilityIndex
 
     ######################################################################
     # Converter Converts Json object to ModelSubscribableVolatilityIndex #
@@ -14,7 +13,7 @@ class ConverterJsonToModelSubscribableVolatilityIndex():
 
         self.json_obj = json.loads(json_string)
 
-    def convert(self) -> List[ModelSubscribableVolatilityIndex]:
+    def convert(self) -> list[ModelSubscribableVolatilityIndex]:
 
         if not "params" in self.json_obj:
             return None
@@ -28,6 +27,7 @@ class ConverterJsonToModelSubscribableVolatilityIndex():
 
         index_name   = data["index_name"]
 
-        return ModelSubscribableVolatilityIndex(
-            name = index_name,
-        )
+        x = ModelSubscribableVolatilityIndex(
+                                             name = index_name)
+        
+        return x

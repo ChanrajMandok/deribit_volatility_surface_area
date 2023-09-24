@@ -1,14 +1,13 @@
-
 import sys
 import json
 import traceback
 
-from typing import List, Dict
-
 from deribit_arb_app.model.model_message import ModelMessage
 from deribit_arb_app.model.model_subscribable import ModelSubscribable
-from deribit_arb_app.services.deribit_api.service_deribit_messaging import ServiceDeribitMessaging
-from deribit_arb_app.services.deribit_api.service_deribit_websocket_connector import ServiceDeribitWebsocketConnector
+from deribit_arb_app.services.deribit_api.service_deribit_messaging import \
+                                                     ServiceDeribitMessaging
+from deribit_arb_app.services.deribit_api.service_deribit_websocket_connector import \
+                                                      ServiceDeribitWebsocketConnector
 
     ########################################################
     # Service Provides interface to Subscribe to Websocket #
@@ -21,7 +20,7 @@ class ServiceDeribitSubscribe(ModelSubscribable):
         self.deribit_messaging = ServiceDeribitMessaging()
         self.subscriptions = []
 
-    async def send_instructions(self, method: str, params: Dict, snapshot: bool = False):
+    async def send_instructions(self, method: str, params: dict, snapshot: bool = False):
 
         msg_id = self.deribit_messaging.generate_id(method)
 
@@ -44,7 +43,7 @@ class ServiceDeribitSubscribe(ModelSubscribable):
                     _, _, exc_traceback = sys.exc_info()
                     traceback.print_tb(exc_traceback, limit=None, file=None)
 
-    async def subscribe(self, subscribables: List[ModelSubscribable], snapshot: bool):
+    async def subscribe(self, subscribables: list[ModelSubscribable], snapshot: bool):
 
         method = "public/subscribe"
 
@@ -65,7 +64,7 @@ class ServiceDeribitSubscribe(ModelSubscribable):
             _, _, exc_traceback = sys.exc_info()
             traceback.print_tb(exc_traceback, limit=None, file=None)
 
-    async def unsubscribe(self, unsubscribables: List[ModelSubscribable]):
+    async def unsubscribe(self, unsubscribables: list[ModelSubscribable]):
 
         method = "public/unsubscribe"
 

@@ -1,10 +1,11 @@
-from typing import List
 from decimal import Decimal
 
 from deribit_arb_app.store.stores import Stores
+from deribit_arb_app.model.model_subscribable_instrument import \
+                                      ModelSubscribableInstrument
+from deribit_arb_app.services.deribit_api.service_api_deribit import \
+                                                     ServiceApiDeribit
 from deribit_arb_app.tasks.task_instruments_pull import TaskInstrumentsPull
-from deribit_arb_app.services.deribit_api.service_api_deribit import ServiceApiDeribit
-from deribit_arb_app.model.model_subscribable_instrument import ModelSubscribableInstrument
 
     #################################################################
     # Retriever Retrieves Liquid Instruments Markets to Make up VSA #
@@ -22,7 +23,7 @@ class ServiceDeribitVsaInstrumentsRetrieverWs():
         self.store_subscribable_instruments = Stores.store_subscribable_instruments
 
     async def main(self, currency:str, kind:str, 
-                         minimum_liquidity_threshold:int) -> List[ModelSubscribableInstrument]:
+                         minimum_liquidity_threshold:int) -> list[ModelSubscribableInstrument]:
         
         await self.async_setup(currency=currency, kind=kind)
         store_subscribable_instruments = self.store_subscribable_instruments.get_subscribables()

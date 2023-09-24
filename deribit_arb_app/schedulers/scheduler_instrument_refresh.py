@@ -4,14 +4,18 @@ import asyncio
 
 from typing import Optional
 from singleton_decorator import singleton
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from deribit_arb_app.schedulers import logger
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from deribit_arb_app.utils.utils_asyncio import get_or_create_eventloop
+from deribit_arb_app.model.model_subscribable_volatility_index import \
+                                       ModelSubscribableVolatilityIndex
 from deribit_arb_app.model.model_subscribable_index import ModelSubscribableIndex
-from deribit_arb_app.model.model_subscribable_volatility_index import ModelSubscribableVolatilityIndex
-from deribit_arb_app.utils.utils_asyncio import (loop_run_until_complete_log_exception, get_or_create_eventloop)
-from deribit_arb_app.services.retrievers.service_deribit_vsa_instruments_retriever_ws import ServiceDeribitVsaInstrumentsRetrieverWs
-from deribit_arb_app.converters.convert_instruments_list_to_model_observable_instrument_list import ConvertInstrumentsListToModelObservableInstrumentList
+from deribit_arb_app.utils.utils_asyncio import loop_run_until_complete_log_exception
+from deribit_arb_app.services.retrievers.service_deribit_vsa_instruments_retriever_ws import \
+                                                       ServiceDeribitVsaInstrumentsRetrieverWs
+from deribit_arb_app.converters.convert_instruments_list_to_model_observable_instrument_list import \
+                                                ConvertInstrumentsListToModelObservableInstrumentList
 
     ######################################################################
     # Service Schedules Update of the Instrument constituents of the VSA # 

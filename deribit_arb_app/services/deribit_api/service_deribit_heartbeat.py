@@ -3,9 +3,12 @@ import json
 from singleton_decorator import singleton
 
 from deribit_arb_app.model.model_message import ModelMessage
-from deribit_arb_app.converters.converter_json_to_heartbeat import ConverterJsonToHeartbeat
-from deribit_arb_app.services.deribit_api.service_deribit_messaging import ServiceDeribitMessaging
-from deribit_arb_app.services.deribit_api.service_deribit_websocket_connector import ServiceDeribitWebsocketConnector
+from deribit_arb_app.converters.converter_json_to_heartbeat import \
+                                            ConverterJsonToHeartbeat
+from deribit_arb_app.services.deribit_api.service_deribit_messaging import \
+                                                     ServiceDeribitMessaging
+from deribit_arb_app.services.deribit_api.service_deribit_websocket_connector import \
+                                                      ServiceDeribitWebsocketConnector
 
     #####################################################
     # Service retrieves Deribit Heartbeat via Websocket #

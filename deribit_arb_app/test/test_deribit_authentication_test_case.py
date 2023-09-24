@@ -1,10 +1,12 @@
 import unittest
 
-from deribit_arb_app.store.stores import Stores 
-from deribit_arb_app.services.deribit_api.service_deribit_messaging import ServiceDeribitMessaging
-from deribit_arb_app.services.deribit_api.service_deribit_authentication import ServiceDeribitAuthentication
-from deribit_arb_app.services.deribit_api.service_deribit_websocket_connector import ServiceDeribitWebsocketConnector
-
+from deribit_arb_app.store.stores import Stores
+from deribit_arb_app.services.deribit_api.service_deribit_messaging import \
+                                                     ServiceDeribitMessaging
+from deribit_arb_app.services.deribit_api.service_deribit_authentication import \
+                                                     ServiceDeribitAuthentication
+from deribit_arb_app.services.deribit_api.service_deribit_websocket_connector import \
+                                                      ServiceDeribitWebsocketConnector
     ##################################################################
     # TestCase Testing Authentication Object in DeribitAuthorization #
     ##################################################################

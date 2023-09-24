@@ -4,8 +4,10 @@ import datetime
 from typing import Optional
 
 from deribit_arb_app.store.stores import Stores
-from deribit_arb_app.services.pricers.service_pricer_black_scholes import ServicePricerBlackScholes
-from deribit_arb_app.model.indicator_models.model_indicator_put_call_parity_arbitrage import ModelIndicatorPutCallVolArbitrage
+from deribit_arb_app.services.pricers.service_pricer_black_scholes import \
+                                                  ServicePricerBlackScholes
+from deribit_arb_app.model.indicator_models.model_indicator_put_call_parity_arbitrage import \
+                                                             ModelIndicatorPutCallVolArbitrage
 
     #############################################################
     # Service Builds Put_call Parity Arbitrage relational Model #

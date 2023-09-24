@@ -1,5 +1,6 @@
 from abc import ABC
 from typing import Generic, TypeVar
+
 from deribit_arb_app.model.model_observable import ModelObservable
 from deribit_arb_app.observers.observer_interface import ObserverInterface
 

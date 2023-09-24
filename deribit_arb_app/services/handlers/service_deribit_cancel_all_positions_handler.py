@@ -1,5 +1,5 @@
 import json
-from typing import Dict
+
 from singleton_decorator import singleton
 
 from deribit_arb_app.store.store_deribit_open_orders import StoreDeribitOpenOrders

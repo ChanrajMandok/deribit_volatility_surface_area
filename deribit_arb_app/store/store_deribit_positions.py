@@ -1,9 +1,10 @@
-from typing import Dict, List, Optional
+from typing import  Optional
 from singleton_decorator import singleton
 
 from deribit_arb_app.store.stores import Stores
 from deribit_arb_app.model.model_position import ModelPosition
-from deribit_arb_app.model.model_subscribable_instrument import ModelSubscribableInstrument
+from deribit_arb_app.model.model_subscribable_instrument import \
+                                      ModelSubscribableInstrument
 
     ############################################
     # Store Manages & Stores Deribit Positions #
@@ -28,12 +29,12 @@ class StoreDeribitPositions():
         else:
             return None
 
-    def get_deribit_positions(self, currency: str) -> Dict[str,Dict[str, ModelPosition]]:
+    def get_deribit_positions(self, currency: str) -> dict[str,dict[str, ModelPosition]]:
         if not currency in self.__positions:
             self.__positions[currency] = {}
         return self.__positions[currency]
 
-    def set_deribit_positions(self, positions: List[ModelPosition]) -> Dict[str,Dict[str, ModelPosition]]:
+    def set_deribit_positions(self, positions: list[ModelPosition]) -> dict[str,dict[str, ModelPosition]]:
         for position in positions:
             instrument = self.store_subscribable_instruments.get_subscribable_via_key(position.instrument_name)
             if instrument:

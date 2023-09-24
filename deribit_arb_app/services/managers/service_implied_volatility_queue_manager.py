@@ -3,7 +3,8 @@ import asyncio
 
 from singleton_decorator import singleton
 
-from deribit_arb_app.model.indicator_models.model_indicator_bsm_implied_volatility import ModelIndicatorBsmImpliedVolatility
+from deribit_arb_app.model.indicator_models.model_indicator_bsm_implied_volatility import \
+                                                         ModelIndicatorBsmImpliedVolatility
 
     ####################################################################################################
     # Service Manages the implied_volatility_queue process which must be called from a seperate thread # 

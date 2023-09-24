@@ -1,7 +1,8 @@
 import sys
 import traceback
 
-from typing import Dict, Mapping, TypeVar, Iterator
+from typing import Mapping, TypeVar, Iterator
+
 from deribit_arb_app.observables.observable_indicator import ObservableIndicator
 
 M = TypeVar('M')
@@ -14,7 +15,7 @@ E = TypeVar('E')
 class StoreObservableIndicatorInterface(Mapping[E, M]):
 
         def __init__(self):
-            self.d: Dict[E, M] = dict()
+            self.d: dict[E, M] = dict()
 
         def __getitem__(self, item: E) -> M:
             value = str(item)

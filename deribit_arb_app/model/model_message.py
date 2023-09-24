@@ -1,15 +1,15 @@
-from typing import Dict
+from django.db import models
 
     #############################
     # Model for Message Objects #
     #############################
 
-class ModelMessage:
+class ModelMessage(models.Model):
 
     def __init__(self,
                  msg_id: int,
                  method: str,
-                 params: Dict = None,
+                 params: dict = None,
                  jsonrpc="2.0"
                  ):
 
@@ -22,7 +22,7 @@ class ModelMessage:
         else:
             self.params = params
 
-    def build_message(self) -> Dict:
+    def build_message(self) -> dict:
 
         return {
                 "jsonrpc": self.jsonrpc,

@@ -1,10 +1,11 @@
 import json
+
 from typing import Optional
 
 from deribit_arb_app.model.model_position import ModelPosition
 from deribit_arb_app.enums.enum_field_name import EnumFieldName
-
-from deribit_arb_app.converters.converter_json_object_to_model_position import ConverterJsonObjectToModelPosition
+from deribit_arb_app.converters.converter_json_object_to_model_position import \
+                                              ConverterJsonObjectToModelPosition
 
     ###################################################
     # Converter Converts Json object to ModelPosition #

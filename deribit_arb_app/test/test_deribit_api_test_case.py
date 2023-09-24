@@ -1,11 +1,11 @@
 import unittest
 
-from deribit_arb_app.store.stores import Stores 
+from deribit_arb_app.store.stores import Stores
 from deribit_arb_app.enums.enum_currency import EnumCurrency
 from deribit_arb_app.enums.enum_direction import EnumDirection
+from deribit_arb_app.services.deribit_api.service_api_deribit import \
+                                                     ServiceApiDeribit
 from deribit_arb_app.enums.enum_instrument_kind import EnumInstrumentKind
-from deribit_arb_app.services.deribit_api.service_api_deribit import ServiceApiDeribit
-
     ##############################################
     # TestCase Service Deribit API Functionality #
     ##############################################

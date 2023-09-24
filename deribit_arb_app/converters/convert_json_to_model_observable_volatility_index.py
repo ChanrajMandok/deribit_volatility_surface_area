@@ -1,7 +1,9 @@
 import json
+
 from typing import Optional
 
-from deribit_arb_app.model.model_observable_volatility_index import ModelObservableVolatilityIndex
+from deribit_arb_app.model.model_observable_volatility_index import \
+                                       ModelObservableVolatilityIndex
 
     ####################################################################
     # Converter Converts Json object to ModelObservableVolatilityIndex #

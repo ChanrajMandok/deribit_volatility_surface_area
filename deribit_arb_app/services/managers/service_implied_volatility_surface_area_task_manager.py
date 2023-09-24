@@ -3,16 +3,26 @@ import asyncio
 import threading
 
 from singleton_decorator import singleton
+
 from deribit_arb_app.services import logger
+from deribit_arb_app.enums.enum_volatility_index_currency import \
+                                       EnumVolatilityIndexCurrency
+from deribit_arb_app.schedulers.scheduler_instrument_refresh import \
+                                       SchedulerVsaInstrumentsRefresh
 from deribit_arb_app.enums.enum_index_currency import EnumIndexCurrency
+from deribit_arb_app.utils.utils_asyncio import get_or_create_eventloop
+from deribit_arb_app.model.model_subscribable_volatility_index import \
+                                       ModelSubscribableVolatilityIndex
+from deribit_arb_app.services.deribit_api.service_api_deribit_utils import \
+                                                      ServiceApiDeribitUtils
+from deribit_arb_app.utils.utils_asyncio import loop_run_forever_log_exception
+from deribit_arb_app.utils.utils_asyncio import loop_create_task_log_exception
 from deribit_arb_app.model.model_subscribable_index import ModelSubscribableIndex
-from deribit_arb_app.enums.enum_volatility_index_currency import EnumVolatilityIndexCurrency
-from deribit_arb_app.services.deribit_api.service_api_deribit_utils import ServiceApiDeribitUtils
-from deribit_arb_app.schedulers.scheduler_instrument_refresh import SchedulerVsaInstrumentsRefresh
-from deribit_arb_app.model.model_subscribable_volatility_index import ModelSubscribableVolatilityIndex
-from deribit_arb_app.services.managers.service_implied_volatility_queue_manager import ServiceImpliedVolatilityQueueManager
-from deribit_arb_app.services.managers.service_instruments_subscription_manager import ServiceInstrumentsSubscriptionManager
-from deribit_arb_app.utils.utils_asyncio import (asyncio_create_task_log_exception, loop_run_forever_log_exception, loop_create_task_log_exception, get_or_create_eventloop)
+from deribit_arb_app.utils.utils_asyncio import asyncio_create_task_log_exception
+from deribit_arb_app.services.managers.service_implied_volatility_queue_manager import \
+                                                    ServiceImpliedVolatilityQueueManager
+from deribit_arb_app.services.managers.service_instruments_subscription_manager import \
+                                                   ServiceInstrumentsSubscriptionManager
 
     ########################################################################################################################
     # Service runs all tasks to construct Volatility Surface area -> Instument subscriptions, Observers and Asyncio Queues #

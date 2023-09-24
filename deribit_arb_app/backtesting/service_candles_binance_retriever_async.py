@@ -2,7 +2,6 @@ import os
 import aiohttp
 import asyncio
 
-from typing import List
 from binance.client import BaseClient
 from datetime import datetime, timedelta
 
@@ -20,7 +19,7 @@ class ServiceCandlesBinanceRetrieverAsync():
         result = asyncio.run(self.fetch_all(timestamps=timestamps, symbol=symbol))
         return result     
     
-    async def fetch(self, timestamp_start:int,timestamp_end:int, symbol:str, max_retries=2) -> List:
+    async def fetch(self, timestamp_start:int,timestamp_end:int, symbol:str, max_retries=2) -> list:
         interval = BaseClient.KLINE_INTERVAL_1MINUTE
         retries = 0
         data = []
@@ -34,7 +33,7 @@ class ServiceCandlesBinanceRetrieverAsync():
                         retries += 1
         return data
             
-    async def fetch_all(self, timestamps:List, symbol:str) -> List:
+    async def fetch_all(self, timestamps:list, symbol:str) -> list:
         tasks = []
         for i in range(1,len(timestamps),1):
             task = asyncio.create_task(self.fetch(timestamp_start=timestamps[i], timestamp_end=timestamps[i-1], symbol=symbol)) 
@@ -43,7 +42,7 @@ class ServiceCandlesBinanceRetrieverAsync():
         result = [x for y in list_of_candle_list for x in y]
         return result
     
-    def ts_increments(self, lookback_period=int) -> List:
+    def ts_increments(self, lookback_period=int) -> list:
         increment = 1000    
         lookback_period=lookback_period + (increment - lookback_period % increment) if lookback_period % increment > 0 else lookback_period
         end_time = datetime.now().replace(second=0, microsecond=0)
@@ -60,5 +59,3 @@ class ServiceCandlesBinanceRetrieverAsync():
             date_to -= increment*60*1000
             
         return t1
-    
-    

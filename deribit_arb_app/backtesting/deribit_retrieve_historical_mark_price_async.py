@@ -2,8 +2,6 @@ import os
 import aiohttp
 import asyncio
 
-from typing import List
-
 from datetime import timedelta, datetime
 
     ############################################################
@@ -15,18 +13,18 @@ class ServiceDeribitRetrieveHistoricaMarkPriceAsync():
     def __init__(self):
         self.base_url = os.environ['BASE_HTTP_URL']
         
-    def main(self, lookback_period) -> List[dict]:
+    def main(self, lookback_period) -> list[dict]:
         timestamps = self.time_increments(lookback_period=lookback_period)
         result = asyncio.run(self.fetch_all(timestamps=timestamps))
         return result   
         
-    async def fetch(self, timestamp_start:int, timestamp_end:int) -> List:
+    async def fetch(self, timestamp_start:int, timestamp_end:int) -> list:
         async with aiohttp.ClientSession() as session:
             async with session.get(url= f'{self.base_url}/public/get_funding_rate_history?end_timestamp={timestamp_end}&instrument_name=BTC-PERPETUAL&start_timestamp={timestamp_start}') as response:
                 data = await response.json()
                 return(data['result'])
             
-    async def fetch_all(self, timestamps:List) -> List:
+    async def fetch_all(self, timestamps:list) -> list:
         tasks = []
         for i in range(1,len(timestamps),1):
             task = asyncio.create_task(self.fetch(timestamp_start=timestamps[i], timestamp_end=timestamps[i-1])) 
@@ -35,7 +33,7 @@ class ServiceDeribitRetrieveHistoricaMarkPriceAsync():
         result = [x for y in list_of_candle_list for x in y]
         return result
     
-    def time_increments(self, lookback_period=int) -> List:    
+    def time_increments(self, lookback_period=int) -> list:    
         lookback_period=lookback_period + (744 - lookback_period % 744) if lookback_period % 744 > 0 else lookback_period
         end_time = datetime.now().replace(second=0, microsecond=0)
         
@@ -51,6 +49,3 @@ class ServiceDeribitRetrieveHistoricaMarkPriceAsync():
             date_to -= 2678400000
             
         return t1
-    
-    
-        

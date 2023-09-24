@@ -1,9 +1,12 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
+
 from deribit_arb_app.model.model_observable import ModelObservable
+from deribit_arb_app.model.model_subscribable_instrument import \
+                                     ModelSubscribableInstrument
+from deribit_arb_app.model.model_subscribable_volatility_index import \
+                                      ModelSubscribableVolatilityIndex
 from deribit_arb_app.model.model_subscribable_index import ModelSubscribableIndex
-from deribit_arb_app.model.model_subscribable_instrument import ModelSubscribableInstrument
-from deribit_arb_app.model.model_subscribable_volatility_index import ModelSubscribableVolatilityIndex
 
     ##########################################################
     # Model for BSM implied Volatility (observable) Objects #

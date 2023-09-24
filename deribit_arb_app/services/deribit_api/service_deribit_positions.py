@@ -1,14 +1,15 @@
 import json
 
-from typing import Dict
 from singleton_decorator import singleton
 
 from deribit_arb_app.model.model_message import ModelMessage
 from deribit_arb_app.model.model_position import ModelPosition
-
-from deribit_arb_app.services.deribit_api.service_deribit_messaging import ServiceDeribitMessaging
-from deribit_arb_app.services.deribit_api.service_deribit_authentication import ServiceDeribitAuthentication
-from deribit_arb_app.services.deribit_api.service_deribit_websocket_connector import ServiceDeribitWebsocketConnector
+from deribit_arb_app.services.deribit_api.service_deribit_messaging import \
+                                                     ServiceDeribitMessaging
+from deribit_arb_app.services.deribit_api.service_deribit_authentication import \
+                                                     ServiceDeribitAuthentication
+from deribit_arb_app.services.deribit_api.service_deribit_websocket_connector import \
+                                                      ServiceDeribitWebsocketConnector
 
     #####################################################
     # Service Retrieves Deribit Positions via Websocket #
@@ -36,7 +37,7 @@ class ServiceDeribitPositions():
             params=self.params
         )
 
-    async def get(self) -> Dict[str, Dict[str, ModelPosition]]:
+    async def get(self) -> dict[str, dict[str, ModelPosition]]:
 
         async with ServiceDeribitWebsocketConnector() as websocket:
 

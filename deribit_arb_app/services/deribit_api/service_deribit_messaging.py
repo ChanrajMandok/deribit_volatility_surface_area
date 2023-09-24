@@ -3,18 +3,28 @@ import json
 import random
 import traceback
 
-from typing import Tuple, Union
+from typing import Union
 
-from deribit_arb_app.services.handlers.service_deribit_test_handler import ServiceDeribitTestHandler
-from deribit_arb_app.services.handlers.service_deribit_orders_handler import ServiceDeribitOrdersHandler
-from deribit_arb_app.services.handlers.service_deribit_positions_handler import ServiceDeribitPositionsHandler
-from deribit_arb_app.services.handlers.service_deribit_instruments_handler import ServiceDeribitInstrumentsHandler
-from deribit_arb_app.services.handlers.service_deribit_subscription_handler import ServiceDeribitSubscriptionHandler
-from deribit_arb_app.services.handlers.service_deribit_unsubcription_handler import ServiceDeribitUnsubscriptionHandler
-from deribit_arb_app.services.handlers.service_deribit_authentication_handler import ServiceDeribitAuthenticationHandler
-from deribit_arb_app.services.handlers.service_deribit_account_summary_handler import ServiceDeribitAccountSummaryHandler
-from deribit_arb_app.services.handlers.service_deribit_orderbook_summary_handler import ServiceDeribitOrderbookSummaryHandler
-from deribit_arb_app.services.handlers.service_deribit_cancel_all_positions_handler import ServiceDeribitCancelAllPositionsHandler
+from deribit_arb_app.services.handlers.service_deribit_test_handler import \
+                                                   ServiceDeribitTestHandler
+from deribit_arb_app.services.handlers.service_deribit_orders_handler import \
+                                                   ServiceDeribitOrdersHandler
+from deribit_arb_app.services.handlers.service_deribit_positions_handler import \
+                                                   ServiceDeribitPositionsHandler
+from deribit_arb_app.services.handlers.service_deribit_instruments_handler import \
+                                                   ServiceDeribitInstrumentsHandler
+from deribit_arb_app.services.handlers.service_deribit_subscription_handler import \
+                                                   ServiceDeribitSubscriptionHandler
+from deribit_arb_app.services.handlers.service_deribit_unsubcription_handler import \
+                                                  ServiceDeribitUnsubscriptionHandler
+from deribit_arb_app.services.handlers.service_deribit_authentication_handler import \
+                                                   ServiceDeribitAuthenticationHandler
+from deribit_arb_app.services.handlers.service_deribit_account_summary_handler import \
+                                                    ServiceDeribitAccountSummaryHandler
+from deribit_arb_app.services.handlers.service_deribit_orderbook_summary_handler import \
+                                                    ServiceDeribitOrderbookSummaryHandler
+from deribit_arb_app.services.handlers.service_deribit_cancel_all_positions_handler import \
+                                                     ServiceDeribitCancelAllPositionsHandler
 
     ###################################################
     # Service provides Interface for Deribit messages #
@@ -22,7 +32,7 @@ from deribit_arb_app.services.handlers.service_deribit_cancel_all_positions_hand
 
 class ServiceDeribitMessaging():
 
-    def message_handle(self, response) -> Tuple[Union[int, str, None], object]:
+    def message_handle(self, response) -> tuple[Union[int, str, None], object]:
 
         try:
 

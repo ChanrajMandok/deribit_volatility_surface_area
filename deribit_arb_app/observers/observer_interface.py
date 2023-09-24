@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Dict, Iterator, Mapping, TypeVar
+from typing import Iterator, Mapping, TypeVar
 
     ##################################################
     # Interface provides observers with update logic #
@@ -19,7 +19,7 @@ class ObserverInterface(ABC, Mapping[E, M]):
         """
         raise NotImplementedError(f"ObserverInterface: update not implemented for E: {str(E)} and M: {str(M)}")
     
-    def update_many(self, instances = Dict[E, M]) -> None:
+    def update_many(self, instances = dict[E, M]) -> None:
         """
         Receive updates from observable.
         """

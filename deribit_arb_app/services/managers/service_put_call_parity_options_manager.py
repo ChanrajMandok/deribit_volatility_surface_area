@@ -3,7 +3,7 @@ import asyncio
 import aiohttp
 
 from decimal import Decimal
-from typing import List, Optional
+from typing import Optional
 from singleton_decorator import singleton
 
 from deribit_arb_app.store.stores import Stores

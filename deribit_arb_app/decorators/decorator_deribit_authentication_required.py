@@ -1,4 +1,5 @@
-from deribit_arb_app.services.deribit_api.service_deribit_authentication import ServiceDeribitAuthentication
+from deribit_arb_app.services.deribit_api.service_deribit_authentication import \
+                                                      ServiceDeribitAuthentication
 
     #############################################
     # Decorator Provides Deribit Authentication #

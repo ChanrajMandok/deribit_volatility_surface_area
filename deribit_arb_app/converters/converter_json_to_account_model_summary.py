@@ -71,5 +71,4 @@ class ConverterJsonToAccountModelSummary():
         except Exception as e:
             raise Exception(f"{self.__class__.__name__}: {e}")
 
-
         return account_summary

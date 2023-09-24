@@ -1,9 +1,9 @@
 import json
 
-from typing import List
 from decimal import Decimal
 
-from deribit_arb_app.model.model_subscribable_instrument import ModelSubscribableInstrument
+from deribit_arb_app.model.model_subscribable_instrument import \
+                                        ModelSubscribableInstrument
 
     #############################################################
     # Converter Converts Json object to list of ModelInstrument #
@@ -15,7 +15,7 @@ class ConverterJsonToInstruments():
 
         self.json_obj = json.loads(json_string)
 
-    def convert(self) -> List[ModelSubscribableInstrument]:
+    def convert(self) -> list[ModelSubscribableInstrument]:
 
         instruments = []
 

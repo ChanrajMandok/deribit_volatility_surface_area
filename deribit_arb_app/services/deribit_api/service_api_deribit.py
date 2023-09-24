@@ -1,18 +1,26 @@
-from typing import Dict, List, Optional
+from typing import Optional
 
 from deribit_arb_app.model.model_order import ModelOrder
 from deribit_arb_app.model.model_position import ModelPosition
 from deribit_arb_app.enums.enum_direction import EnumDirection
+from deribit_arb_app.model.model_subscribable_instrument import \
+                                      ModelSubscribableInstrument
 from deribit_arb_app.model.model_subscribable import ModelSubscribable
-from deribit_arb_app.services.deribit_api.service_api_interface import ServiceApiInterface
-from deribit_arb_app.model.model_subscribable_instrument import ModelSubscribableInstrument
-from deribit_arb_app.services.deribit_api.service_deribit_orders import ServiceDeribitOrders
-from deribit_arb_app.services.deribit_api.service_deribit_positions import ServiceDeribitPositions
-from deribit_arb_app.services.deribit_api.service_deribit_subscribe import ServiceDeribitSubscribe
-from deribit_arb_app.services.deribit_api.service_deribit_instruments import ServiceDeribitInstruments
-from deribit_arb_app.services.deribit_api.service_deribit_account_summary import ServiceDeribitAccountSummary
-from deribit_arb_app.services.deribit_api.service_deribit_get_orderbook_summary import ServiceDeribitGetOrderbookSummary
-
+from deribit_arb_app.services.deribit_api.service_api_interface import \
+                                                     ServiceApiInterface
+from deribit_arb_app.services.deribit_api.service_deribit_orders import \
+                                                     ServiceDeribitOrders
+from deribit_arb_app.services.deribit_api.service_deribit_positions import \
+                                                     ServiceDeribitPositions
+from deribit_arb_app.services.deribit_api.service_deribit_subscribe import \
+                                                     ServiceDeribitSubscribe
+from deribit_arb_app.services.deribit_api.service_deribit_instruments import \
+                                                     ServiceDeribitInstruments
+from deribit_arb_app.services.deribit_api.service_deribit_account_summary import \
+                                                      ServiceDeribitAccountSummary
+from deribit_arb_app.services.deribit_api.service_deribit_get_orderbook_summary import \
+                                                       ServiceDeribitGetOrderbookSummary
+                                                       
     ################################################################################
     # Service Implements Deribit API to provide Framework to trade via Deribit API #
     ################################################################################
@@ -22,7 +30,7 @@ class ServiceApiDeribit(ServiceApiInterface):
     async def get_instruments(
                               self,
                               currency: str, 
-                              kind: str) -> Dict[str, ModelSubscribableInstrument]:
+                              kind: str) -> dict[str, ModelSubscribableInstrument]:
 
         deribit_instruments = ServiceDeribitInstruments(currency=currency, kind=kind)
 
@@ -32,7 +40,7 @@ class ServiceApiDeribit(ServiceApiInterface):
         
     async def get_open_orders(
                               self,
-                              currency: str) -> Dict[str, Dict[str, List[ModelOrder]]]:
+                              currency: str) -> dict[str, dict[str, list[ModelOrder]]]:
 
         deribit_orders = ServiceDeribitOrders()
 
@@ -71,7 +79,7 @@ class ServiceApiDeribit(ServiceApiInterface):
 
         return await deribit_orders.cancel(order_id=order_id)
 
-    async def get_positions(self, currency) -> Dict[str,Dict[str, ModelPosition]]:
+    async def get_positions(self, currency) -> dict[str,dict[str, ModelPosition]]:
 
         deribit_positions = ServiceDeribitPositions(currency=currency)
 
@@ -83,7 +91,7 @@ class ServiceApiDeribit(ServiceApiInterface):
 
         return await deribit_account_summary.get()
 
-    async def subscribe(self, subscribables: List[ModelSubscribable]):
+    async def subscribe(self, subscribables: list[ModelSubscribable]):
 
         # deribit quotes service
         deribit_subscribe = ServiceDeribitSubscribe()
@@ -94,7 +102,7 @@ class ServiceApiDeribit(ServiceApiInterface):
 
         await task
 
-    async def unsubscribe(self, unsubscribables: List[ModelSubscribable]):
+    async def unsubscribe(self, unsubscribables: list[ModelSubscribable]):
     
         # deribit quotes service
         deribit_subscribe = ServiceDeribitSubscribe()

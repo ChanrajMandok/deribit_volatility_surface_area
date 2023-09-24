@@ -1,12 +1,14 @@
 import math
 import datetime
-import numpy as np 
+import numpy as np
+
 from typing import Optional
 
 from deribit_arb_app.store.stores import Stores
-from deribit_arb_app.services.pricers.service_pricer_black_scholes import ServicePricerBlackScholes
-from deribit_arb_app.model.indicator_models.model_indicator_bsm_implied_volatility import ModelIndicatorBsmImpliedVolatility
-
+from deribit_arb_app.services.pricers.service_pricer_black_scholes import \
+                                                  ServicePricerBlackScholes
+from deribit_arb_app.model.indicator_models.model_indicator_bsm_implied_volatility import \
+                                                         ModelIndicatorBsmImpliedVolatility
     ##################################################################
     # Service Builds implied Volatility mesure which can be observed #
     ##################################################################

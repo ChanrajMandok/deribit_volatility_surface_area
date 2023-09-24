@@ -1,4 +1,5 @@
 import json
+
 from decimal import Decimal
 
 from deribit_arb_app.model.model_orderbook_summary import ModelOrderbookSummary

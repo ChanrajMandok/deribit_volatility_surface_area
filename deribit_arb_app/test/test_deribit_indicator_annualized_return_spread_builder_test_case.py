@@ -7,10 +7,13 @@ from deribit_arb_app.enums.enum_currency import EnumCurrency
 from deribit_arb_app.enums.enum_index_currency import EnumIndexCurrency
 from deribit_arb_app.enums.enum_instrument_kind import EnumInstrumentKind
 from deribit_arb_app.tasks.task_instruments_pull import TaskInstrumentsPull
+from deribit_arb_app.services.deribit_api.service_deribit_subscribe import \
+                                                     ServiceDeribitSubscribe
 from deribit_arb_app.model.model_subscribable_index import ModelSubscribableIndex
-from deribit_arb_app.services.deribit_api.service_deribit_subscribe import ServiceDeribitSubscribe
-from deribit_arb_app.observers.observer_indicator_annualised_return_spread import ObserverIndicatorAnnualisedReturnSpread
-from deribit_arb_app.model.indicator_models.model_indicator_annualised_return_spread import ModelIndicatorAnnualisedReturnSpread
+from deribit_arb_app.observers.observer_indicator_annualised_return_spread import \
+                                            ObserverIndicatorAnnualisedReturnSpread
+from deribit_arb_app.model.indicator_models.model_indicator_annualised_return_spread import \
+                                                         ModelIndicatorAnnualisedReturnSpread
 
     #########################################################################################################
     # TestCase Testing funcitonality to calculate aned subscribe to internally calculated Annualised Spread #

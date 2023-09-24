@@ -1,10 +1,11 @@
 import json
-from typing import List, Optional
+
+from typing import Optional
 
 from deribit_arb_app.model.model_order import ModelOrder
 from deribit_arb_app.enums.enum_field_name import EnumFieldName
-
-from deribit_arb_app.converters.converter_json_object_to_model_order import ConverterJsonObjectToModelOrder
+from deribit_arb_app.converters.converter_json_object_to_model_order import \
+                                              ConverterJsonObjectToModelOrder
 
     #################################################
     # Converter Converts Json object to Model Order #
@@ -17,7 +18,7 @@ class ConverterJsonToOpenOrders():
         self.json_obj = json.loads(json_string)
         self.json_object_to_order = ConverterJsonObjectToModelOrder()
         
-    def convert(self) -> Optional[List[ModelOrder]]:
+    def convert(self) -> Optional[list[ModelOrder]]:
 
         orders = []
 

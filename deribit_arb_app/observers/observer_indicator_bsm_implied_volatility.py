@@ -6,8 +6,10 @@ from concurrent.futures import ThreadPoolExecutor
 
 from deribit_arb_app.store.stores import Stores
 from deribit_arb_app.observers.observer_interface import ObserverInterface
-from deribit_arb_app.services.builders.service_implied_volatility_bsm_builder import ServiceImpliedVolatilityBsmBuilder
-from deribit_arb_app.model.indicator_models.model_indicator_bsm_implied_volatility import ModelIndicatorBsmImpliedVolatility
+from deribit_arb_app.services.builders.service_implied_volatility_bsm_builder import \
+                                                   ServiceImpliedVolatilityBsmBuilder
+from deribit_arb_app.model.indicator_models.model_indicator_bsm_implied_volatility import \
+                                                        ModelIndicatorBsmImpliedVolatility
 
     ###################################################################################################
     # Observer monitors the instrument orderbook & index price feed and updates BSM Implied volatility #

@@ -1,10 +1,12 @@
 import json
+
 from typing import Optional
 from singleton_decorator import singleton
 
 from deribit_arb_app.store.stores import Stores
 from deribit_arb_app.model.model_account_summary import ModelAccountSummary
-from deribit_arb_app.converters.converter_json_to_account_model_summary import ConverterJsonToAccountModelSummary
+from deribit_arb_app.converters.converter_json_to_account_model_summary import \
+                                              ConverterJsonToAccountModelSummary
 
     ##############################################
     # Service Implements Account Summary Handler #
