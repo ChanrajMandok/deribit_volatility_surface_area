@@ -16,7 +16,7 @@ async def _log_exception(awaitable: Awaitable, logger: Logger, origin: str = "")
         
         # Propagate specific critical exceptions
         if "no close frame received or sent" in str(e):
-            raise Exception(str(e))
+            logger.error(str(e))
         
         return None
 

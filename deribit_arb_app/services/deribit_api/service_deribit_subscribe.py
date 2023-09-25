@@ -53,7 +53,7 @@ class ServiceDeribitSubscribe(ModelSubscribable):
 
         for subscribable in subscribables:
             params["channels"].append(subscribable.channel_name)
-            print(f"SUBSCRIBED {subscribable.channel_name}")
+            # print(f"SUBSCRIBED {subscribable.channel_name}")
             if snapshot==False:
                 self.subscriptions.append(subscribable)
         

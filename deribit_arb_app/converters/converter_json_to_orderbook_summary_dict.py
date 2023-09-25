@@ -2,6 +2,7 @@ import json
 
 from decimal import Decimal
 
+from deribit_arb_app.converters import logger
 from deribit_arb_app.model.model_orderbook_summary import ModelOrderbookSummary
 
     ############################################################
@@ -47,4 +48,4 @@ class ConverterJsonToOrderbookSummaryDict():
             return orderbook_summary
         
         except Exception as e:
-            raise Exception(f"An error occurred during conversion: {self.__class__.__name__} {e}")
+            logger.error(f"An error occurred during conversion: {self.__class__.__name__} {e}")

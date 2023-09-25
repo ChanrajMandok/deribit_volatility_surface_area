@@ -32,15 +32,12 @@ from deribit_arb_app.services.managers.service_instruments_subscription_manager 
 class ServiceImpliedVolatilitySurfaceAreaTaskManager():
 
     def __init__(self):
-        self.instruments_queue = asyncio.Queue()
         self.implied_volatility_queue = asyncio.Queue()
         self.service_api_deribit_utils = ServiceApiDeribitUtils()
         self.minimum_liquidity_threshold = int(os.environ.get('VSA_MINIMUM_LIQUIDITY_THRESHOLD', None))
         self.service_implied_volatility_queue_manager = ServiceImpliedVolatilityQueueManager(self.implied_volatility_queue)
-        self.scheduler_instrument_refresh = SchedulerVsaInstrumentsRefresh(implied_volatility_queue=self.implied_volatility_queue,
-                                                                                                instruments_queue=self.instruments_queue)
-        self.service_instruments_subscription_manager = ServiceInstrumentsSubscriptionManager(implied_volatility_queue=self.implied_volatility_queue,
-                                                                                                                instruments_queue=self.instruments_queue)
+        self.scheduler_instrument_refresh = SchedulerVsaInstrumentsRefresh(implied_volatility_queue=self.implied_volatility_queue)
+        self.service_instruments_subscription_manager = ServiceInstrumentsSubscriptionManager(implied_volatility_queue=self.implied_volatility_queue)
 
     def create_producer(self, currency: str):
         inner_loop_thread = threading.Thread(target=lambda: self.run_scheduler(currency=currency), name='vsa_producer')
@@ -55,7 +52,7 @@ class ServiceImpliedVolatilitySurfaceAreaTaskManager():
         if threading.current_thread() != threading.main_thread():
             raise Exception(f"{self.__class__.__name__} consumer not on main thread")
         thread_main_loop = get_or_create_eventloop()
-        loop_run_forever_log_exception(loop=thread_main_loop, awaitable=self.consume_vsa_tasks(), logger=logger, origin=f"{self.__class__.__name__} consumer")
+        loop_run_forever_log_exception(loop=thread_main_loop, awaitable=self.consume_iv_queue(), logger=logger, origin=f"{self.__class__.__name__} consumer")
         
     def get_index_and_volatility_index(self, currency: str) -> tuple[ModelSubscribableIndex, ModelSubscribableVolatilityIndex]:
         index_currency_value = getattr(EnumIndexCurrency, currency.upper()).value
@@ -73,7 +70,7 @@ class ServiceImpliedVolatilitySurfaceAreaTaskManager():
                                               minimum_liquidity_threshold=self.minimum_liquidity_threshold
                                              )
         
-    async def consume_vsa_tasks(self):
-        awaitable = self.service_instruments_subscription_manager.manage_instruments_queue()
-        asyncio_create_task_log_exception(awaitable=awaitable, logger=logger, origin=f"{self.__class__.__name__} consume_vsa_tasks")
+    async def consume_iv_queue(self):
+        iv_awaitable = self.service_implied_volatility_queue_manager.manage_implied_volatility_queue()
+        asyncio_create_task_log_exception(awaitable=iv_awaitable, logger=logger, origin=f"{self.__class__.__name__} consume_vsa_tasks")
         

@@ -1,5 +1,6 @@
 from singleton_decorator import singleton
 
+from deribit_arb_app.converters import logger
 from deribit_arb_app.model.model_order import ModelOrder
 from deribit_arb_app.model.model_trade import ModelTrade
 from deribit_arb_app.enums.enum_field_name import EnumFieldName
@@ -69,7 +70,7 @@ class ConverterJsonObjectToModelOrder():
                 amount                 = amount)
 
         except Exception as e:
-            raise Exception(f"{self.__class__.__name__}: {e}")
+            logger.error(f"{self.__class__.__name__}: {e}")
 
         if EnumFieldName.TRADES.value in json_order:
             for trade_data in json_order[EnumFieldName.TRADES.value]:

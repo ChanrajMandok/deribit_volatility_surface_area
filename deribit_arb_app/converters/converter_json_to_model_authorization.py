@@ -1,5 +1,6 @@
 import json
 
+from deribit_arb_app.converters import logger
 from deribit_arb_app.model.model_authorization import ModelAuthorization
 
     ########################################################
@@ -29,6 +30,6 @@ class ConverterJsonToModelAuthorization():
             )
 
         except Exception as e:
-            raise Exception(f"{self.__class__.__name__}: {e}")
+            logger.error(f"{self.__class__.__name__}: {e}")
 
         return a 

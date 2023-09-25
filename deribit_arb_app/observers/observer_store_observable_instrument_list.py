@@ -5,13 +5,13 @@ from singleton_decorator import singleton
 from deribit_arb_app.schedulers import logger
 from deribit_arb_app.store.stores import Stores
 from deribit_arb_app.model.model_observable_instrument_list import \
-                                      ModelObservableInstrumentList
+                                       ModelObservableInstrumentList
 from deribit_arb_app.utils.utils_asyncio import get_or_create_eventloop
 from deribit_arb_app.observers.observer_interface import ObserverInterface
 from deribit_arb_app.utils.utils_asyncio import loop_create_task_log_exception
 from deribit_arb_app.services.managers.service_instruments_subscription_manager import \
-                                                  ServiceInstrumentsSubscriptionManager
-
+                                                   ServiceInstrumentsSubscriptionManager
+                                                   
     ###################################################################################################
     # Observer monitors VSA Instrument List (Store) and notifys Subscription Manager of state changes #
     ###################################################################################################

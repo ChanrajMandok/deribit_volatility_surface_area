@@ -1,5 +1,6 @@
 from typing import Optional
 
+from deribit_arb_app.converters import logger
 from deribit_arb_app.model.model_order import ModelOrder
 from deribit_arb_app.model.model_position import ModelPosition
 
@@ -18,4 +19,4 @@ class ConverterJsonObjectToModelPosition():
             position = ModelPosition(**self.json_obj)
             return position
         except Exception as e:
-            raise Exception(f"{self.__class__.__name__}: {e}")
+            logger.error(f"{self.__class__.__name__}: {e}")

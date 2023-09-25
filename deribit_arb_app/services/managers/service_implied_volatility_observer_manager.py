@@ -21,7 +21,8 @@ from deribit_arb_app.model.indicator_models.model_indicator_bsm_implied_volatili
 class ServiceImpliedVolatilityObserverManager:
     def __init__(self, implied_volatility_queue: asyncio.Queue):
         self.implied_volatility_queue = implied_volatility_queue
-        self.observer_indicator_bsm_implied_volatility = ObserverIndicatorBsmImpliedVolatility(self.implied_volatility_queue)
+        self.observer_indicator_bsm_implied_volatility = \
+            ObserverIndicatorBsmImpliedVolatility(self.implied_volatility_queue)
         
     async def manager_observers(self,
                                 index :ModelSubscribableIndex,
@@ -42,7 +43,7 @@ class ServiceImpliedVolatilityObserverManager:
                             volatility_index=volatility_index
                         )
                         self.observer_indicator_bsm_implied_volatility.attach_indicator(indicator)
-                        print(f"{str(indicator.key)} observer attached")
+                        # print(f"{str(indicator.key)} observer attached")
                     except Exception as e:
                         print(f"Error while populating model instance: {str(e)}")
                     

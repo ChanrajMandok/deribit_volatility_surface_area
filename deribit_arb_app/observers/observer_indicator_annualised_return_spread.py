@@ -1,5 +1,6 @@
 from singleton_decorator import singleton
 
+from deribit_arb_app.observers import logger
 from deribit_arb_app.store.stores import Stores
 from deribit_arb_app.observers.observer_interface import ObserverInterface
 from deribit_arb_app.model.indicator_models.model_indicator_annualised_return_spread import \
@@ -39,7 +40,7 @@ class ObserverIndicatorAnnualisedReturnSpread(ObserverInterface):
                 if indicator is not None:
                     self.store_observable_indicator_annualised_spread.update_observable(indicator)
             except Exception as e:
-                raise Exception(f"{self.__class__.__name__}: {e}")
+                logger.error(f"{self.__class__.__name__}: {e}")
 
     def get(self, key) -> ModelIndicatorAnnualisedReturnSpread:
         return self.indicators.get(key)

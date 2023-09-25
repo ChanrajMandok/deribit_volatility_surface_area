@@ -4,6 +4,7 @@ import asyncio
 from singleton_decorator import singleton
 from concurrent.futures import ThreadPoolExecutor
 
+from deribit_arb_app.observers import logger
 from deribit_arb_app.store.stores import Stores
 from deribit_arb_app.observers.observer_interface import ObserverInterface
 from deribit_arb_app.services.builders.service_implied_volatility_bsm_builder import \
@@ -66,10 +67,11 @@ class ObserverIndicatorBsmImpliedVolatility(ObserverInterface):
                     if result is not None:
                         if result is not None:
                             if result.name not in self.implied_volatility_dict or \
-                                    round(self.implied_volatility_dict[result.name].implied_volatility, 4) != round(result.implied_volatility, 4):
+                                    round(self.implied_volatility_dict[result.name].implied_volatility, 4) !=\
+                                                                             round(result.implied_volatility, 4):
                                 self.implied_volatility_queue.put_nowait(result)
                 except Exception as e:
-                    raise Exception(f"{self.__class__.__name__}: {e}")
+                    logger.error(f"{self.__class__.__name__}: {e}")
 
     def detach_all(self):
         for key in list(self.indicators.keys()):
