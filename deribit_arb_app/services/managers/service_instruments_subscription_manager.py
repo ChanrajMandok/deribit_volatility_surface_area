@@ -29,8 +29,9 @@ from deribit_arb_app.services.retrievers.service_deribit_vsa_instruments_retriev
 @singleton
 class ServiceInstrumentsSubscriptionManager():
     
-    def __init__(self, implied_volatility_queue: asyncio.Queue):
+    def __init__(self, implied_volatility_queue: asyncio.Queue, instruments_queue: asyncio.Queue):
         self.previous_instruments             = []
+        self.instruments_queue                = instruments_queue
         self.implied_volatility_queue         = implied_volatility_queue
         self.service_api_deribit_utils        = ServiceApiDeribitUtils()
         self.vsa_instruments_retriever        = ServiceDeribitVsaInstrumentsRetrieverWs()
@@ -38,22 +39,29 @@ class ServiceInstrumentsSubscriptionManager():
         self.service_bsm_observer_manager     = ServiceImpliedVolatilityObserverManager(\
                                                             self.implied_volatility_queue)
         
-    async def manage_instruments(self,
-                                 model_observable_instrument_list: ModelObservableInstrumentList): 
-        try:
-            if not isinstance(model_observable_instrument_list, ModelObservableInstrumentList):
-                logger.error(f"{self.__class__.__name__} queue not popualted with model instances")
+    async def manage_instruments_queue(self):
+            logger.info(f"{self.__class__.__name__} running ")
 
-            task = self.manage_instrument_subscribables(
-                index=model_observable_instrument_list.index,
-                volatility_index=model_observable_instrument_list.volatility_index,
-                instruments=model_observable_instrument_list.instruments)
+            while True:
+                try:
+                    if not self.instruments_queue.empty():
+                        model_observable_instrument_list = await self.instruments_queue.get()
 
-            asyncio_create_task_log_exception(awaitable=task, logger=logger, 
-                                                origin=f"{self.__class__.__name__} manage_instruments")
-        except Exception as e:
-            logger.error(f"{self.__class__.__name__}: {e}")
+                        if not isinstance(model_observable_instrument_list, ModelObservableInstrumentList):
+                            raise Exception(f"{self.__class__.__name__} queue not popualted with model instances")
 
+                        task = self.manage_instrument_subscribables(
+                            index=model_observable_instrument_list.index,
+                            volatility_index=model_observable_instrument_list.volatility_index,
+                            instruments=model_observable_instrument_list.instruments)
+
+                        asyncio_create_task_log_exception(awaitable=task, logger=logger, 
+                                                        origin=f"{self.__class__.__name__} manage_instruments_queue")
+                    else:
+                        await asyncio.sleep(1)
+                except Exception as e:
+                    logger.error(f"{self.__class__.__name__}: manage subscriptables error")
+                    
     async def manage_instrument_subscribables(self,
                                               instruments: Optional[list[ModelSubscribableInstrument]], 
                                               index: Optional[ModelSubscribableIndex],
@@ -87,9 +95,7 @@ class ServiceInstrumentsSubscriptionManager():
                     [instrument for instrument in instruments if instrument.name not in previous_instrument_names]
                 instruments_unsubscribables = \
                     [instrument for instrument in self.previous_instruments if instrument.name not in instrument_names]
-                
-                # if previous_instrument_names and not instruments_subscribables or instruments_unsubscribables:
-                #     logger.info('no change to subscribed instruments') 
+        
         except Exception as e:
             logger.error(f"{self.__class__.__name__}: {e}")
         
@@ -98,12 +104,12 @@ class ServiceInstrumentsSubscriptionManager():
                 asyncio_create_task_log_exception(\
                     awaitable=self.service_api_deribit_utils.a_coroutine_subscribe(subscribables=instruments_subscribables),
                                                                                logger=logger, origin="a_coroutine_subscribe")
-                logger.info(f"{len(instruments_subscribables)} instruments subscribed ") 
+                # logger.info(f"{len(instruments_subscribables)} instruments task subscribed ") 
             if len(instruments_unsubscribables) > 0:
                 asyncio_create_task_log_exception(\
                     awaitable=self.service_api_deribit_utils.a_coroutine_unsubscribe(unsubscribables=instruments_unsubscribables),
                                                                                     logger=logger, origin="a_coroutine_unsubscribe")
-                logger.info(f"{len(instruments_unsubscribables)} instruments unsubscribed ")
+                # logger.info(f"{len(instruments_unsubscribables)} instruments unsubscribed ")
             if len(instruments_subscribables) > 0 or len(instruments_unsubscribables) > 0:
                 asyncio_create_task_log_exception(\
                     awaitable=self.service_bsm_observer_manager.manager_observers(index=index,

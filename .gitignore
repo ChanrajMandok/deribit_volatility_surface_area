@@ -4,3 +4,4 @@ __pycache__
 .vscode
 __pycache__/
 *.pyc
+\__pycache__

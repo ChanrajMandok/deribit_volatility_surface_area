@@ -65,10 +65,13 @@ class ObserverIndicatorBsmImpliedVolatility(ObserverInterface):
                 try:
                     result = future.result()
                     if result is not None:
-                        if result is not None:
-                            if result.name not in self.implied_volatility_dict or \
-                                    round(self.implied_volatility_dict[result.name].implied_volatility, 4) !=\
-                                                                             round(result.implied_volatility, 4):
+                        result.time_to_maturity   = round(result.time_to_maturity, 4)
+                        result.implied_volatility = round(result.implied_volatility, 4)
+                        
+                        if result.name not in self.implied_volatility_dict or \
+                                round(self.implied_volatility_dict[result.name].implied_volatility, 4) !=\
+                                                                            round(result.implied_volatility, 4):
+                                self.implied_volatility_dict[result.name] = result
                                 self.implied_volatility_queue.put_nowait(result)
                 except Exception as e:
                     logger.error(f"{self.__class__.__name__}: {e}")

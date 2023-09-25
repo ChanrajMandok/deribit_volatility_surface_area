@@ -22,8 +22,10 @@ class ServiceImpliedVolatilityQueueManager():
                     model_iv_object = self.implied_volatility_queue.get_nowait()
                     if not isinstance(model_iv_object, ModelIndicatorBsmImpliedVolatility):
                         continue
-                    self.implied_volatility_dict[(model_iv_object.strike, model_iv_object.time_to_maturity)] = \
-                                                                                    model_iv_object.implied_volatility
-                    # print(f'{model_iv_object.name} : {model_iv_object.implied_volatility}')
+                    ttm = round(model_iv_object.time_to_maturity,4)
+                    
+                    self.implied_volatility_dict[(model_iv_object.strike, ttm)] = \
+                                                                                   model_iv_object.implied_volatility
+                    print(f'{model_iv_object.name} : {model_iv_object.implied_volatility}')
             else: 
                 await asyncio.sleep(1)

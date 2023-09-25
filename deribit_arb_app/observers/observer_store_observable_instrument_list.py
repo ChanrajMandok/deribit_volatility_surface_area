@@ -45,11 +45,11 @@ class ObserverStoreObservableInstrumentList(ObserverInterface):
         instruments_list = observable_instance.instruments 
         volatility_index = observable_instance.volatility_index
         
-        task = self.service_instruments_subscription_manager.manage_instrument_subscribables(
-            index=index,
-            instruments=instruments_list,
-            volatility_index=volatility_index            
-        )
+        self.service_instruments_subscription_manager.manage_instrument_subscribables(
+                                                                                      index=index,
+                                                                                      instruments=instruments_list,
+                                                                                      volatility_index=volatility_index            
+                                                                                     )
         
         loop = get_or_create_eventloop()        
         loop_create_task_log_exception(awaitable=task, logger=logger, 
