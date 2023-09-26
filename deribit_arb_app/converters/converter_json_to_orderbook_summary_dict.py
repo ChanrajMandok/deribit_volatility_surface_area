@@ -48,4 +48,4 @@ class ConverterJsonToOrderbookSummaryDict():
             return orderbook_summary
         
         except Exception as e:
-            logger.error(f"An error occurred during conversion: {self.__class__.__name__} {e}")
+            logger.error(f"An error occurred during conversion: {self.__class__.__name__}: {e}")

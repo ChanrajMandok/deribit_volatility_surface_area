@@ -10,7 +10,6 @@ from deribit_arb_app.model.model_subscribable_volatility_index import \
 class ConverterJsonToModelSubscribableVolatilityIndex():
 
     def __init__(self, json_string):
-
         self.json_obj = json.loads(json_string)
 
     def convert(self) -> list[ModelSubscribableVolatilityIndex]:
@@ -18,16 +17,15 @@ class ConverterJsonToModelSubscribableVolatilityIndex():
         if not "params" in self.json_obj:
             return None
 
-        params     = self.json_obj["params"]
+        params = self.json_obj["params"]
 
         if not "data" in params:
             return None
 
-        data       = params["data"]
+        data = params["data"]
 
-        index_name   = data["index_name"]
+        index_name = data["index_name"]
 
-        x = ModelSubscribableVolatilityIndex(
-                                             name = index_name)
+        x = ModelSubscribableVolatilityIndex(name = index_name)
         
         return x

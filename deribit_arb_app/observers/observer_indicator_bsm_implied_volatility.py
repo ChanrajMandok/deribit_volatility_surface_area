@@ -60,15 +60,15 @@ class ObserverIndicatorBsmImpliedVolatility(ObserverInterface):
             try:
                 result = self.service_implied_volatility_bsm_builder.build(indicator)
                 if result is not None:
+                    name = result.name
                     result.time_to_maturity = round(result.time_to_maturity, 4)
                     result.implied_volatility = round(result.implied_volatility, 5)
                     
-                    existing_iv = self.implied_volatility_dict.get(result.name)
+                    existing_iv = self.implied_volatility_dict.get(name)
                     
                     if existing_iv is None or existing_iv != result.implied_volatility:
-                        timestamp = result.timestamp
-                        self.implied_volatility_dict[result.name] = result.implied_volatility
-                        self.implied_volatility_queue.put_nowait({"value": result, "timestamp": timestamp})
+                        self.implied_volatility_dict[name] = result.implied_volatility
+                        self.implied_volatility_queue.put_nowait(result)
                         
             except Exception as e:
                 logger.error(f"{self.__class__.__name__}: {e}")

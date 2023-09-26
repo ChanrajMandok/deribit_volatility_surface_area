@@ -35,4 +35,6 @@ class ModelIndicatorBsmImpliedVolatility(ModelObservable, models.Model):
         key = f"BSM Implied Volatility-{instrument.name}"
         return key
     
+    def __repr__(self):
+        return f"{self.__class__.__name__}: {self.name} "
     
