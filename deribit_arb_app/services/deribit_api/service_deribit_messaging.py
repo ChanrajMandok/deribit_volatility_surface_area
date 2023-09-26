@@ -1,10 +1,10 @@
-import sys
 import json
 import random
 import traceback
 
 from typing import Union
 
+from deribit_arb_app.services import logger
 from deribit_arb_app.services.handlers.service_deribit_test_handler import \
                                                    ServiceDeribitTestHandler
 from deribit_arb_app.services.handlers.service_deribit_orders_handler import \
@@ -85,9 +85,7 @@ class ServiceDeribitMessaging():
                 return None, None
 
         except Exception as e:
-            print(e)
-            _, _, exc_traceback = sys.exc_info()
-            traceback.print_tb(exc_traceback, limit=None, file=None)
+            logger.error(f"{self.__class__.__name__}: Error: {str(e)}. Stack trace: {traceback.format_exc()}")
 
 
     def generate_id(self, method) -> int:

@@ -1,8 +1,8 @@
-import sys
 import traceback
 
 from typing import Mapping, TypeVar, Iterator
 
+from deribit_arb_app.store import logger
 from deribit_arb_app.observables.observable_indicator import ObservableIndicator
 
 M = TypeVar('M')
@@ -36,9 +36,8 @@ class StoreObservableIndicatorInterface(Mapping[E, M]):
             try:
                 self.d[observable_indicator_instance.key].set_instance(observable_indicator_instance)
             except Exception as e:
-                print(e)
-                _, _, exc_traceback = sys.exc_info()
-                traceback.print_tb(exc_traceback, limit=None, file=None)
+                        logger.error(f"{self.__class__.__name__}: Error: {str(e)}. Stack trace: {traceback.format_exc()}")
+                
 
         def get_observable(self, observable_indicator_instance: M):
             if not observable_indicator_instance.key in self.d:
@@ -51,6 +50,3 @@ class StoreObservableIndicatorInterface(Mapping[E, M]):
 
             if observable_indicator_instance.key in self.d:
                 del self.d[observable_indicator_instance.key]
-                
-
-            

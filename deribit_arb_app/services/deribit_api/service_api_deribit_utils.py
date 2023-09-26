@@ -1,6 +1,7 @@
 import asyncio
 import traceback
 
+from deribit_arb_app.services import logger
 from deribit_arb_app.model.model_subscribable_instrument import \
                                       ModelSubscribableInstrument
 from deribit_arb_app.services.deribit_api.service_deribit_subscribe import \
@@ -20,8 +21,8 @@ class ServiceApiDeribitUtils:
             await self.deribit_subscribe.subscribe(subscribables=subscribables, snapshot=snapshot)
         except asyncio.exceptions.TimeoutError:
             pass
-        except Exception:
-            traceback.print_exc()
+        except Exception as e:
+            logger.error(f"{self.__class__.__name__}: Error: {str(e)}. Stack trace: {traceback.format_exc()}")
 
     async def a_coroutine_unsubscribe(self, unsubscribables: list[ModelSubscribableInstrument]): 
         await self.deribit_subscribe.unsubscribe(unsubscribables=unsubscribables)

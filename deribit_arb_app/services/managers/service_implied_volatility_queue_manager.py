@@ -21,11 +21,17 @@ class ServiceImpliedVolatilityQueueManager():
         while True:
             try:
                 if self.implied_volatility_queue.qsize() > 0:
-                    model_iv_object = self.implied_volatility_queue.get_nowait()
+                    
+                    data = self.implied_volatility_queue.get_nowait()
+                    timestamp = data["timestamp"]
+                    model_iv_object = data["value"]
+                    
                     if not isinstance(model_iv_object, ModelIndicatorBsmImpliedVolatility):
                         continue
-                    ttm = round(model_iv_object.time_to_maturity,4)
-                    self.implied_volatility_dict[(model_iv_object.strike, ttm)] = model_iv_object.implied_volatility
+                    
+                    self.implied_volatility_dict[model_iv_object.strike] = {"value": model_iv_object.implied_volatility, "timestamp": timestamp}
+                    
                     logger.info(f'{model_iv_object.name} : {model_iv_object.implied_volatility}')
+                    
             except Exception as e:
                 logger.error(f"Error in manage_implied_volatility_queue: {e}")

@@ -1,7 +1,7 @@
 import math
-import datetime
 
 from typing import Optional
+from datetime import datetime
 
 from deribit_arb_app.store.stores import Stores
 from deribit_arb_app.services.pricers.service_pricer_black_scholes import \
@@ -42,8 +42,8 @@ class ServicePutCallParityAribtrageBuilder():
         put_instrument_bid    = put_instrument_book.best_bid_price
 
         expiry_timestamp      = put_instrument.expiration_timestamp
-        expiry_date           = datetime.datetime.fromtimestamp((expiry_timestamp/1000))
-        current_date          = datetime.datetime.utcnow()
+        expiry_date           = datetime.fromtimestamp((expiry_timestamp/1000))
+        current_date          = datetime.utcnow()
 
         ## preventing unecessary overhead of BSM calculation
         if any(not var for var in [index, index_price, call_instrument_book, put_instrument_book,

@@ -1,6 +1,7 @@
 import os
 import asyncio
 
+from datetime import datetime
 from singleton_decorator import singleton
 
 from deribit_arb_app.observers import logger
@@ -63,11 +64,13 @@ class ObserverIndicatorBsmImpliedVolatility(ObserverInterface):
                     result.time_to_maturity = round(result.time_to_maturity, 4)
                     result.implied_volatility = round(result.implied_volatility, 5)
                     
-                    if result.name not in self.implied_volatility_dict or \
-                            round(self.implied_volatility_dict[result.name].implied_volatility, 5) != \
-                            round(result.implied_volatility, 5):
-                        self.implied_volatility_dict[result.name] = result
-                        self.implied_volatility_queue.put_nowait(result)
+                    existing_iv = self.implied_volatility_dict.get(result.name)
+                    
+                    if existing_iv is None or existing_iv != result.implied_volatility:
+                        timestamp = datetime.utcnow()
+                        self.implied_volatility_dict[result.name] = result.implied_volatility
+                        self.implied_volatility_queue.put_nowait({"value": result, "timestamp": timestamp})
+                        
             except Exception as e:
                 logger.error(f"{self.__class__.__name__}: {e}")
 

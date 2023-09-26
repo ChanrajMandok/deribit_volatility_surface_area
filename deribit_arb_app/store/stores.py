@@ -21,7 +21,6 @@ from deribit_arb_app.model.indicator_models.model_indicator_annualised_return_sp
 from deribit_arb_app.model.indicator_models.model_indicator_put_call_parity_arbitrage import \
                                                              ModelIndicatorPutCallVolArbitrage
 
-
     ############################################################################
     # Stores Declares Store instances utilising modularity of Store Interfaces #
     ############################################################################

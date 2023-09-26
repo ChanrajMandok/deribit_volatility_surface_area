@@ -1,7 +1,7 @@
-import sys
 import json
 import traceback
 
+from deribit_arb_app.services import logger
 from deribit_arb_app.model.model_message import ModelMessage
 from deribit_arb_app.model.model_subscribable import ModelSubscribable
 from deribit_arb_app.services.deribit_api.service_deribit_messaging import \
@@ -39,9 +39,7 @@ class ServiceDeribitSubscribe(ModelSubscribable):
                     if snapshot and id_or_method == "subscription":
                         break
                 except Exception as e:
-                    print(e)
-                    _, _, exc_traceback = sys.exc_info()
-                    traceback.print_tb(exc_traceback, limit=None, file=None)
+                    logger.error(f"{self.__class__.__name__}: Error: {str(e)}. Stack trace: {traceback.format_exc()}")
 
     async def subscribe(self, subscribables: list[ModelSubscribable], snapshot: bool):
 
@@ -60,9 +58,7 @@ class ServiceDeribitSubscribe(ModelSubscribable):
         try:
             await self.send_instructions(method, params, snapshot)
         except Exception as e:
-            print(e)
-            _, _, exc_traceback = sys.exc_info()
-            traceback.print_tb(exc_traceback, limit=None, file=None)
+            logger.error(f"{self.__class__.__name__}: Error: {str(e)}. Stack trace: {traceback.format_exc()}")
 
     async def unsubscribe(self, unsubscribables: list[ModelSubscribable]):
 

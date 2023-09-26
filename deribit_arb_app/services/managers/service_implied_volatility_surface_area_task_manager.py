@@ -7,14 +7,11 @@ from singleton_decorator import singleton
 from deribit_arb_app.services import logger
 from deribit_arb_app.enums.enum_volatility_index_currency import \
                                        EnumVolatilityIndexCurrency
-from deribit_arb_app.schedulers.scheduler_instrument_refresh import \
-                                       SchedulerVsaInstrumentsRefresh
 from deribit_arb_app.enums.enum_index_currency import EnumIndexCurrency
 from deribit_arb_app.utils.utils_asyncio import get_or_create_eventloop
 from deribit_arb_app.model.model_subscribable_volatility_index import \
                                        ModelSubscribableVolatilityIndex
 from deribit_arb_app.utils.utils_asyncio import loop_run_forever_log_exception
-from deribit_arb_app.utils.utils_asyncio import loop_create_task_log_exception
 from deribit_arb_app.model.model_subscribable_index import ModelSubscribableIndex
 from deribit_arb_app.utils.utils_asyncio import asyncio_create_task_log_exception
 from deribit_arb_app.services.managers.service_implied_volatility_queue_manager import \
@@ -36,11 +33,11 @@ class ServiceImpliedVolatilitySurfaceAreaTaskManager():
         self.service_instruments_subscription_manager = ServiceInstrumentsSubscriptionManager(implied_volatility_queue=self.implied_volatility_queue)
 
     def create_producer(self, currency: str):
-        inner_loop_thread = threading.Thread(target=lambda: self.run_scheduler(currency=currency), name='vsa_producer')
+        inner_loop_thread = threading.Thread(target=lambda: self.run_instruments_manager(currency=currency), name='vsa_producer')
         inner_loop_thread.start()
         self.run_consumer()
 
-    def run_scheduler(self, currency: str):
+    def run_instruments_manager(self, currency: str):
         try:
             thread_2_loop = get_or_create_eventloop()
             loop_run_forever_log_exception(loop=thread_2_loop, awaitable=self.build_vsa_tasks(currency=currency), logger=logger, origin=f"{self.__class__.__name__} Scheduler")
@@ -71,4 +68,4 @@ class ServiceImpliedVolatilitySurfaceAreaTaskManager():
 
     async def consumer_task(self):
         iv_awaitable = self.service_implied_volatility_queue_manager.manage_implied_volatility_queue()
-        asyncio_create_task_log_exception(awaitable=iv_awaitable, logger=logger, origin=f"{self.__class__.__name__} consume_iv_queue"),
+        asyncio_create_task_log_exception(awaitable=iv_awaitable, logger=logger, origin=f"{self.__class__.__name__} consume_iv_queue")

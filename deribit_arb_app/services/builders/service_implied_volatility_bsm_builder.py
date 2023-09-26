@@ -1,8 +1,8 @@
 import math
-import datetime
 import numpy as np
 
 from typing import Optional
+from datetime import datetime
 
 from deribit_arb_app.store.stores import Stores
 from deribit_arb_app.services.pricers.service_pricer_black_scholes import \
@@ -35,8 +35,8 @@ class ServiceImpliedVolatilityBsmBuilder():
         instrument_ask   = book.best_ask_price if hasattr(book, 'best_ask_price') else None
         instrument_bid   = book.best_bid_price if hasattr(book, 'best_bid_price') else None
         expiry_timestamp = instrument.expiration_timestamp if hasattr(instrument, 'expiration_timestamp') else None
-        expiry_date      = datetime.datetime.fromtimestamp((expiry_timestamp/1000))
-        current_date     = datetime.datetime.utcnow()
+        expiry_date      = datetime.fromtimestamp((expiry_timestamp/1000))
+        current_date     = datetime.utcnow()
 
         ## preventing unecessary overhead of BSM calculation
         if any(not var for var in [index, index_price, book, instument_name, hvol_value, (instrument_ask or instrument_bid), expiry_date]):
@@ -71,11 +71,12 @@ class ServiceImpliedVolatilityBsmBuilder():
         object_name = f"BSM Implied Volatility-{instument_name}"
         
         return ModelIndicatorBsmImpliedVolatility(
-            name=object_name,
-            instrument=instrument, 
-            index=index_instrument,
-            implied_volatility=implied_vol,
+            spot=s,
             strike=k,
+            name=object_name,
             time_to_maturity=t,
-            spot=s
+            instrument=instrument, 
+            timestamp=current_date,
+            index=index_instrument,
+            implied_volatility=implied_vol
         )

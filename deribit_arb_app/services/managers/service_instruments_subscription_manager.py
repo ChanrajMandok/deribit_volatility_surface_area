@@ -34,7 +34,7 @@ class ServiceInstrumentsSubscriptionManager():
         self.service_api_deribit_utils        = ServiceApiDeribitUtils()
         self.store_observable_instrument_list = Stores.store_observable_instrument_list
         self.vsa_instruments_retriever        = ServiceDeribitVsaInstrumentsRetrieverWs()
-        self.__refresh_increment_mins         = int(os.environ['INSTRUMENTS_REFRESH_MINS'])
+        self.__refresh_increment_mins         = int(os.environ['INSTRUMENTS_REFRESH_SECONDS'])
         self.service_bsm_observer_manager     = ServiceImpliedVolatilityObserverManager(self.implied_volatility_queue)
         
     async def manage_instruments(self, 
@@ -75,9 +75,10 @@ class ServiceInstrumentsSubscriptionManager():
                                                       awaitable=task,  
                                                       origin=f"{self.__class__.__name__} manage_instruments")
 
-                    await asyncio.sleep(1)
+                    await asyncio.sleep(self.__refresh_increment_mins)
                 except Exception as e:
                     logger.error(f"{self.__class__.__name__}: manage subscriptables error")
+                    await asyncio.sleep(self.__refresh_increment_mins)
                     
     async def manage_instrument_subscribables(self,
                                               instruments: Optional[list[ModelSubscribableInstrument]], 

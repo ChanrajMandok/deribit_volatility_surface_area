@@ -1,6 +1,6 @@
-import datetime
 
 from typing import Optional
+from datetime import datetime
 
 from deribit_arb_app.store.stores import Stores
 from deribit_arb_app.model.indicator_models.model_indicator_annualised_return_spread import \
@@ -35,11 +35,11 @@ class ServiceIndicatorAnnualisedReturnSpreadBuilder():
         instrument_1_ts = instrument_1.expiration_timestamp
         instrument_2_ts = instrument_2.expiration_timestamp
 
-        instrument_1_datetime = datetime.datetime.fromtimestamp(instrument_1_ts / 1000.0)
-        instrument_2_datetime = datetime.datetime.fromtimestamp(instrument_2_ts / 1000.0)
+        instrument_1_datetime = datetime.fromtimestamp(instrument_1_ts / 1000.0)
+        instrument_2_datetime = datetime.fromtimestamp(instrument_2_ts / 1000.0)
 
-        r2 = (instrument_2_bid / index_price_val) ** (365.0 / (instrument_2_datetime - datetime.datetime.now()).days) - 1
-        r1 = (instrument_1_ask / index_price_val) ** (365.0 / (instrument_1_datetime - datetime.datetime.now()).days) - 1
+        r2 = (instrument_2_bid / index_price_val) ** (365.0 / (instrument_2_datetime - datetime.now()).days) - 1
+        r1 = (instrument_1_ask / index_price_val) ** (365.0 / (instrument_1_datetime - datetime.now()).days) - 1
 
         spread = r2 - r1
         amount = min(book1.best_ask_amount, book2.best_bid_amount)

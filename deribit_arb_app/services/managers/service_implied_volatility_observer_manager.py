@@ -1,8 +1,10 @@
 import asyncio
+import traceback
 
 from typing import Optional
 from singleton_decorator import singleton
 
+from deribit_arb_app.services import logger
 from deribit_arb_app.model.model_subscribable_instrument import \
                                       ModelSubscribableInstrument
 from deribit_arb_app.model.model_subscribable_volatility_index import \
@@ -43,20 +45,19 @@ class ServiceImpliedVolatilityObserverManager:
                             volatility_index=volatility_index
                         )
                         self.observer_indicator_bsm_implied_volatility.attach_indicator(indicator)
-                        print(f"{str(indicator.key)} observer attached")
+                        # print(f"{str(indicator.key)} observer attached")
                     except Exception as e:
-                        print(f"Error while populating model instance: {str(e)}")
+                        logger.error(f"{self.__class__.__name__}: Error: {str(e)}. Stack trace: {traceback.format_exc()}")
                     
         if unsubscribables is not None:
             for instrument in unsubscribables:
-                # only detach index from unsubscribables if their are no live observers
-                if len(self.observer_indicator_bsm_implied_volatility) == 0:
-                    unsubscribables.extend([index, volatility_index])
-                if type(instrument) == ModelSubscribableInstrument:
-                    key = ModelIndicatorBsmImpliedVolatility.generate_key(instrument)
-                    self.observer_indicator_bsm_implied_volatility.detach_indicator(key)
-                    print(f"{str(indicator.key)} observer detached")
-                        
-        
-                        
-        
+                try:
+                    # only detach index from unsubscribables if their are no live observers
+                    if len(self.observer_indicator_bsm_implied_volatility) == 0:
+                        unsubscribables.extend([index, volatility_index])
+                    if type(instrument) == ModelSubscribableInstrument:
+                        key = ModelIndicatorBsmImpliedVolatility.generate_key(instrument)
+                        self.observer_indicator_bsm_implied_volatility.detach_indicator(key)
+                        # print(f"{str(indicator.key)} observer detached")
+                except Exception as e:
+                        logger.error(f"{self.__class__.__name__}: Error: {str(e)}. Stack trace: {traceback.format_exc()}")

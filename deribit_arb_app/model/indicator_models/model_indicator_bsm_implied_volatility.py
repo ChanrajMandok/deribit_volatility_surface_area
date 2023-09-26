@@ -19,6 +19,7 @@ class ModelIndicatorBsmImpliedVolatility(ModelObservable, models.Model):
     strike              = models.DecimalField(max_digits=20, decimal_places=4, null=True)
     time_to_maturity    = models.DecimalField(max_digits=20, decimal_places=4, null=True)
     spot                = models.DecimalField(max_digits=20, decimal_places=8, null=True)
+    timestamp           = models.IntegerField(null=True)
     
     def __init__(self, *args, **kwargs):
         instrument_name = kwargs['name'] if 'name' in kwargs else None
