@@ -40,19 +40,17 @@
 # Disclaimer
 This repository was created as a proof of theory/concept and should not be utilized in a trading environment. The code in this repository is provided for educational purposes only, and it is the sole responsibility of the user to determine whether the code is suitable for their intended use. The author of this repository does not make any representation or warranty as to the accuracy, completeness, or reliability of the information & performance contained herein. The user should be aware that there are risks associated with trading and that trading decisions should only be made after careful consideration of all relevant factors. The author of this repository will not be held responsible for any losses that may result from the use of this code.
 
-# Design Pattern Implementations
-### This repository implements three main design patterns.
+# Design Patterns
 
-1. **The Factory Pattern**
-Implementation: ServiceDeribitMessaging
-2. **Subject Observer Design Pattern**
-Implementations:
-store_observable_orderbooks
-store_observable_index_prices
-store_observable_instrument_list
+1. **The Factory Pattern**:
+ ServiceDeribitMessaging
+2. **Subject Observer Design Pattern**:
+store_observable_orderbooks,
+store_observable_index_prices,
+bsm_implied_volatility_queue,
 store_observable_volatility_index
-3. **Producer Consumer Design Pattern**
-Implementation: ServiceImpliedVolatilitySurfaceAreaTaskManager().build_vsa_tasks()
+3. **Producer Consumer Design Pattern**:
+ServiceImpliedVolatilitySurfaceAreaTaskManager().build_vsa_tasks()
 
 # Executive Summary
 This repository provides infrastructure to execute trading strategies on the Deribit Exchange. The project can execute Trading strategies by implementing the Subject Observer Design Pattern, which is a behavioural pattern that defines a one-to-many dependency between objects so that when one object changes state, all its dependents are notified and updated automatically. 

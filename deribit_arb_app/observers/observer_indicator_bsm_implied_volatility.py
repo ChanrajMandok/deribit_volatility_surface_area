@@ -2,7 +2,6 @@ import os
 import asyncio
 
 from singleton_decorator import singleton
-from concurrent.futures import ThreadPoolExecutor
 
 from deribit_arb_app.observers import logger
 from deribit_arb_app.store.stores import Stores
@@ -57,24 +56,20 @@ class ObserverIndicatorBsmImpliedVolatility(ObserverInterface):
             del self.indicators[key]
 
     def update(self) -> None:
-        with ThreadPoolExecutor(int(self.max_workers)) as executor:
-            tasks = [(key, executor.submit(self.service_implied_volatility_bsm_builder.build, indicator))
-                    for key, indicator in self.indicators.items()]
-
-            for key, future in tasks:
-                try:
-                    result = future.result()
-                    if result is not None:
-                        result.time_to_maturity   = round(result.time_to_maturity, 4)
-                        result.implied_volatility = round(result.implied_volatility, 4)
-                        
-                        if result.name not in self.implied_volatility_dict or \
-                                round(self.implied_volatility_dict[result.name].implied_volatility, 4) !=\
-                                                                            round(result.implied_volatility, 4):
-                                self.implied_volatility_dict[result.name] = result
-                                self.implied_volatility_queue.put_nowait(result)
-                except Exception as e:
-                    logger.error(f"{self.__class__.__name__}: {e}")
+        for key, indicator in self.indicators.items():
+            try:
+                result = self.service_implied_volatility_bsm_builder.build(indicator)
+                if result is not None:
+                    result.time_to_maturity = round(result.time_to_maturity, 4)
+                    result.implied_volatility = round(result.implied_volatility, 5)
+                    
+                    if result.name not in self.implied_volatility_dict or \
+                            round(self.implied_volatility_dict[result.name].implied_volatility, 5) != \
+                            round(result.implied_volatility, 5):
+                        self.implied_volatility_dict[result.name] = result
+                        self.implied_volatility_queue.put_nowait(result)
+            except Exception as e:
+                logger.error(f"{self.__class__.__name__}: {e}")
 
     def detach_all(self):
         for key in list(self.indicators.keys()):

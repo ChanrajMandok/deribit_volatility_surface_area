@@ -137,3 +137,4 @@ SHELL_PLUS_IMPORTS = [
     'from deribit_arb_app.schedulers.scheduler_instrument_refresh import SchedulerVsaInstrumentsRefresh'
 ]
 
+ASYNCIO_DEBUG = True

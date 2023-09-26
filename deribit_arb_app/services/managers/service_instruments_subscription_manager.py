@@ -1,3 +1,4 @@
+import os
 import asyncio
 
 from typing import Optional
@@ -7,8 +8,6 @@ from deribit_arb_app.services import logger
 from deribit_arb_app.store.stores import Stores
 from deribit_arb_app.model.model_subscribable_instrument import \
                                       ModelSubscribableInstrument
-from deribit_arb_app.model.model_observable_instrument_list import \
-                                       ModelObservableInstrumentList
 from deribit_arb_app.model.model_subscribable_volatility_index import \
                                        ModelSubscribableVolatilityIndex
 from deribit_arb_app.utils.utils_asyncio import get_or_create_eventloop
@@ -29,36 +28,54 @@ from deribit_arb_app.services.retrievers.service_deribit_vsa_instruments_retriev
 @singleton
 class ServiceInstrumentsSubscriptionManager():
     
-    def __init__(self, implied_volatility_queue: asyncio.Queue, instruments_queue: asyncio.Queue):
+    def __init__(self, implied_volatility_queue: asyncio.Queue):
         self.previous_instruments             = []
-        self.instruments_queue                = instruments_queue
         self.implied_volatility_queue         = implied_volatility_queue
         self.service_api_deribit_utils        = ServiceApiDeribitUtils()
-        self.vsa_instruments_retriever        = ServiceDeribitVsaInstrumentsRetrieverWs()
         self.store_observable_instrument_list = Stores.store_observable_instrument_list
-        self.service_bsm_observer_manager     = ServiceImpliedVolatilityObserverManager(\
-                                                            self.implied_volatility_queue)
+        self.vsa_instruments_retriever        = ServiceDeribitVsaInstrumentsRetrieverWs()
+        self.__refresh_increment_mins         = int(os.environ['INSTRUMENTS_REFRESH_MINS'])
+        self.service_bsm_observer_manager     = ServiceImpliedVolatilityObserverManager(self.implied_volatility_queue)
         
-    async def manage_instruments_queue(self):
+    async def manage_instruments(self, 
+                                  kind: str,
+                                  currency: str,
+                                  minimum_liquidity_threshold: int,
+                                  index: Optional[ModelSubscribableIndex],
+                                  volatility_index: Optional[ModelSubscribableVolatilityIndex]):
+        
             logger.info(f"{self.__class__.__name__} running ")
 
             while True:
                 try:
-                    if not self.instruments_queue.empty():
-                        model_observable_instrument_list = await self.instruments_queue.get()
+                    logger.info("retrieve_and_update started.")
+                    
+                    if index:
+                        index_subscribed = False
 
-                        if not isinstance(model_observable_instrument_list, ModelObservableInstrumentList):
-                            raise Exception(f"{self.__class__.__name__} queue not popualted with model instances")
+                    if volatility_index:
+                        volatility_index_subscribed = False
 
-                        task = self.manage_instrument_subscribables(
-                            index=model_observable_instrument_list.index,
-                            volatility_index=model_observable_instrument_list.volatility_index,
-                            instruments=model_observable_instrument_list.instruments)
+                    instruments = \
+                        await self.vsa_instruments_retriever.main(kind=kind,
+                                                                  currency=currency,
+                                                                  minimum_liquidity_threshold=minimum_liquidity_threshold)
 
-                        asyncio_create_task_log_exception(awaitable=task, logger=logger, 
-                                                        origin=f"{self.__class__.__name__} manage_instruments_queue")
-                    else:
-                        await asyncio.sleep(1)
+                    subscriptions = [(index_subscribed, index), (volatility_index_subscribed, volatility_index)]
+                    for subs, indexes in subscriptions:
+                        if not subs:
+                            instruments.insert(0, indexes)
+                            subs = True
+
+                    task = self.manage_instrument_subscribables(index=index,
+                                                                instruments=instruments,
+                                                                volatility_index=volatility_index)
+
+                    asyncio_create_task_log_exception(logger=logger,
+                                                      awaitable=task,  
+                                                      origin=f"{self.__class__.__name__} manage_instruments")
+
+                    await asyncio.sleep(1)
                 except Exception as e:
                     logger.error(f"{self.__class__.__name__}: manage subscriptables error")
                     
@@ -69,17 +86,6 @@ class ServiceInstrumentsSubscriptionManager():
         try:      
 
             instrument_names = self.__get_instrument_names(instruments=instruments)
-
-            subscriptions = []
-            if index:
-                subscriptions.append((False, index))
-            if volatility_index:
-                subscriptions.append((False, volatility_index))
-
-            for subscribed, inst in subscriptions:
-                if not subscribed:
-                    instruments.insert(0, inst)
-                    instrument_names.insert(0, inst.name)
 
         except Exception as e:
             logger.error(f"{self.__class__.__name__}: {e}")
@@ -122,4 +128,3 @@ class ServiceInstrumentsSubscriptionManager():
                  
     def __get_instrument_names(self, instruments):
         return [instrument.name for instrument in instruments]
-
