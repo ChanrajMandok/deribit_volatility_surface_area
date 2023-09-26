@@ -48,7 +48,6 @@ class ServiceInstrumentsSubscriptionManager():
 
             while True:
                 try:
-                    logger.info("retrieve_and_update started.")
                     
                     if index:
                         index_subscribed = False

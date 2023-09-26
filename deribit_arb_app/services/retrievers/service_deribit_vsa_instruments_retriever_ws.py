@@ -24,7 +24,6 @@ class ServiceDeribitVsaInstrumentsRetrieverWs():
     async def main(self, currency:str, kind:str, 
                          minimum_liquidity_threshold:int) -> list[ModelSubscribableInstrument]:
         
-        logger.info(f"{self.__class__.__name__} instrument pull running")
         store_subscribable_instruments = self.store_subscribable_instruments.get_subscribables()
         if not store_subscribable_instruments: 
             await self.async_setup(currency=currency, kind=kind)
@@ -33,5 +32,5 @@ class ServiceDeribitVsaInstrumentsRetrieverWs():
         liquid_instrument_names = [x.instrument_name for x in orderbook_summaries if \
                           x.volume_usd is not None and x.volume_usd > Decimal(str(minimum_liquidity_threshold))]
         result = [x for x in instruments if x.name in liquid_instrument_names]
-        logger.info(f"{self.__class__.__name__} instrument pull complete")
+        logger.info(f"{self.__class__.__name__}: Liquid Instruments Retrieved")
         return result

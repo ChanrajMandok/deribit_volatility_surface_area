@@ -23,13 +23,15 @@ class ServiceImpliedVolatilityQueueManager():
                 if self.implied_volatility_queue.qsize() > 0:
                     
                     data = self.implied_volatility_queue.get_nowait()
-                    timestamp = data["timestamp"]
                     model_iv_object = data["value"]
+                    timestamp       = data["timestamp"]
+                    ttm             = model_iv_object.time_to_maturity
                     
                     if not isinstance(model_iv_object, ModelIndicatorBsmImpliedVolatility):
                         continue
                     
-                    self.implied_volatility_dict[model_iv_object.strike] = {"value": model_iv_object.implied_volatility, "timestamp": timestamp}
+                    iv_key = f"{model_iv_object.strike}-{model_iv_object.option_type}"
+                    self.implied_volatility_dict[iv_key] = {"value": model_iv_object.implied_volatility, "timestamp": timestamp, "time_to_maturity":ttm}
                     
                     logger.info(f'{model_iv_object.name} : {model_iv_object.implied_volatility}')
                     

@@ -1,7 +1,6 @@
 import os
 import asyncio
 
-from datetime import datetime
 from singleton_decorator import singleton
 
 from deribit_arb_app.observers import logger
@@ -56,7 +55,7 @@ class ObserverIndicatorBsmImpliedVolatility(ObserverInterface):
             self.store_observable_volatility_index.get_observable(volatility_index).detach(self)
             del self.indicators[key]
 
-    def update(self) -> None:
+    def update(self):
         for key, indicator in self.indicators.items():
             try:
                 result = self.service_implied_volatility_bsm_builder.build(indicator)
@@ -67,7 +66,7 @@ class ObserverIndicatorBsmImpliedVolatility(ObserverInterface):
                     existing_iv = self.implied_volatility_dict.get(result.name)
                     
                     if existing_iv is None or existing_iv != result.implied_volatility:
-                        timestamp = datetime.utcnow()
+                        timestamp = result.timestamp
                         self.implied_volatility_dict[result.name] = result.implied_volatility
                         self.implied_volatility_queue.put_nowait({"value": result, "timestamp": timestamp})
                         

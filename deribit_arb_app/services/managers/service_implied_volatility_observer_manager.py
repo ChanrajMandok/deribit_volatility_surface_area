@@ -5,6 +5,7 @@ from typing import Optional
 from singleton_decorator import singleton
 
 from deribit_arb_app.services import logger
+from deribit_arb_app.enums.enum_option_type import EnumOptionType
 from deribit_arb_app.model.model_subscribable_instrument import \
                                       ModelSubscribableInstrument
 from deribit_arb_app.model.model_subscribable_volatility_index import \
@@ -13,7 +14,7 @@ from deribit_arb_app.model.model_subscribable_index import ModelSubscribableInde
 from deribit_arb_app.observers.observer_indicator_bsm_implied_volatility import \
                                             ObserverIndicatorBsmImpliedVolatility
 from deribit_arb_app.model.indicator_models.model_indicator_bsm_implied_volatility import \
-                                                         ModelIndicatorBsmImpliedVolatility   
+                                                         ModelIndicatorBsmImpliedVolatility
 
     #####################################################
     # Service Handles, Builds  & Manages Live Observers # 
@@ -37,11 +38,13 @@ class ServiceImpliedVolatilityObserverManager:
             for instrument in subscribables:
                 if type(instrument) == ModelSubscribableInstrument:
                     object_name = f"BSM Implied Volatility-{instrument.name}"
+                    option_type = EnumOptionType.CALL if object_name.rstrip()[-1] == 'C' else EnumOptionType.PUT
                     try:
                         indicator = ModelIndicatorBsmImpliedVolatility(
+                            index=index,
                             name=object_name,
                             instrument=instrument,
-                            index=index,
+                            option_type=option_type,
                             volatility_index=volatility_index
                         )
                         self.observer_indicator_bsm_implied_volatility.attach_indicator(indicator)

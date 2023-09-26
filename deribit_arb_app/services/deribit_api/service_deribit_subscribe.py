@@ -48,10 +48,11 @@ class ServiceDeribitSubscribe(ModelSubscribable):
         params = {
             "channels": []
         }
-
+        
+        if len(subscribables) > 1: 
+            logger.info(f"{self.__class__.__name__}: {len(subscribables)} Ws Instrument Streams Subscribed")
         for subscribable in subscribables:
             params["channels"].append(subscribable.channel_name)
-            print(f"SUBSCRIBED {subscribable.channel_name}")
             if snapshot==False:
                 self.subscriptions.append(subscribable)
         
@@ -67,12 +68,12 @@ class ServiceDeribitSubscribe(ModelSubscribable):
         params = {
             "channels": []
         }
-
+        if len(unsubscribables) > 1: 
+            logger.info(f"{self.__class__.__name__}: {len(unsubscribables)} Ws Instrument Streams Unsubscribed")
         for unsubscribable in unsubscribables:
             if unsubscribable in self.subscriptions:
                 self.subscriptions.remove(unsubscribable)
             params["channels"].append(unsubscribable.channel_name)
-            # print(f"UNSUBSCRIBED {unsubscribable.channel_name}")
             
         await self.send_instructions(method, params)
         
