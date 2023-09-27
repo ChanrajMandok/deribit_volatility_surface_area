@@ -44,7 +44,7 @@ class ServiceInstrumentsSubscriptionManager():
                                   index: Optional[ModelSubscribableIndex],
                                   volatility_index: Optional[ModelSubscribableVolatilityIndex]):
         
-            logger.info(f"{self.__class__.__name__} running ")
+            logger.info(f"{self.__class__.__name__} Running ")
 
             while True:
                 try:

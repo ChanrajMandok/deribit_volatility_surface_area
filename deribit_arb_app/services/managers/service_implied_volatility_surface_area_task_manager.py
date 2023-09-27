@@ -32,10 +32,14 @@ class ServiceImpliedVolatilitySurfaceAreaTaskManager():
         self.service_implied_volatility_queue_manager = ServiceImpliedVolatilityQueueManager(self.implied_volatility_queue)
         self.service_instruments_subscription_manager = ServiceInstrumentsSubscriptionManager(implied_volatility_queue=self.implied_volatility_queue)
 
-    def create_producer(self, currency: str):
+    def create_producer(self, 
+                        currency: str,
+                        plot:bool= False):
+        
+        logger.info(f"{self.__class__.__name__}: Running ")
         inner_loop_thread = threading.Thread(target=lambda: self.run_instruments_manager(currency=currency), name='vsa_producer')
         inner_loop_thread.start()
-        self.run_consumer()
+        self.run_consumer(plot=plot)
 
     def run_instruments_manager(self, currency: str):
         try:
@@ -44,11 +48,11 @@ class ServiceImpliedVolatilitySurfaceAreaTaskManager():
         except Exception as e:
             logger.error(f"Error in run_scheduler: {e}")
 
-    def run_consumer(self):
+    def run_consumer(self, plot:bool):
         if threading.current_thread() != threading.main_thread():
             raise Exception(f"{self.__class__.__name__} consumer not on main thread")
         thread_main_loop = get_or_create_eventloop()
-        loop_run_forever_log_exception(loop=thread_main_loop, awaitable=self.consumer_task(), logger=logger, origin=f"{self.__class__.__name__} consumer")
+        loop_run_forever_log_exception(loop=thread_main_loop, awaitable=self.consumer_task(plot=plot), logger=logger, origin=f"{self.__class__.__name__} consumer")
         
     def get_index_and_volatility_index(self, currency: str) -> tuple[ModelSubscribableIndex, ModelSubscribableVolatilityIndex]:
         index_currency_value = getattr(EnumIndexCurrency, currency.upper()).value
@@ -66,6 +70,6 @@ class ServiceImpliedVolatilitySurfaceAreaTaskManager():
                                                                          minimum_liquidity_threshold=self.minimum_liquidity_threshold
                                                                         )
 
-    async def consumer_task(self):
-        iv_awaitable = self.service_implied_volatility_queue_manager.manage_implied_volatility_queue()
+    async def consumer_task(self, plot: bool):
+        iv_awaitable = self.service_implied_volatility_queue_manager.manage_implied_volatility_queue(plot=plot)
         asyncio_create_task_log_exception(awaitable=iv_awaitable, logger=logger, origin=f"{self.__class__.__name__} consume_iv_queue")

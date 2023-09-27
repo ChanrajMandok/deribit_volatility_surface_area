@@ -23,7 +23,10 @@ class ServiceImpliedVolatilityQueueManager():
         self.implied_volatility_queue    = implied_volatility_queue
         self.service_vsa_object_manager  = ServiceImpliedVolatiltySurfaceAreaObjectManager()
         
-    async def manage_implied_volatility_queue(self):
+    async def manage_implied_volatility_queue(self,
+                                              plot: bool):
+        logger.info(f"{self.__class__.__name__}: Running ")
+        
         while True:
             try:
                 if self.implied_volatility_queue.qsize() > 0:
@@ -47,7 +50,8 @@ class ServiceImpliedVolatilityQueueManager():
                         self.implied_volatility_cache = deque()
 
                         # Use the local variable for task deployment
-                        task = self.service_vsa_object_manager.create_vsa_surface(model_iv_objects=current_cache)
+                        task = self.service_vsa_object_manager.create_vsa_surface(plot=plot,
+                                                                                  model_iv_objects=current_cache)
                         asyncio_create_task_log_exception(
                             logger=logger,
                             awaitable=task,
