@@ -40,14 +40,15 @@ class ConvertInstrumentsListToModelObservableInstrumentList:
                     model_subscribable_index = value
                 if isinstance(value, ModelSubscribableInstrument):
                     list_model_subscribable_instruments.append(value)
-                
-            x = ModelObservableInstrumentList(name='vsa_instruments_list',
+             
+            model_observable_instrument_list = \
+                ModelObservableInstrumentList(name='vsa_instruments_list',
                                               instruments = list_model_subscribable_instruments,
                                               volatility_index = model_subscribable_vol_index,
                                               index = model_subscribable_index
                                               )
             
-            return x 
+            return model_observable_instrument_list 
 
         except Exception as e:
             logger.error(f"{self.__class__.__name__}: {e}")

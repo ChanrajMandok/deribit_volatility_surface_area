@@ -34,7 +34,7 @@ class ServiceInstrumentsSubscriptionManager():
         self.service_api_deribit_utils        = ServiceApiDeribitUtils()
         self.store_observable_instrument_list = Stores.store_observable_instrument_list
         self.vsa_instruments_retriever        = ServiceDeribitVsaInstrumentsRetrieverWs()
-        self.__refresh_increment_mins         = int(os.environ['INSTRUMENTS_REFRESH_SECONDS'])
+        self.__refresh_increment_mins         = int(os.environ.get('INSTRUMENTS_REFRESH_SECONDS', 3600))
         self.service_bsm_observer_manager     = ServiceImpliedVolatilityObserverManager(self.implied_volatility_queue)
         
     async def manage_instruments(self, 

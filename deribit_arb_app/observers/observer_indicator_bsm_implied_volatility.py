@@ -7,9 +7,9 @@ from deribit_arb_app.observers import logger
 from deribit_arb_app.store.stores import Stores
 from deribit_arb_app.observers.observer_interface import ObserverInterface
 from deribit_arb_app.services.builders.service_implied_volatility_bsm_builder import \
-                                                   ServiceImpliedVolatilityBsmBuilder
+                                                    ServiceImpliedVolatilityBsmBuilder
 from deribit_arb_app.model.indicator_models.model_indicator_bsm_implied_volatility import \
-                                                        ModelIndicatorBsmImpliedVolatility
+                                                         ModelIndicatorBsmImpliedVolatility
 
     ###################################################################################################
     # Observer monitors the instrument orderbook & index price feed and updates BSM Implied volatility #
@@ -22,7 +22,7 @@ class ObserverIndicatorBsmImpliedVolatility(ObserverInterface):
         super().__init__()
         self.indicators = {}
         self.implied_volatility_dict = {}
-        self.max_workers = os.environ.get('MAX_WORKERS', None)
+        self.max_workers = os.environ.get('MAX_WORKERS', 6)
         self.implied_volatility_queue = implied_volatility_queue
         self.store_observable_order_books = Stores.store_observable_orderbooks
         self.store_observable_index_prices = Stores.store_observable_index_prices
@@ -62,7 +62,7 @@ class ObserverIndicatorBsmImpliedVolatility(ObserverInterface):
                 if result is not None:
                     name = result.name
                     result.time_to_maturity = round(result.time_to_maturity, 4)
-                    result.implied_volatility = round(result.implied_volatility, 5)
+                    result.implied_volatility = round(result.implied_volatility, 4)
                     
                     existing_iv = self.implied_volatility_dict.get(name)
                     

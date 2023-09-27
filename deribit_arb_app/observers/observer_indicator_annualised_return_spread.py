@@ -4,10 +4,10 @@ from deribit_arb_app.observers import logger
 from deribit_arb_app.store.stores import Stores
 from deribit_arb_app.observers.observer_interface import ObserverInterface
 from deribit_arb_app.model.indicator_models.model_indicator_annualised_return_spread import \
-                                                        ModelIndicatorAnnualisedReturnSpread
+                                                         ModelIndicatorAnnualisedReturnSpread
 from deribit_arb_app.services.builders.service_indicator_annualised_return_spread_builder import \
-                                                    ServiceIndicatorAnnualisedReturnSpreadBuilder
-
+                                                     ServiceIndicatorAnnualisedReturnSpreadBuilder
+                                                     
     #########################################################################
     # Observer monitors the Annualised Return Spead between two instruments #
     #########################################################################

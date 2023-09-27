@@ -20,8 +20,8 @@ class ServiceDeribitAuthentication():
 
         self.params = {
                     "grant_type": "client_credentials",
-                    "client_id": f'{os.environ["CLIENT_ID"]}',
-                    "client_secret": f'{os.environ["CLIENT_SECRET"]}'
+                    "client_id": f'{os.environ.get("CLIENT_ID", None)}',
+                    "client_secret": f'{os.environ.get("CLIENT_SECRET", None)}'
                 }
 
         self.method = "public/auth"

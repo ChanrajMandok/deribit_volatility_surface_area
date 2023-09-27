@@ -12,7 +12,7 @@ class ServiceDeribitWebsocketConnector():
 
     def __init__(self):
 
-        self.base_ws = os.environ['BASE_WS_URL']
+        self.base_ws = os.environ.get('BASE_WS_URL', None)
         self.websocket = websockets.connect(self.base_ws)
 
     async def __aenter__(self):
