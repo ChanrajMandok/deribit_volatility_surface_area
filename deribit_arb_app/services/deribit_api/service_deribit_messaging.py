@@ -118,6 +118,3 @@ class ServiceDeribitMessaging():
             msg_id = 1200000 + msg_id
 
         return msg_id
-
-
-
