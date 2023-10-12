@@ -42,7 +42,7 @@ This repository was created as a proof of theory/concept and should not be utili
 
 # Design Patterns
 
-## 1. Subject Observer Design Pattern
+### 1. Subject Observer Design Pattern
 
 The **Subject-Observer** design pattern is a behavioral pattern that defines a one-to-many relationship between objects. When the state of one object (the "subject") changes, all its dependent objects (the "observers") are notified and updated automatically. This pattern is central to event-driven programming and fits seamlessly with WebSocket-based systems.
 
@@ -52,7 +52,7 @@ The **Subject-Observer** design pattern is a behavioral pattern that defines a o
 
 ---
 
-## 2. Producer Consumer Design Pattern
+### 2. Producer Consumer Design Pattern
 
 The **Producer-Consumer** design pattern involves two main actors: the Producer, which produces data, and the Consumer, which consumes that data. It's commonly used when data production and consumption occur at different rates.
 
@@ -84,18 +84,18 @@ The DVOL Index from Deribit encapsulates the market's 30-day forward-looking imp
 
 # Arbitrage-Free Volatility Surface Methodology
 
-## 1. Theoretical Foundations
+### 1. Theoretical Foundations
 
-### Monotonicity in Time-to-Maturity (Calendar Arbitrage)
+#### Monotonicity in Time-to-Maturity (Calendar Arbitrage)
 Historical data suggests that calendar spreads, which involve opposite positions in options with different expirations but identical strikes, rarely guarantee a risk-free profit. Our methodology ensures that the implied volatility for a given strike doesn't decrease with a longer time-to-maturity. This aligns with the notion that extended durations inherently introduce more uncertainty, thereby justifying a non-decreasing volatility trend.
 
-### Convexity in Strikes (Butterfly Arbitrage)
+#### Convexity in Strikes (Butterfly Arbitrage)
 The butterfly spread, composed of three options of the same type and expiry but with varying strikes, should not yield arbitrage profits. Empirical studies, like that of Dumas, Fleming, and Whaley (1998), validate this perspective. Our model ensures that the second derivative of implied volatility concerning the strike price remains non-negative. This not only prevents butterfly arbitrage opportunities but also reflects observed market behavior.
 
-### Monotonicity in Strikes (Strike Arbitrage)
+#### Monotonicity in Strikes (Strike Arbitrage)
 The variation of implied volatilities across different strikes is evident in phenomena such as the "volatility smile" and the "volatility skew". Backed by Black's approximation (1976) and various market crash models, our methodology enforces a structure wherein implied volatility either increases or remains unchanged as strike prices decrease.
 
-## 2. Practical Implications
+### 2. Practical Implications
 
 An arbitrage-free surface holds significance not just in theoretical discussions but in practical applications:
 
@@ -104,8 +104,6 @@ An arbitrage-free surface holds significance not just in theoretical discussions
 - **Robustness in Hedging:** The surface ensures that hedging strategies are safeguarded against guaranteed losses, which can arise from surfaces that permit arbitrage.
   
 - **Model Stability:** Arbitrage-free surfaces generally exhibit smoother behaviors and are less swayed by market noise.
-
-
 
 
 # Architecture Design

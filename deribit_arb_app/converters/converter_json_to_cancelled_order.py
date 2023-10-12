@@ -13,13 +13,22 @@ from deribit_arb_app.converters.converter_json_object_to_model_order import \
     ################################################
 
 class ConverterJsonToCancelledOrder():
+    """
+    Converter class that transforms a JSON string representation 
+    of a cancelled order into a `ModelOrder` instance.
+    """
     
     def __init__(self, json_string):
 
         self.json_obj = json.loads(json_string)
 
     def convert(self) -> Optional[ModelOrder]:
-
+        """
+        Converts the stored JSON object into a ModelOrder instance.
+        Checks if the necessary fields (`EnumFieldName.RESULT.value`) 
+        are present in the JSON before conversion.
+        """
+        
         try:
 
             if EnumFieldName.RESULT.value not in self.json_obj:

@@ -10,13 +10,20 @@ from deribit_arb_app.enums.enum_field_name import EnumFieldName
     ###############################################
 
 class ConverterJsonToHeartbeat():
+    """
+    A converter class to transform a JSON string representing a cancelled order 
+    into a ModelOrder instance.
+    """
 
     def __init__(self, json_string):
 
         self.json_obj = json.loads(json_string)
 
     def convert(self) -> Optional[str]:
-
+        """
+        Convert the stored JSON object into a ModelOrder instance representing a cancelled order.
+        """
+        
         try:
 
             if EnumFieldName.RESULT.value in self.json_obj:
