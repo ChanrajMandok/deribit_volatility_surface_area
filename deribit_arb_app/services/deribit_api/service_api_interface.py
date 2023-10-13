@@ -19,19 +19,3 @@ class ServiceApiInterface(ABC):
         currency: EnumCurrency, 
         kind: EnumInstrumentKind):
         pass
-        
-    # @abstractmethod
-    # def send_order(
-    #     self,
-    #     instrument: ModelInstrument, 
-    #     direction: EnumDirection, 
-    #     amount: float, 
-    #     price: float):
-    #     pass
-
-    # @abstractmethod
-    # def cancel_order(
-    #     self, 
-    #     exchange: EnumExchange,
-    #     order_id: float):
-    #     pass

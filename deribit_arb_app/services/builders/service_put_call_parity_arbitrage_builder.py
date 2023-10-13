@@ -13,7 +13,7 @@ from deribit_arb_app.model.indicator_models.model_indicator_put_call_parity_arbi
     # Service Builds Put_call Parity Arbitrage relational Model #
     #############################################################
 
-class ServicePutCallParityAribtrageBuilder():
+class ServicePutCallParityAribtrageBuilder:
     
     def __init__(self):
         self.service_black_scholes_pricer    = ServicePricerBlackScholes()
@@ -23,6 +23,8 @@ class ServicePutCallParityAribtrageBuilder():
 
     def build(self, indicator_put_call_parity_arbtirage: ModelIndicatorPutCallVolArbitrage) -> Optional[ModelIndicatorPutCallVolArbitrage]:
         ## instruments will already be maturity & strike matched
+
+        ## not completed
      
         call_instrument       = indicator_put_call_parity_arbtirage.call_instrument
         put_instrument        = indicator_put_call_parity_arbtirage.put_instrument
@@ -84,8 +86,8 @@ class ServicePutCallParityAribtrageBuilder():
         pvk = k * math.exp(-r * t)
 
         # Calculate put-call parity difference
-        put_call_parity_diff = call_value + pvk - put_value - S
-        arbitrage = abs(put_call_parity_diff) > threshold  # replace 'threshold' with an appropriate value
+        # put_call_parity_diff = call_value + pvk - put_value - S
+        # arbitrage = abs(put_call_parity_diff) > threshold  # replace 'threshold' with an appropriate value
 
         return ModelIndicatorPutCallVolArbitrage(
             put_instrument=put_instrument, 

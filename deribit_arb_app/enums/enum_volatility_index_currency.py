@@ -6,6 +6,5 @@ from deribit_arb_app.enums.enum_no_value_interface import NoValue
 
 class EnumVolatilityIndexCurrency(NoValue):
     
-   
     BTC     = "btc_usd"
     ETH     = "eth_usd"

@@ -43,9 +43,9 @@ class ConvertInstrumentsListToModelObservableInstrumentList:
              
             model_observable_instrument_list = \
                 ModelObservableInstrumentList(name='vsa_instruments_list',
-                                              instruments = list_model_subscribable_instruments,
+                                              index = model_subscribable_index,
                                               volatility_index = model_subscribable_vol_index,
-                                              index = model_subscribable_index
+                                              instruments = list_model_subscribable_instruments,
                                               )
             
             return model_observable_instrument_list 

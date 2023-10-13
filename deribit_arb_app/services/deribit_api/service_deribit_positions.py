@@ -17,9 +17,11 @@ from deribit_arb_app.services.deribit_api.service_deribit_websocket_connector im
 
 @singleton
 class ServiceDeribitPositions():
+    """
+    Service for retrieving positions from Deribit via Websocket.
+    """
 
     def __init__(self, currency: str):
-
         self.deribit_messaging = ServiceDeribitMessaging()
 
         self.params = {
@@ -31,13 +33,15 @@ class ServiceDeribitPositions():
 
         self.msg_id = self.deribit_messaging.generate_id(self.method)
 
-        self.msg = ModelMessage(
-            msg_id=self.msg_id,
-            method=self.method,
-            params=self.params
-        )
+        self.msg = ModelMessage(msg_id=self.msg_id,
+                                method=self.method,
+                                params=self.params
+                                )
 
     async def get(self) -> dict[str, dict[str, ModelPosition]]:
+        """
+        Retrieve positions from Deribit for the specified currency.
+        """
 
         async with ServiceDeribitWebsocketConnector() as websocket:
 
@@ -53,5 +57,3 @@ class ServiceDeribitPositions():
                 # if the id matches the initial msg id, we can break the loop
                 if id == self.msg_id:
                     return positions
-
-

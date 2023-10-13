@@ -31,9 +31,18 @@ from deribit_arb_app.services.handlers.service_deribit_cancel_all_positions_hand
     ###################################################
 
 class ServiceDeribitMessaging():
+    """
+    Handles message processing related to the Deribit platform.
+
+    Provides functionalities for:
+    - Handling incoming responses from Deribit.
+    - Generating unique IDs for specific message methods.
+    """
 
     def message_handle(self, response) -> tuple[Union[int, str, None], object]:
-
+        """
+        Process and handle the incoming response from Deribit.
+        """
         try:
 
             response_json = json.loads(response)
@@ -89,6 +98,9 @@ class ServiceDeribitMessaging():
 
 
     def generate_id(self, method) -> int:
+        """
+        Generate a unique message ID based on the specified method.
+        """
 
         msg_id = random.randrange(0, 10000)
 

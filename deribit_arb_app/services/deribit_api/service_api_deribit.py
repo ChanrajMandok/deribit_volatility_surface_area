@@ -26,97 +26,77 @@ from deribit_arb_app.services.deribit_api.service_deribit_get_orderbook_summary 
     ################################################################################
 
 class ServiceApiDeribit(ServiceApiInterface):
+    """API service for Deribit operations."""
 
-    async def get_instruments(
-                              self,
-                              currency: str, 
-                              kind: str) -> dict[str, ModelSubscribableInstrument]:
+    def __init__(self) -> None:
+        super().__init__()
+        self._deribit_orders = ServiceDeribitOrders()
+        self._deribit_subscribe = ServiceDeribitSubscribe()
+
+    async def get_instruments(self, 
+                              kind: str,
+                              currency: str) -> dict[str, ModelSubscribableInstrument]:
+        """Retrieve available instruments for a given currency and kind."""
 
         deribit_instruments = ServiceDeribitInstruments(currency=currency, kind=kind)
+        return await deribit_instruments.get()
 
-        instruments = await deribit_instruments.get()
-
-        return instruments
+    async def get_open_orders(self,
+                               currency: str) -> dict[str, dict[str, list[ModelOrder]]]:
+        """Retrieve open orders for a given currency"""
         
-    async def get_open_orders(
-                              self,
-                              currency: str) -> dict[str, dict[str, list[ModelOrder]]]:
+        return await self._deribit_orders.get_open_orders_by_currency(currency=currency)
 
-        deribit_orders = ServiceDeribitOrders()
-
-        open_orders = await deribit_orders.get_open_orders_by_currency(currency=currency)
-
-        return open_orders
-
-    async def send_order(
-        self,
-        instrument: ModelSubscribableInstrument, 
-        direction: EnumDirection, 
-        amount: float, 
-        price: float) -> Optional[ModelOrder]:
-
-        deribit_orders = ServiceDeribitOrders()
+    async def send_order(self,
+                         price: float,
+                         amount: float, 
+                         direction: EnumDirection, 
+                         instrument: ModelSubscribableInstrument) -> Optional[ModelOrder]:
+        """Send an order to buy/sell."""
 
         if direction == EnumDirection.BUY:
-            order = await deribit_orders.buy_async(
-                    instrument_name=instrument.name, 
-                    amount=amount, 
-                    price=price)
-            
+            return await self._deribit_orders.buy_async(instrument_name=instrument.name, amount=amount, price=price)
         elif direction == EnumDirection.SELL:
-            order = await deribit_orders.sell_async(
-                    instrument_name=instrument.name, 
-                    amount=amount, 
-                    price=price)
+            return await self._deribit_orders.sell_async(instrument_name=instrument.name, amount=amount, price=price)
 
-        return order
+    async def cancel_order(self,
+                           order_id: str) -> ModelOrder:
+        """Cancel an existing order. """
 
-    async def cancel_order(
-        self, 
-        order_id: str) -> ModelOrder:
+        return await self._deribit_orders.cancel(order_id=order_id)
 
-        deribit_orders = ServiceDeribitOrders()
-
-        return await deribit_orders.cancel(order_id=order_id)
-
-    async def get_positions(self, currency) -> dict[str,dict[str, ModelPosition]]:
+    async def get_positions(self,
+                            currency: str) -> dict[str, dict[str, ModelPosition]]:
+        """Retrieve positions for a given currency."""
 
         deribit_positions = ServiceDeribitPositions(currency=currency)
-
         return await deribit_positions.get()
-
-    async def get_account_summary(self, currency) -> ServiceDeribitAccountSummary:
+    
+    async def get_account_summary(self,
+                                  currency: str) -> ServiceDeribitAccountSummary:
+        """Retrieve account summary for a given currency."""
 
         deribit_account_summary = ServiceDeribitAccountSummary(currency=currency)
-
         return await deribit_account_summary.get()
 
-    async def subscribe(self, subscribables: list[ModelSubscribable]):
-
-        # deribit quotes service
-        deribit_subscribe = ServiceDeribitSubscribe()
-
-        task = self.my_loop.create_task(deribit_subscribe.subscribe(
-            subscribables=subscribables, snapshot=False
-        ))
-
+    async def subscribe(self, 
+                        subscribables: list[ModelSubscribable]):
+        """Subscribe to a list of subscribables."""
+        
+        task = self.my_loop.create_task(self._deribit_subscribe.subscribe(subscribables=subscribables, snapshot=False))
         await task
 
-    async def unsubscribe(self, unsubscribables: list[ModelSubscribable]):
-    
-        # deribit quotes service
-        deribit_subscribe = ServiceDeribitSubscribe()
+    async def unsubscribe(self,
+                          unsubscribables: list[ModelSubscribable]):
+        """Unsubscribe from a list of subscribables."""
 
-        task = self.my_loop.create_task(deribit_subscribe.unsubscribe(
-            unsubscribables=unsubscribables
-        ))
-
+        task = self.my_loop.create_task(self._deribit_subscribe.unsubscribe(unsubscribables=unsubscribables))
         await task
 
-    async def get_orderbook_summary_via_currency(self, currency:str, kind:str):
+    async def get_orderbook_summary_via_currency(self, 
+                                                 kind: str,
+                                                 currency: str): 
+        """Retrieve orderbook summary for a specific currency and kind."""
 
         service_deribit_get_orderbook_summary = ServiceDeribitGetOrderbookSummary(currency=currency, kind=kind)        
-        
-        orderbook_summary_retriever = await service_deribit_get_orderbook_summary.get()
-
-        return orderbook_summary_retriever
+        return await service_deribit_get_orderbook_summary.get()

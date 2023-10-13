@@ -19,7 +19,6 @@ class ConverterJsonToAccountModelSummary():
 
     def convert(self) -> ModelAccountSummary:
         """Convert the JSON object into a ModelAccountSummary instance."""
-
         try:
             if 'error' in self.json_obj:
                 json_error = self.json_obj['error']

@@ -46,14 +46,13 @@ class ConverterJsonToModelObservableVolatilityIndex():
             
             # Extract values from 'data' and create a ModelObservableVolatilityIndex instance.
             volatility_index = ModelObservableVolatilityIndex(
-                                        name=json_data["index_name"],
-                                        timestamp=json_data['timestamp'],
-                                        volatility=json_data['volatility']
-                                    )
+                                                              name=json_data["index_name"],
+                                                              timestamp=json_data['timestamp'],
+                                                              volatility=json_data['volatility']
+                                                             )
             
             # Return the created ModelObservableVolatilityIndex instance.
             return volatility_index
 
         except Exception as e:
-            # Log any exceptions encountered during conversion.
             logger.error(f"{self.__class__.__name__}: {e}")

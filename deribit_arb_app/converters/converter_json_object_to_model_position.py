@@ -20,7 +20,6 @@ class ConverterJsonObjectToModelPosition():
         """
         Converts the stored JSON object into a ModelPosition instance.
         """
-        
         try:
             position = ModelPosition(**self.json_obj)
             return position

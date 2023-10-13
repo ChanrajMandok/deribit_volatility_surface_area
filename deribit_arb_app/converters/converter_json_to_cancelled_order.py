@@ -17,7 +17,7 @@ class ConverterJsonToCancelledOrder():
     Converter class that transforms a JSON string representation 
     of a cancelled order into a `ModelOrder` instance.
     """
-    
+
     def __init__(self, json_string):
 
         self.json_obj = json.loads(json_string)
@@ -28,9 +28,7 @@ class ConverterJsonToCancelledOrder():
         Checks if the necessary fields (`EnumFieldName.RESULT.value`) 
         are present in the JSON before conversion.
         """
-        
         try:
-
             if EnumFieldName.RESULT.value not in self.json_obj:
                 return None
 

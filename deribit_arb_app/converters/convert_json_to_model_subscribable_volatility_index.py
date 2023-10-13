@@ -34,10 +34,10 @@ class ConverterJsonToModelSubscribableVolatilityIndex():
             
             index_name = data["index_name"]
             
-            model_subscribable_volatility_index =  ModelSubscribableVolatilityIndex(name=index_name) 
+            model_subscribable_volatility_index =\
+                          ModelSubscribableVolatilityIndex(name=index_name) 
             
             return model_subscribable_volatility_index
         
         except Exception as e:
-            # Log any exceptions encountered during conversion.
             logger.error(f"{self.__class__.__name__}: {e}")

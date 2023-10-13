@@ -15,20 +15,22 @@ from deribit_arb_app.services.deribit_api.service_deribit_websocket_connector im
     #################################################
 
 class ServiceDeribitOrders():
+    """
+    Handles sending and managing orders on the Deribit platform via Websocket.
+    """
 
     def __init__(self) -> None:
-        
         self.deribit_messaging = ServiceDeribitMessaging()
 
     async def send_instruction(self, params: dict, method: str):
-
+        """Sends instructions to the Deribit API."""
+        
         msg_id = self.deribit_messaging.generate_id(method)
 
-        msg = ModelMessage(
-            msg_id=msg_id,
-            method=method,
-            params=params
-        )
+        self.msg = ModelMessage(msg_id=self.msg_id,
+                                method=self.method,
+                                params=self.params
+                                )
 
         async with ServiceDeribitWebsocketConnector() as websocket:
             await ServiceDeribitAuthentication().authenticate(websocket)
@@ -45,6 +47,7 @@ class ServiceDeribitOrders():
                     return data
 
     async def buy_async(self, instrument_name: str, amount: float, price: float) -> ModelOrder:
+        """ Sends a buy instruction to the Deribit API."""
 
         params = {
             "instrument_name": instrument_name,
@@ -58,8 +61,8 @@ class ServiceDeribitOrders():
 
         return await self.send_instruction(params, method)
 
-
     async def sell_async(self, instrument_name: str, amount: float, price: float) -> ModelOrder:
+        """Sends a buy instruction to the Deribit API."""
 
         params = {
             "instrument_name": instrument_name,
@@ -73,8 +76,8 @@ class ServiceDeribitOrders():
 
         return await self.send_instruction(params, method)
 
-
     async def cancel(self, order_id: str) -> ModelOrder:
+        """Sends a cancel order instruction to the Deribit API."""
 
         params = {
             "order_id": order_id
@@ -84,8 +87,8 @@ class ServiceDeribitOrders():
 
         return await self.send_instruction(params, method)
 
-
     async def cancel_all(self):
+        """Sends an instruction to the Deribit API to cancel all orders."""
 
         params = {
         }
@@ -94,8 +97,8 @@ class ServiceDeribitOrders():
 
         await self.send_instruction(params, method)
 
-
     async def get_open_orders_by_currency(self, currency: str):
+        """ Retrieves all open orders for a given currency from the Deribit API."""
 
         params = {
             "currency": currency
@@ -105,9 +108,9 @@ class ServiceDeribitOrders():
 
         return await self.send_instruction(params, method)
 
-
     async def get_margins(self, instrument_name: str, amount: float, price: float):
-
+        """Retrieves margin details for a given instrument from the Deribit API."""
+        
         params = {
             "instrument_name": instrument_name,
             "amount": amount,
@@ -117,4 +120,3 @@ class ServiceDeribitOrders():
         method = "private/get_margins"
 
         await self.send_instruction(params, method)
-

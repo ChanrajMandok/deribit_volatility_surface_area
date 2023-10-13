@@ -12,17 +12,22 @@ from deribit_arb_app.services.deribit_api.service_deribit_messaging import \
     ##########################################################
 
 @singleton
-class ServiceDeribitAuthentication():
-
+class ServiceDeribitAuthentication:
+    """
+    Service class for authenticating with the Deribit API.
+    
+    This class is used to generate and send authentication messages
+    to Deribit through a websocket connection.
+    """
+    
     def __init__(self):
-
         self.deribit_messaging = ServiceDeribitMessaging()
 
         self.params = {
-                    "grant_type": "client_credentials",
-                    "client_id": f'{os.environ.get("CLIENT_ID", None)}',
-                    "client_secret": f'{os.environ.get("CLIENT_SECRET", None)}'
-                }
+                        "grant_type": "client_credentials",
+                        "client_id": os.environ.get("CLIENT_ID", None),
+                        "client_secret": os.environ.get("CLIENT_SECRET", None)
+                       }
 
         self.method = "public/auth"
 
@@ -33,8 +38,8 @@ class ServiceDeribitAuthentication():
         )
 
     def authenticate(self, websocket):
-
+        """
+        Send an authentication message to Deribit through a given websocket.
+        """
+        
         return websocket.send(json.dumps(self.msg.build_message()))
-
-
-

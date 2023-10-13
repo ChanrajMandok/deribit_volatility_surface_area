@@ -12,28 +12,46 @@ from deribit_arb_app.converters.converter_json_object_to_model_position import \
     # Converter Converts Json object to ModelPosition #
     ###################################################
 
-class ConverterJsonToModelPositions():
+class ConverterJsonToModelPositions:
+    """
+    Converter class to transform a JSON string representing positions into a list 
+    of ModelPosition instances.
+    """
     
-    def __init__(self, json_string):
+    def __init__(self, json_string: str):
+        """Initialize the converter with the given JSON string."""
 
-        self.json_obj = json.loads(json_string)
+        try:
+            self.json_obj = json.loads(json_string)
+        except json.JSONDecodeError:
+            logger.error(f"Invalid JSON string provided to {self.__class__.__name__}.")
+            self.json_obj = None
 
-    def convert(self) -> Optional[ModelPosition]:
+    def convert(self) -> Optional[list[ModelPosition]]:
+        """
+        Converts the internal JSON object into a list of ModelPosition instances.
+        """
 
         positions = []
 
+        if not self.json_obj:
+            return None
+
         try:
+            json_result = self.json_obj.get(EnumFieldName.RESULT.value, [])
 
-            if EnumFieldName.RESULT.value not in self.json_obj:
+            if not isinstance(json_result, list):
+                logger.warning("Expected a list of positions in the 'result' field.")
                 return None
-
-            json_result = self.json_obj[EnumFieldName.RESULT.value]
             
             for position_json in json_result:
-                position = ConverterJsonObjectToModelPosition(position_json).convert()
-                positions.append(position)
+                converter = ConverterJsonObjectToModelPosition(position_json)
+                position = converter.convert()
+                if position:
+                    positions.append(position)
 
             return positions
 
         except Exception as e:
-            logger.error(f"{self.__class__.__name__}: {e}")
+            logger.error(f"An error occurred during conversion in {self.__class__.__name__}: {e}")
+            return None

@@ -35,14 +35,15 @@ class ConverterJsonToModelObservableIndexPrice():
 
         data = params["data"]
 
-        index_name   = data["index_name"]
         price        = data["price"]
         timestamp    = data["timestamp"]
+        index_name   = data["index_name"]
 
-        x =  ModelObservableIndexPrice(
-                                        name        =index_name,
+        model_observable_price = \
+              ModelObservableIndexPrice(
                                         price       =price,
-                                        timestamp   =timestamp
+                                        timestamp   =timestamp,
+                                        name        =index_name,
                                         )
         
-        return x
+        return model_observable_price

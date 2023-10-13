@@ -21,11 +21,10 @@ class ConverterJsonToHeartbeat():
 
     def convert(self) -> Optional[str]:
         """
-        Convert the stored JSON object into a ModelOrder instance representing a cancelled order.
+        Convert the stored JSON object into a ModelOrder instance representing 
+        a cancelled order.
         """
-        
         try:
-
             if EnumFieldName.RESULT.value in self.json_obj:
                 return str(self.json_obj[EnumFieldName.RESULT.value])
 

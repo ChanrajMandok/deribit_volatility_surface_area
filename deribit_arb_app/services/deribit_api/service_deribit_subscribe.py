@@ -14,21 +14,26 @@ from deribit_arb_app.services.deribit_api.service_deribit_websocket_connector im
     ########################################################
 
 class ServiceDeribitSubscribe(ModelSubscribable):
+    """
+    Service to handle subscription and unsubscription operations with Deribit via Websocket.
+    """
 
     def __init__(self):
-
         self.deribit_messaging = ServiceDeribitMessaging()
         self.subscriptions = []
 
-    async def send_instructions(self, method: str, params: dict, snapshot: bool = False):
+    async def send_instructions(self, 
+                                method: str,
+                                params: dict,
+                                snapshot: bool = False):
+        """Send subscription or unsubscription instructions to Deribit."""
 
         msg_id = self.deribit_messaging.generate_id(method)
 
-        msg = ModelMessage(
-            msg_id=msg_id,
-            method=method,
-            params=params
-        )
+        msg = ModelMessage(msg_id=msg_id,
+                           method=method,
+                           params=params
+                          )
 
         async with ServiceDeribitWebsocketConnector() as websocket:
             await websocket.send(json.dumps(msg.build_message()))
@@ -41,7 +46,11 @@ class ServiceDeribitSubscribe(ModelSubscribable):
                 except Exception as e:
                     logger.error(f"{self.__class__.__name__}: Error: {str(e)}. Stack trace: {traceback.format_exc()}")
 
-    async def subscribe(self, subscribables: list[ModelSubscribable], snapshot: bool):
+    async def subscribe(self, 
+                        subscribables: list[ModelSubscribable],
+                        snapshot: bool):
+    
+        """Subscribe to channels."""
 
         method = "public/subscribe"
 
