@@ -26,7 +26,7 @@ Observers are employed to observe real-time instrument pricing on the Deribit Ex
 |<span style="color:red"> Migration Errors |<span style="color:red">Ensure migrations folder with blank __init__.py file in |
 |Run Migrations|Run & debug -> Dropdown Menu -> Migrate|
 
-# Enviroment Variables
+### Enviroment Variables
 
 |Environment variable|value|
 | :-| :-
