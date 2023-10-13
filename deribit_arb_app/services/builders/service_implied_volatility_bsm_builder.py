@@ -30,7 +30,6 @@ class ServiceImpliedVolatilityBsmBuilder:
         """
         Construct a ModelIndicatorBsmImpliedVolatility object which contains implied volatility data.
         """
-        
         # Extract the necessary attributes from the indicator_implied_volatility object
         instrument = indicator_implied_volatility.instrument
         index_instrument = indicator_implied_volatility.index

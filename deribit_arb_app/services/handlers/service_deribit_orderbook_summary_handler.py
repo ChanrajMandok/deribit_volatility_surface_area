@@ -12,10 +12,16 @@ from deribit_arb_app.converters.converter_json_to_orderbook_summary_dict import 
 
 @singleton
 class ServiceDeribitOrderbookSummaryHandler():
+    """
+    Singleton class to manage and handle Deribit orderbook summaries.
+    """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.store_subscribable_instruments = Stores.store_subscribable_instruments
 
-    def handle(self, result) -> dict[str, str]:
+    def handle(self, result: dict) -> dict[str, str]:
+        """
+        Processes and converts the orderbook summary based on the given result.
+        """
         orderbook_summary = ConverterJsonToOrderbookSummaryDict(json.dumps(result)).convert()  
         return orderbook_summary

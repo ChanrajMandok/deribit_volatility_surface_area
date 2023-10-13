@@ -23,7 +23,6 @@ class ConverterJsonToModelAuthorization():
         If the necessary fields (`result`) are absent in the JSON, it returns 
         an empty `ModelAuthorization` instance.
         """
-    
         if 'result' not in self.json_obj:
             return ModelAuthorization()
 

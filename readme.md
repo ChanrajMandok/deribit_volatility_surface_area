@@ -50,17 +50,16 @@ Observers are employed to observe real-time instrument pricing on the Deribit Ex
 
 The **Subject-Observer** design pattern is a behavioral pattern that defines a one-to-many relationship between objects. When the state of one object (the "subject") changes, all its dependent objects (the "observers") are notified and updated automatically. This pattern is central to event-driven programming and fits seamlessly with WebSocket-based systems.
 
-**Subject:** The WebSocket stream acts as the "subject". Whenever new market data arrives, the WebSocket stream changes its state.
+**Subject:** The WebSocket instrument stream acts as the "subject". Whenever new market data arrives eg. orderbook data, the WebSocket stream changes its state.
 
-**Observers:** These are components or functions interested in this market data, such as the Black-Scholes-Merton (BSM) calculations module, which computes implied volatility (IV). Every time new data arrives at the WebSocket stream (subject), the BSM calculations (observer) are automatically triggered to update the IV.
+**Observers:** These are components or functions interested in this market data, such as the Black-Scholes-Merton (BSM) calculations module, which computes implied volatility (IV). Every time new data arrives at the WebSocket stream (subject) [Spot Price, Dvol, TTM (Theta decay), Option Price], the BSM calculations (observer) are automatically triggered to update the IV for all related instruments.
 
 ---
-
 ### 2. Producer Consumer Design Pattern
 
-The **Producer-Consumer** design pattern involves two main actors: the Producer, which produces data, and the Consumer, which consumes that data. It's commonly used when data production and consumption occur at different rates.
+The **Producer-Consumer** design pattern involves two main actors: the Producer (master), which produces data, and the Consumer (slave), which consumes that data. It's commonly used when data production and consumption occur at different rates.
 
-**Producer:** Running on a non-primary thread, the producer handles everything in your repo to create a continuous stream of implied volatility objects. Since it's on a separate thread, it can continuously generate and populate data without interfering with the primary task of the application.
+**Producer:** Running on a non-primary thread, the producer handles all task utilised in the continous population of the stream of implied volatility objects. Since it's on a separate thread, it can continuously generate and populate data without interfering with the primary task of the application.
 
 **Queue:** The implied volatility objects produced by the Producer are placed in a shared buffer or queue. This intermediate storage allows for the producer and consumer to work at their own paces without directly depending on the immediate availability of each other.
 
@@ -84,13 +83,15 @@ The DVOL Index from Deribit encapsulates the market's 30-day forward-looking imp
 ### 1. Theoretical Foundations
 
 #### Monotonicity in Time-to-Maturity (Calendar Arbitrage)
-Historical data suggests that calendar spreads, which involve opposite positions in options with different expirations but identical strikes, rarely guarantee a risk-free profit. Our methodology ensures that the implied volatility for a given strike doesn't decrease with a longer time-to-maturity. This aligns with the notion that extended durations inherently introduce more uncertainty, thereby justifying a non-decreasing volatility trend.
+Historical data suggests that calendar spreads, which involve opposite positions in options with different expirations but identical strikes, rarely guarantee a risk-free profit. My methodology ensures that the implied volatility for a given strike doesn't decrease with a longer time-to-maturity. This aligns with the notion that extended durations inherently introduce more uncertainty, thereby justifying a non-decreasing volatility trend.
 
 #### Convexity in Strikes (Butterfly Arbitrage)
-The butterfly spread, composed of three options of the same type and expiry but with varying strikes, should not yield arbitrage profits. Empirical studies, like that of Dumas, Fleming, and Whaley (1998), validate this perspective. Our model ensures that the second derivative of implied volatility concerning the strike price remains non-negative. This not only prevents butterfly arbitrage opportunities but also reflects observed market behavior.
+The butterfly spread, composed of three options of the same type and expiry but with varying strikes, should not yield arbitrage profits. Empirical studies, like that of Dumas, Fleming, and Whaley (1998), validate this perspective. My model ensures that the second derivative of implied volatility concerning the strike price remains non-negative. This not only prevents butterfly arbitrage opportunities but also reflects observed market behavior.
 
 #### Monotonicity in Strikes (Strike Arbitrage)
-The variation of implied volatilities across different strikes is evident in phenomena such as the "volatility smile" and the "volatility skew". Backed by Black's approximation (1976) and various market crash models, our methodology enforces a structure wherein implied volatility either increases or remains unchanged as strike prices decrease.
+The variation of implied volatilities across different strikes is evident in phenomena such as the "volatility smile" and the "volatility skew". Backed by Black's approximation (1976) and various market crash models, my methodology enforces a structure wherein implied volatility either increases or remains unchanged as strike prices decrease.
+
+---
 
 ### 2. Practical Implications
 
@@ -102,6 +103,19 @@ An arbitrage-free surface holds significance not just in theoretical discussions
   
 - **Model Stability:** Arbitrage-free surfaces generally exhibit smoother behaviors and are less swayed by market noise.
 
+---
+
+### 3. Methodology Implementation
+
+In developing a methodological approach for the volatility surface, I've emphasized adherence to non-arbitrage theories while leveraging computational methods to ensure precision and efficiency.Central to my approach is the RectBivariateSpline, a tool designed for two-dimensional data interpolation. Its significance in this context is manifold:
+
+**Dimensionality Alignment:** The volatility surface operates in a two-dimensional framework, marked by moneyness and time-to-maturity. The RectBivariateSpline, by design, caters to such bi-dimensional data, ensuring precise interpolations.
+
+**Ensuring Continuity::** Financial models are sensitive to abrupt transitions, which can induce mispricing or arbitrage. The RectBivariateSpline delivers a smooth volatility surface, essential for accurate derivatives pricing and risk assessment.
+
+**Responsive Modeling::** Unlike more rigid interpolation techniques, the RectBivariateSpline tailors itself to the data's peculiarities. This adaptability results in a volatility surface that resonates with market subtleties, balancing theoretical robustness with practicality.
+
+In sum, my incorporation of the RectBivariateSpline aligns mathematical rigor with market dynamics, ensuring a volatility surface that's attuned to real-time market nuances.
 
 # Architecture Design
 ![Deribit_logo](illustrations/app_architecture.png)

@@ -12,13 +12,17 @@ from deribit_arb_app.converters.converter_json_to_test_response import \
 
 @singleton
 class ServiceDeribitTestHandler():
+    """
+    Singleton class to manage and handle test operations related to Deribit.
+    """
 
-    def __init__(self):
-
+    def __init__(self) -> None:
         self.version = None
 
-    def check_response(self, test_response):
-
+    def check_response(self, test_response: dict) -> None:
+        """
+        Checks and processes the provided test response to extract the version information.
+        """
         result = ConverterJsonToTestResponse(json.dumps(test_response)).convert()
 
         if EnumFieldName.RESULT.value not in result:

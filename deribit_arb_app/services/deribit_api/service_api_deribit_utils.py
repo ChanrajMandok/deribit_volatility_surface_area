@@ -36,7 +36,6 @@ class ServiceApiDeribitUtils:
         """
         Unsubscribes from given instruments on Deribit.
         """
-
         try:
             await self.deribit_subscribe.unsubscribe(unsubscribables=unsubscribables)
         except asyncio.exceptions.TimeoutError:

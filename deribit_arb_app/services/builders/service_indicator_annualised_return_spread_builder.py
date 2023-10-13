@@ -23,7 +23,6 @@ class ServiceIndicatorAnnualisedReturnSpreadBuilder:
 
     def build(self, indicator_annualised_return_spread: ModelIndicatorAnnualisedReturnSpread) -> Optional[ModelIndicatorAnnualisedReturnSpread]:
         """Builds the annualized return spread indicator."""
-        
         # Extracting the instruments and index from the input indicator.
         instrument_1 = indicator_annualised_return_spread.instrument_1
         instrument_2 = indicator_annualised_return_spread.instrument_2

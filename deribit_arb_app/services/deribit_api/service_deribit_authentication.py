@@ -41,5 +41,4 @@ class ServiceDeribitAuthentication:
         """
         Send an authentication message to Deribit through a given websocket.
         """
-        
         return websocket.send(json.dumps(self.msg.build_message()))

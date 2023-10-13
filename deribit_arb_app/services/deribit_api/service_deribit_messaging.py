@@ -101,7 +101,6 @@ class ServiceDeribitMessaging():
         """
         Generate a unique message ID based on the specified method.
         """
-
         msg_id = random.randrange(0, 10000)
 
         if method == "public/auth":

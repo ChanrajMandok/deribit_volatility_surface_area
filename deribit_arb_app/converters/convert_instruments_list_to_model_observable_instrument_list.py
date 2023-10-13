@@ -29,7 +29,6 @@ class ConvertInstrumentsListToModelObservableInstrumentList:
         assigned. All other instruments of type ModelSubscribableInstrument will be
         appended to a list and assigned collectively.
         """
-        
         try:
             # Check the type of each instrument and categorize accordingly.
             list_model_subscribable_instruments = []

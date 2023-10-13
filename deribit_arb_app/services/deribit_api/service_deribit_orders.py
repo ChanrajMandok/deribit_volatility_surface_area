@@ -34,7 +34,7 @@ class ServiceDeribitOrders():
 
         async with ServiceDeribitWebsocketConnector() as websocket:
             await ServiceDeribitAuthentication().authenticate(websocket)
-            await websocket.send(json.dumps(msg.build_message()))
+            await websocket.send(json.dumps(self.msg.build_message()))
 
             while websocket.open:
                 response = await websocket.recv()

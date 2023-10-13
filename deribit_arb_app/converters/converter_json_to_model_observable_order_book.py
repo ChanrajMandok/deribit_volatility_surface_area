@@ -52,7 +52,6 @@ class ConverterJsonToModelObservableOrderBook():
         Converts the stored JSON object into a ModelObservableOrderBook instance, assuming it 
         directly contains the 'data' format fields without the need to navigate to the 'params' section.
         """
-        
         try:
             json_data = self.json_obj
 

@@ -14,15 +14,19 @@ from deribit_arb_app.converters.converter_json_to_account_model_summary import \
 
 @singleton
 class ServiceDeribitAccountSummaryHandler():
+    """
+    Singleton class to manage and handle Deribit account summaries.
+    """
 
     def __init__(self):
-
         self.store_deribit_account_summary = Stores.store_model_account_summary
         self.account_summary = None
         
-    def set_account_summary(self, result) -> Optional[ModelAccountSummary]:
-
+    def set_account_summary(self, 
+                            result: json) -> Optional[ModelAccountSummary]:
+        """
+        Process and store the provided account summary.
+        """
         self.account_summary = ConverterJsonToAccountModelSummary(json.dumps(result)).convert()
         account_summary = self.store_deribit_account_summary.set(self.account_summary)
         return account_summary
-

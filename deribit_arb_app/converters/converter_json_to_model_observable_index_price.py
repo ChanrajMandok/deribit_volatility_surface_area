@@ -24,7 +24,6 @@ class ConverterJsonToModelObservableIndexPrice():
         Converts the stored JSON object into a ModelObservableIndexPrice instance.
         If the necessary fields (`params`) are absent in the JSON, it returns `None`.
         """
-        
         if not "params" in self.json_obj:
              return None
 

@@ -53,7 +53,6 @@ class ServiceDeribitHeartbeat:
         Set the heartbeat for the websocket connection to Deribit and 
         handle any test requests sent by Deribit as part of the heartbeat mechanism.
         """
-        
         async with ServiceDeribitWebsocketConnector() as websocket:
             await websocket.send(json.dumps(self.msg.build_message()))
 
