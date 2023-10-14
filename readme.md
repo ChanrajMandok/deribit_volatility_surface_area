@@ -111,9 +111,9 @@ In developing a methodological approach for the volatility surface, I've emphasi
 
 **Dimensionality Alignment:** The volatility surface operates in a two-dimensional framework, marked by moneyness and time-to-maturity. The RectBivariateSpline, by design, caters to such bi-dimensional data, ensuring precise interpolations.
 
-**Ensuring Continuity::** Financial models are sensitive to abrupt transitions, which can induce mispricing or arbitrage. The RectBivariateSpline delivers a smooth volatility surface, essential for accurate derivatives pricing and risk assessment.
+**Ensuring Continuity:** Financial models are sensitive to abrupt transitions, which can induce mispricing or arbitrage. The RectBivariateSpline delivers a smooth volatility surface, essential for accurate derivatives pricing and risk assessment.
 
-**Responsive Modeling::** Unlike more rigid interpolation techniques, the RectBivariateSpline tailors itself to the data's peculiarities. This adaptability results in a volatility surface that resonates with market subtleties, balancing theoretical robustness with practicality.
+**Responsive Modeling:** Unlike more rigid interpolation techniques, the RectBivariateSpline tailors itself to the data's peculiarities. This adaptability results in a volatility surface that resonates with market subtleties, balancing theoretical robustness with practicality.
 
 In sum, my incorporation of the RectBivariateSpline aligns mathematical rigor with market dynamics, ensuring a volatility surface that's attuned to real-time market nuances.
 
