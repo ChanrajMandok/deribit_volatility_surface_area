@@ -107,7 +107,7 @@ An arbitrage-free surface holds significance not just in theoretical discussions
 
 ### 3. Methodology Implementation
 
-In developing a methodological approach for the volatility surface, I've emphasized adherence to non-arbitrage theories while leveraging computational methods to ensure precision and efficiency.Central to my approach is the RectBivariateSpline, a tool designed for two-dimensional data interpolation. Its significance in this context is manifold:
+In developing a methodological approach for the volatility surface, I've emphasized adherence to non-arbitrage theories while leveraging computational methods to ensure precision and efficiency.Central to my approach is the RectBivariateSpline, a tool designed for two-dimensional data interpolation. Its significance in this context is:
 
 **Dimensionality Alignment:** The volatility surface operates in a two-dimensional framework, marked by moneyness and time-to-maturity. The RectBivariateSpline, by design, caters to such bi-dimensional data, ensuring precise interpolations.
 
