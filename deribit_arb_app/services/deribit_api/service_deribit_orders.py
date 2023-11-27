@@ -22,6 +22,7 @@ class ServiceDeribitOrders():
     def __init__(self) -> None:
         self.deribit_messaging = ServiceDeribitMessaging()
 
+
     async def send_instruction(self, params: dict, method: str):
         """Sends instructions to the Deribit API."""
         
@@ -46,6 +47,7 @@ class ServiceDeribitOrders():
                 if id == msg_id:
                     return data
 
+
     async def buy_async(self, instrument_name: str, amount: float, price: float) -> ModelOrder:
         """ Sends a buy instruction to the Deribit API."""
 
@@ -60,6 +62,7 @@ class ServiceDeribitOrders():
         method = "private/buy"
 
         return await self.send_instruction(params, method)
+
 
     async def sell_async(self, instrument_name: str, amount: float, price: float) -> ModelOrder:
         """Sends a buy instruction to the Deribit API."""
@@ -76,6 +79,7 @@ class ServiceDeribitOrders():
 
         return await self.send_instruction(params, method)
 
+
     async def cancel(self, order_id: str) -> ModelOrder:
         """Sends a cancel order instruction to the Deribit API."""
 
@@ -87,6 +91,7 @@ class ServiceDeribitOrders():
 
         return await self.send_instruction(params, method)
 
+
     async def cancel_all(self):
         """Sends an instruction to the Deribit API to cancel all orders."""
 
@@ -96,6 +101,7 @@ class ServiceDeribitOrders():
         method = "private/cancel_all"
 
         await self.send_instruction(params, method)
+
 
     async def get_open_orders_by_currency(self, currency: str):
         """ Retrieves all open orders for a given currency from the Deribit API."""
@@ -107,6 +113,7 @@ class ServiceDeribitOrders():
         method = "private/get_open_orders_by_currency"
 
         return await self.send_instruction(params, method)
+
 
     async def get_margins(self, instrument_name: str, amount: float, price: float):
         """Retrieves margin details for a given instrument from the Deribit API."""

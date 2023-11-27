@@ -17,15 +17,19 @@ class StoreObservableIndicatorInterface(Mapping[E, M]):
         def __init__(self):
             self.d: dict[E, M] = dict()
 
+
         def __getitem__(self, item: E) -> M:
             value = str(item)
             return self.d[value]
 
+
         def __len__(self) -> int:
             return len(self.d)
 
+
         def __iter__(self) -> Iterator[E]:
             return iter(self.d)
+
 
         def update_observable(self, observable_indicator_instance: M):
             if observable_indicator_instance is None:
@@ -43,6 +47,7 @@ class StoreObservableIndicatorInterface(Mapping[E, M]):
             if not observable_indicator_instance.key in self.d:
                 self.d[observable_indicator_instance.key] = ObservableIndicator(observable_indicator_instance)
             return self.d[observable_indicator_instance.key]
+        
         
         def remove_observable(self, observable_indicator_instance: M):
             if observable_indicator_instance is None:

@@ -16,17 +16,18 @@ class ServiceDeribitRetrieveHistoricalFundingRatesAsync:
     """
 
     def __init__(self):
-        """Initializes the base URL from the environment variable."""
         self.base_url = os.environ['BASE_HTTP_URL']
 
-    def main(self, lookback_period: int) -> list[dict]:
+
+    def main(self, 
+             lookback_period: int) -> list[dict]:
         """
         The main method to be called to retrieve historical funding rates.
         """
-        
         timestamps = self.time_increments(lookback_period=lookback_period)
         result = asyncio.run(self.fetch_all(timestamps=timestamps))
         return result
+
 
     async def fetch(self, 
                     timestamp_end: int , 
@@ -46,22 +47,26 @@ class ServiceDeribitRetrieveHistoricalFundingRatesAsync:
                 data = await response.json()
                 return data['result']
 
+
     async def fetch_all(self, 
                         timestamps: list) -> list:
         """
         Asynchronously fetches all historical funding rates for the given list of timestamps.
         """
-        tasks = [asyncio.create_task(self.fetch(timestamp_start=timestamps[i], timestamp_end=timestamps[i - 1]))
+        tasks = [asyncio.create_task(self.fetch(timestamp_start=timestamps[i],
+                                                timestamp_end=timestamps[i - 1]))
                  for i in range(1, len(timestamps), 1)]
         list_of_candle_list = await asyncio.gather(*tasks)
         return [x for y in list_of_candle_list for x in y]
+
 
     def time_increments(self, lookback_period: int) -> list:
         """
         Generates a list of timestamps in increments based on the lookback period.
         """
         # Adjusting the lookback period
-        lookback_period = lookback_period + (744 - lookback_period % 744) if lookback_period % 744 > 0 else lookback_period
+        lookback_period = lookback_period + (744 - lookback_period % 744) \
+                                                   if lookback_period % 744 > 0 else lookback_period
 
         end_time = datetime.now().replace(second=0, microsecond=0)
         start_date = end_time - timedelta(hours=lookback_period) - timedelta(hours=744)

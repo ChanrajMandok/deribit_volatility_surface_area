@@ -24,6 +24,7 @@ class StoreObservableInterface(Mapping[E, M]):
     def __iter__(self) -> Iterator[E]:
         return iter(self.d)
 
+
     def update_observable(self, observable_instance: M):
         if observable_instance is None:
             return
@@ -32,15 +33,18 @@ class StoreObservableInterface(Mapping[E, M]):
             self.d[observable_instance.name] = ObservableIndicator(observable_instance)
         self.d[observable_instance.name].set_instance(observable_instance)
 
+
     def get_observable(self, observable_instance: M):
         if not observable_instance.name in self.d:
             self.d[observable_instance.name] = ObservableIndicator(observable_instance.__class__(name=observable_instance.name))
         return self.d[observable_instance.name]
     
+    
     def remove_observable(self, observable_instance: M):
         if observable_instance.name in self.d:
             del self.d[observable_instance.name]
             
+
     def remove_observable_by_key(self, key: E):
         if key in self.d:
             del self.d[key]       

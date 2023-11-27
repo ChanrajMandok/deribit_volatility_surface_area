@@ -1,4 +1,5 @@
 import json 
+import traceback
 
 from typing import Optional
 
@@ -18,9 +19,10 @@ class ConverterJsonToCancelledOrder():
     of a cancelled order into a `ModelOrder` instance.
     """
 
-    def __init__(self, json_string):
-
+    def __init__(self,
+                 json_string):
         self.json_obj = json.loads(json_string)
+
 
     def convert(self) -> Optional[ModelOrder]:
         """
@@ -36,4 +38,5 @@ class ConverterJsonToCancelledOrder():
             return ConverterJsonObjectToModelOrder().convert(json_result)
 
         except Exception as e:
-            logger.error(f"{self.__class__.__name__}: {e}")
+            logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
+                                                      f"Stack trace: {traceback.format_exc()}")

@@ -26,7 +26,9 @@ class ServiceImpliedVolatilityBsmBuilder:
         self.store_observable_volatility_index =  Stores.store_observable_volatility_index
         self.service_black_scholes_pricer      = ServicePricerBlackScholes()
 
-    def build(self, indicator_implied_volatility: ModelIndicatorBsmImpliedVolatility) -> Optional[ModelIndicatorBsmImpliedVolatility]:
+
+    def build(self, 
+              indicator_implied_volatility: ModelIndicatorBsmImpliedVolatility) -> Optional[ModelIndicatorBsmImpliedVolatility]:
         """
         Construct a ModelIndicatorBsmImpliedVolatility object which contains implied volatility data.
         """

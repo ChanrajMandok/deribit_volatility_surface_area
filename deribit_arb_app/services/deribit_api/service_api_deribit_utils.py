@@ -17,6 +17,7 @@ class ServiceApiDeribitUtils:
     def __init__(self) -> None:
         self.deribit_subscribe = ServiceDeribitSubscribe()
 
+
     async def a_coroutine_subscribe(self, 
                                     subscribables: list[ModelSubscribableInstrument], 
                                     snapshot: bool = False):

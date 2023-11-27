@@ -12,9 +12,10 @@ class ConverterJsonToModelSubscribableIndex():
     instance.
     """
 
-    def __init__(self, json_string):
-
+    def __init__(self,
+                 json_string):
         self.json_obj = json.loads(json_string)
+
 
     def convert(self) -> list[ModelSubscribableIndex]:
         """Converts the internal JSON object into a ModelSubscribableIndex instance."""

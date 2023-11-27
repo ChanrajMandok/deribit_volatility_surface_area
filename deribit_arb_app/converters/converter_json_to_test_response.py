@@ -1,4 +1,5 @@
 import json
+import traceback
 
 from typing import Optional
 
@@ -14,12 +15,14 @@ class ConverterJsonToTestResponse:
     Converter class to transform a JSON string into a test response.
     """
     
-    def __init__(self, json_string: str):
+    def __init__(self,
+                 json_string: str):
         try:
             self.json_obj = json.loads(json_string)
         except json.JSONDecodeError:
             logger.error(f"Invalid JSON string provided to {self.__class__.__name__}.")
             self.json_obj = None
+
 
     def convert(self) -> Optional[str]:
         """Converts the internal JSON object into a test response string."""
@@ -38,5 +41,6 @@ class ConverterJsonToTestResponse:
             return None
 
         except Exception as e:
-            logger.error(f"An error occurred during conversion in {self.__class__.__name__}: {e}")
+            logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
+                                                      f"Stack trace: {traceback.format_exc()}")
             return None

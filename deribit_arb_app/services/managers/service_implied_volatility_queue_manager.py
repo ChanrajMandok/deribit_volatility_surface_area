@@ -1,4 +1,5 @@
 import asyncio
+import traceback
 
 from collections import deque
 from singleton_decorator import singleton
@@ -16,23 +17,34 @@ from deribit_arb_app.services.managers.service_implied_volatilty_surface_area_ob
     
 @singleton
 class ServiceImpliedVolatilityQueueManager():
+    """
+    Manages the queue of implied volatility indicators and handles the creation and updating
+    of the volatility surface area (VSA) object based on these indicators.
+    """
 
-    def __init__(self, implied_volatility_queue:asyncio.Queue) -> None:
+    def __init__(self, 
+                 implied_volatility_queue:asyncio.Queue) -> None:
         self.vsa_created                 = False
         self.implied_volatility_cache    = deque()
         self.implied_volatility_queue    = implied_volatility_queue
         self.service_vsa_object_manager  = ServiceImpliedVolatiltySurfaceAreaObjectManager()
         
+        
     async def manage_implied_volatility_queue(self,
                                               plot: bool):
-        logger.info(f"{self.__class__.__name__}: Running ")
+        """
+        Asynchronously manages the implied volatility queue, creating or updating the VSA object as necessary.
+        """
         
+        logger.info(f"{self.__class__.__name__}: Running ")
         while True:
             try:
+                # Process items in the queue if it's not empty
                 if self.implied_volatility_queue.qsize() > 0:
                     model_iv_object = self.implied_volatility_queue.get_nowait()
                     
                     required_fields = ['strike', 'time_to_maturity', 'implied_volatility', 'option_type']
+                    # Required fields for a valid implied volatility object
                     if not (isinstance(model_iv_object, ModelIndicatorBsmImpliedVolatility) and 
                         all(hasattr(model_iv_object, field) for field in required_fields)):
                         logger.error(f"{self.__class__.__name__}:"\
@@ -68,9 +80,10 @@ class ServiceImpliedVolatilityQueueManager():
                         # Use the local variable for task deployment
                         task = self.service_vsa_object_manager.update_vsa_surface(model_iv_objects=current_cache)
                         asyncio_create_task_log_exception(
-                            logger=logger,
-                            awaitable=task,
-                            origin=f"{self.__class__.__name__} manage_iv_queue")
+                                                          logger=logger,
+                                                          awaitable=task,
+                                                          origin=f"{self.__class__.__name__} manage_iv_queue")
                     
             except Exception as e:
-                logger.error(f"{self.__class__.__name__}: Error in manage_implied_volatility_queue: {e}")
+                logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
+                                                        f"Stack trace: {traceback.format_exc()}")

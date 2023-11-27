@@ -1,5 +1,6 @@
 import os
 import asyncio
+import traceback
 
 from singleton_decorator import singleton
 
@@ -17,62 +18,80 @@ from deribit_arb_app.model.indicator_models.model_indicator_bsm_implied_volatili
 
 @singleton
 class ObserverIndicatorBsmImpliedVolatility(ObserverInterface):
+    """
+    Observer class for tracking and updating BSM (Black-Scholes-Merton) Implied Volatility indicators.
+    Implements Observer pattern to respond to changes in market data.
+    """
 
-    def __init__(self, implied_volatility_queue:asyncio.Queue) -> None:
+    def __init__(self,
+                 implied_volatility_queue: asyncio.Queue) -> None:
         super().__init__()
-        self.indicators = {}
-        self.implied_volatility_dict = {}
-        self.max_workers = os.environ.get('MAX_WORKERS', 6)
-        self.implied_volatility_queue = implied_volatility_queue
+        self.indicators = {}  # Stores the attached indicators
+        self.implied_volatility_dict = {}  # Stores the latest implied volatilities
+        self.max_workers = os.environ.get('MAX_WORKERS', 6)  # Number of workers for parallel processing
+        self.implied_volatility_queue = implied_volatility_queue  # Queue for implied volatility results
+        # References to observable stores for order books, index prices, and volatility indices
         self.store_observable_order_books = Stores.store_observable_orderbooks
         self.store_observable_index_prices = Stores.store_observable_index_prices
-        self.store_observable_volatility_index =  Stores.store_observable_volatility_index
+        self.store_observable_volatility_index = Stores.store_observable_volatility_index
         self.service_implied_volatility_bsm_builder = ServiceImpliedVolatilityBsmBuilder()
 
-    def attach_indicator(self, instance: ModelIndicatorBsmImpliedVolatility):
-        """ Attach this observer to the instance """
-        key = instance.key
-        instrument = instance.instrument
-        index = instance.index
-        volatility_index = instance.volatility_index
-        self.indicators[key] = instance
 
-        # Attach observer to instrument order book and index
-        self.store_observable_order_books.get_observable(instrument).attach(self)
-        self.store_observable_index_prices.get_observable(index).attach(self)
-        self.store_observable_volatility_index.get_observable(volatility_index).attach(self)
+    def attach_indicator(self,
+                         instance: ModelIndicatorBsmImpliedVolatility):
+        """
+        Attaches an implied volatility indicator instance to this observer.
+
+        Args:
+            instance (ModelIndicatorBsmImpliedVolatility): The indicator instance to attach.
+        """
+        
+        key = instance.key  # Unique key for the indicator
+        # Attach this observer to the relevant order books and indices
+        self.indicators[key] = instance
+        self.store_observable_order_books.get_observable(instance.instrument).attach(self)
+        self.store_observable_index_prices.get_observable(instance.index).attach(self)
+        self.store_observable_volatility_index.get_observable(instance.volatility_index).attach(self)
+
 
     def detach_indicator(self, key):
-        """ Detach this observer from the instance """
+        """
+        Detaches an implied volatility indicator instance from this observer.
+        """
         instance = self.indicators.get(key)
         if instance:
-            instrument = instance.instrument
-            index = instance.index
-            volatility_index = instance.volatility_index
-            # Detach observer from instrument order book and index
-            self.store_observable_order_books.get_observable(instrument).detach(self)
-            self.store_observable_index_prices.get_observable(index).detach(self)
-            self.store_observable_volatility_index.get_observable(volatility_index).detach(self)
-            del self.indicators[key]
+            # Detach this observer from the relevant order books and indices
+            self.store_observable_order_books.get_observable(instance.instrument).detach(self)
+            self.store_observable_index_prices.get_observable(instance.index).detach(self)
+            self.store_observable_volatility_index.get_observable(instance.volatility_index).detach(self)
+            del self.indicators[key]  # Remove the indicator from tracking
+
 
     def update(self):
+        """
+        Update method called when observed subjects change. It recalculates the implied volatilities.
+        """
         for key, indicator in self.indicators.items():
             try:
                 result = self.service_implied_volatility_bsm_builder.build(indicator)
-                if result is not None:
-                    name = result.name
+                if result:
+                    # Round the time to maturity and implied volatility for precision
                     result.time_to_maturity = round(result.time_to_maturity, 4)
                     result.implied_volatility = round(result.implied_volatility, 4)
-                    
-                    existing_iv = self.implied_volatility_dict.get(name)
-                    
+
+                    existing_iv = self.implied_volatility_dict.get(result.name)
+                    # Update the implied volatility dictionary and queue if there's a change
                     if existing_iv is None or existing_iv != result.implied_volatility:
-                        self.implied_volatility_dict[name] = result.implied_volatility
+                        self.implied_volatility_dict[result.name] = result.implied_volatility
                         self.implied_volatility_queue.put_nowait(result)
-                        
             except Exception as e:
-                logger.error(f"{self.__class__.__name__}: {e}")
+                logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
+                                                        f"Stack trace: {traceback.format_exc()}")
+
 
     def detach_all(self):
+        """
+        Detaches all indicators from this observer.
+        """
         for key in list(self.indicators.keys()):
             self.detach_indicator(key)

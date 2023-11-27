@@ -37,6 +37,7 @@ class ServiceDeribitAuthentication:
             params=self.params
         )
 
+
     def authenticate(self, websocket):
         """
         Send an authentication message to Deribit through a given websocket.

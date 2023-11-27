@@ -19,8 +19,10 @@ class StoreDeribitPositions():
         self.__positions = {}
         self.store_subscribable_instruments = Stores.store_subscribable_instruments
 
+
     def __len__(self) -> int:
         return len(self.__positions)
+
 
     def get_deribit_position(self, instrument: ModelSubscribableInstrument) -> Optional[ModelPosition]:
         if instrument.base_currency in self.__positions.keys():
@@ -29,10 +31,12 @@ class StoreDeribitPositions():
         else:
             return None
 
+
     def get_deribit_positions(self, currency: str) -> dict[str,dict[str, ModelPosition]]:
         if not currency in self.__positions:
             self.__positions[currency] = {}
         return self.__positions[currency]
+
 
     def set_deribit_positions(self, positions: list[ModelPosition]) -> dict[str,dict[str, ModelPosition]]:
         for position in positions:
@@ -43,7 +47,6 @@ class StoreDeribitPositions():
                 self.__positions[instrument.base_currency][instrument.name] = position
         return self.__positions
     
+    
     def clear_store(self):
         self.__positions = {}
-
-

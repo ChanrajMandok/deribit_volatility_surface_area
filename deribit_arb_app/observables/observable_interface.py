@@ -21,18 +21,23 @@ class ObservableInterface(ABC, Generic[T]):
         self.instance = instance
         self.observers = []
 
+
     def get_instance(self) -> T:
         return self.instance
+
 
     def set_instance(self, instance: T) -> None:
         self.instance = instance
         self.notify()
 
+
     def attach(self, observer: ObserverInterface) -> None:
         self.observers.append(observer)
 
+
     def detach(self, observer: ObserverInterface) -> None:
         self.observers.remove(observer)
+
 
     def notify(self) -> None:
         for observer in self.observers:

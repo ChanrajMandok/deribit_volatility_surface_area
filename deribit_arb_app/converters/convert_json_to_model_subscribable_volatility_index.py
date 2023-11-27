@@ -1,4 +1,5 @@
 import json
+import traceback
 
 from deribit_arb_app.converters import logger
 from deribit_arb_app.model.model_subscribable_volatility_index import \
@@ -14,8 +15,10 @@ class ConverterJsonToModelSubscribableVolatilityIndex():
     ModelSubscribableVolatilityIndex object.
     """
     
-    def __init__(self, json_string: str):
+    def __init__(self,
+                 json_string: str):
         self.json_obj = json.loads(json_string)
+
 
     def convert(self) -> ModelSubscribableVolatilityIndex:
         """
@@ -40,4 +43,5 @@ class ConverterJsonToModelSubscribableVolatilityIndex():
             return model_subscribable_volatility_index
         
         except Exception as e:
-            logger.error(f"{self.__class__.__name__}: {e}")
+            logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
+                                                      f"Stack trace: {traceback.format_exc()}")

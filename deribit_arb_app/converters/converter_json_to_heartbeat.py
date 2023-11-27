@@ -1,4 +1,5 @@
 import json
+import traceback
 
 from typing import Optional
 
@@ -15,9 +16,10 @@ class ConverterJsonToHeartbeat():
     into a ModelOrder instance.
     """
 
-    def __init__(self, json_string):
-
+    def __init__(self,
+                 json_string):
         self.json_obj = json.loads(json_string)
+
 
     def convert(self) -> Optional[str]:
         """
@@ -37,4 +39,5 @@ class ConverterJsonToHeartbeat():
             return None
 
         except Exception as e:
-            logger.error(f"{self.__class__.__name__}: {e}")
+            logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
+                                                      f"Stack trace: {traceback.format_exc()}")))

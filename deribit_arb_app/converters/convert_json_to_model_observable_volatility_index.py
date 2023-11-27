@@ -1,4 +1,5 @@
 import json
+import traceback
 
 from typing import Optional
 
@@ -14,22 +15,16 @@ class ConverterJsonToModelObservableVolatilityIndex():
     """
     A converter class that transforms a JSON string to an instance
     of ModelObservableVolatilityIndex.
-    
-    The purpose of this class is to extract relevant information
-    from a provided JSON string and use it to instantiate and return
-    a ModelObservableVolatilityIndex object.
     """
     
-    def __init__(self, json_string: str):
+    def __init__(self,
+                 json_string: str):
         self.json_obj = json.loads(json_string)
+
 
     def convert(self) -> Optional[ModelObservableVolatilityIndex]:
         """
         Converts the loaded JSON object to a ModelObservableVolatilityIndex instance.
-        
-        The method navigates through the nested structure of the JSON object and
-        extracts the required information to instantiate a ModelObservableVolatilityIndex object.
-        If the required fields are missing in the JSON object, it returns None.
         """
         try:
             # Check if the JSON object has 'params' key, if not return None.
@@ -55,4 +50,5 @@ class ConverterJsonToModelObservableVolatilityIndex():
             return volatility_index
 
         except Exception as e:
-            logger.error(f"{self.__class__.__name__}: {e}")
+            logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
+                                                      f"Stack trace: {traceback.format_exc()}")

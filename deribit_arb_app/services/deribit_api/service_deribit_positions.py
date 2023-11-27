@@ -38,6 +38,7 @@ class ServiceDeribitPositions():
                                 params=self.params
                                 )
 
+
     async def get(self) -> dict[str, dict[str, ModelPosition]]:
         """
         Retrieve positions from Deribit for the specified currency.

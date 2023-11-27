@@ -1,4 +1,5 @@
 import json
+import traceback
 
 from typing import Optional
 
@@ -18,9 +19,11 @@ class ConverterJsonToOpenOrders:
     a list of ModelOrder instances.
     """
     
-    def __init__(self, json_string: str):
+    def __init__(self,
+                 json_string: str):
         self.json_obj = json.loads(json_string)
         self.json_object_to_order = ConverterJsonObjectToModelOrder()
+        
         
     def convert(self) -> Optional[list[ModelOrder]]:
         """
@@ -39,6 +42,7 @@ class ConverterJsonToOpenOrders:
                 orders.append(order)
   
         except Exception as e:
-            logger.error(f"{self.__class__.__name__}: {e}")
+            logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
+                                                      f"Stack trace: {traceback.format_exc()}")
 
         return orders

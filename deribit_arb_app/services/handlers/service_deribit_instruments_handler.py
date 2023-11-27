@@ -21,6 +21,7 @@ class ServiceDeribitInstrumentsHandler():
     def __init__(self) -> None:
         self.store_subscribable_instruments = Stores.store_subscribable_instruments
 
+
     def set_instruments(self, result: dict) -> dict[str, ModelSubscribableInstrument]:
         """
         Processes and sets the instruments based on the given result.

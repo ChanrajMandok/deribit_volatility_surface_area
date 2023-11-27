@@ -20,6 +20,7 @@ class ServiceDeribitCancelAllPositionsHandler():
     def __init__(self) -> None:
         self.store_deribit_open_orders = StoreDeribitOpenOrders()
 
+
     def cancel_all(self, result: dict) -> None:
         """
         Processes the cancellation of all positions based on the given result.

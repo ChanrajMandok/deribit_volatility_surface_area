@@ -22,6 +22,7 @@ class ServiceDeribitAccountSummaryHandler():
         self.store_deribit_account_summary = Stores.store_model_account_summary
         self.account_summary = None
         
+        
     def set_account_summary(self, 
                             result: json) -> Optional[ModelAccountSummary]:
         """

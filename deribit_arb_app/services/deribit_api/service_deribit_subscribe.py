@@ -22,6 +22,7 @@ class ServiceDeribitSubscribe(ModelSubscribable):
         self.deribit_messaging = ServiceDeribitMessaging()
         self.subscriptions = []
 
+
     async def send_instructions(self, 
                                 method: str,
                                 params: dict,
@@ -45,6 +46,7 @@ class ServiceDeribitSubscribe(ModelSubscribable):
                         break
                 except Exception as e:
                     logger.error(f"{self.__class__.__name__}: Error: {str(e)}. Stack trace: {traceback.format_exc()}")
+
 
     async def subscribe(self, 
                         subscribables: list[ModelSubscribable],
@@ -70,6 +72,7 @@ class ServiceDeribitSubscribe(ModelSubscribable):
         except Exception as e:
             logger.error(f"{self.__class__.__name__}: Error: {str(e)}. Stack trace: {traceback.format_exc()}")
 
+
     async def unsubscribe(self, unsubscribables: list[ModelSubscribable]):
 
         method = "public/unsubscribe"
@@ -85,6 +88,7 @@ class ServiceDeribitSubscribe(ModelSubscribable):
             params["channels"].append(unsubscribable.channel_name)
             
         await self.send_instructions(method, params)
+        
         
     def get_subscriptions(self):
         subscriptions = self.subscriptions

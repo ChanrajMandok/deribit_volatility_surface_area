@@ -19,6 +19,7 @@ class ServiceDeribitOrderbookSummaryHandler():
     def __init__(self) -> None:
         self.store_subscribable_instruments = Stores.store_subscribable_instruments
 
+
     def handle(self, result: dict) -> dict[str, str]:
         """
         Processes and converts the orderbook summary based on the given result.

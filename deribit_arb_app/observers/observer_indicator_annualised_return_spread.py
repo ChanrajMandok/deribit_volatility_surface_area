@@ -1,3 +1,5 @@
+import traceback
+
 from singleton_decorator import singleton
 
 from deribit_arb_app.observers import logger
@@ -14,6 +16,10 @@ from deribit_arb_app.services.builders.service_indicator_annualised_return_sprea
     
 @singleton
 class ObserverIndicatorAnnualisedReturnSpread(ObserverInterface):
+    """
+    Observer class for tracking and updating Annualised Return Spread indicators.
+    Implements Observer pattern to respond to changes in market data.
+    """
 
     def __init__(self) -> None:
         super().__init__()
@@ -22,6 +28,7 @@ class ObserverIndicatorAnnualisedReturnSpread(ObserverInterface):
         self.store_observable_index_prices = Stores.store_observable_index_prices
         self.service_builder = ServiceIndicatorAnnualisedReturnSpreadBuilder()
         self.store_observable_indicator_annualised_spread = Stores.store_indicator_annualised_return_spreads
+
 
     def attach_indicator(self, instance: ModelIndicatorAnnualisedReturnSpread):
         """ Attach this observer to the instance """
@@ -33,25 +40,41 @@ class ObserverIndicatorAnnualisedReturnSpread(ObserverInterface):
             self.store_observable_order_books.get_observable(instrument).attach(self)
         self.store_observable_index_prices.get_observable(instance.index).attach(self)
 
+
     def update(self):
+        """
+        Update method called when observed subjects change. It recalculates the annualised return spreads.
+        """
         for key, instance in self.indicators.items():
             try:
                 indicator = self.service_builder.build(instance)
                 if indicator is not None:
                     self.store_observable_indicator_annualised_spread.update_observable(indicator)
             except Exception as e:
-                logger.error(f"{self.__class__.__name__}: {e}")
+                logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
+                                                        f"Stack trace: {traceback.format_exc()}")
+
 
     def get(self, key) -> ModelIndicatorAnnualisedReturnSpread:
+        """
+        Retrieves an attached indicator by its key.
+        """
         return self.indicators.get(key)
 
+
     def detach_indicator(self, key):
-        """ Detach this observer from the instance """
+        """
+        Detaches an annualised return spread indicator instance from this observer.
+        """
         instance = self.indicators[key]
         for instrument in [instance.instrument_1, instance.instrument_2]:
             self.store_observable_order_books.get_observable(instrument).detach(self)
         self.store_observable_index_prices.get_observable(instance.index).detach(self)
 
+
     def detach_all(self):
+        """
+        Detaches all indicators from this observer.
+        """
         for key in list(self.indicators.keys()):
             self.detach_indicator(key)

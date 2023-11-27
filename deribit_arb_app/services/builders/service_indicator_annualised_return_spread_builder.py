@@ -21,7 +21,9 @@ class ServiceIndicatorAnnualisedReturnSpreadBuilder:
         self.store_observable_order_books = Stores.store_observable_orderbooks
         self.store_observable_index_prices = Stores.store_observable_index_prices
 
-    def build(self, indicator_annualised_return_spread: ModelIndicatorAnnualisedReturnSpread) -> Optional[ModelIndicatorAnnualisedReturnSpread]:
+
+    def build(self, 
+              indicator_annualised_return_spread: ModelIndicatorAnnualisedReturnSpread) -> Optional[ModelIndicatorAnnualisedReturnSpread]:
         """Builds the annualized return spread indicator."""
         # Extracting the instruments and index from the input indicator.
         instrument_1 = indicator_annualised_return_spread.instrument_1

@@ -1,4 +1,5 @@
 import json
+import traceback
 
 from decimal import Decimal
 
@@ -15,8 +16,10 @@ class ConverterJsonToOrderbookSummaryDict:
     a list of ModelOrderbookSummary instances.
     """
     
-    def __init__(self, json_string: str):
+    def __init__(self,
+                 json_string: str):
         self.json_obj = json.loads(json_string)
+
 
     def convert(self) -> list[ModelOrderbookSummary]:
         """Converts the internal JSON object into a list of ModelOrderbookSummary instances. """
@@ -60,5 +63,5 @@ class ConverterJsonToOrderbookSummaryDict:
             return orderbook_summary
         
         except Exception as e:
-            logger.error(f"An error occurred during conversion in {self.__class__.__name__}: {e}")
-            return []
+            logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
+                                                      f"Stack trace: {traceback.format_exc()}")

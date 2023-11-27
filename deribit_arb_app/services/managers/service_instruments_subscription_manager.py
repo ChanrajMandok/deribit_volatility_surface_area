@@ -1,5 +1,6 @@
 import os
 import asyncio
+import traceback
 
 from typing import Optional
 from singleton_decorator import singleton
@@ -27,6 +28,10 @@ from deribit_arb_app.services.retrievers.service_deribit_vsa_instruments_retriev
 
 @singleton
 class ServiceInstrumentsSubscriptionManager():
+    """
+    Manages subscriptions to financial instruments, handling both the subscription
+    and unsubscription of instruments as well as managing observers for implied volatility.
+    """
     
     def __init__(self, implied_volatility_queue: asyncio.Queue):
         self.previous_instruments             = []
@@ -37,13 +42,16 @@ class ServiceInstrumentsSubscriptionManager():
         self.__refresh_increment_mins         = int(os.environ.get('INSTRUMENTS_REFRESH_SECONDS', 3600))
         self.service_bsm_observer_manager     = ServiceImpliedVolatilityObserverManager(self.implied_volatility_queue)
         
+        
     async def manage_instruments(self, 
                                   kind: str,
                                   currency: str,
                                   minimum_liquidity_threshold: int,
                                   index: Optional[ModelSubscribableIndex],
                                   volatility_index: Optional[ModelSubscribableVolatilityIndex]):
-        
+            """
+            Manages instrument subscriptions and unsubscriptions based on liquidity and other criteria.
+            """
             logger.info(f"{self.__class__.__name__} Running ")
 
             while True:
@@ -55,17 +63,20 @@ class ServiceInstrumentsSubscriptionManager():
                     if volatility_index:
                         volatility_index_subscribed = False
 
+                    # Retrieve instruments based on the given criteria
                     instruments = \
                         await self.vsa_instruments_retriever.main(kind=kind,
                                                                   currency=currency,
                                                                   minimum_liquidity_threshold=minimum_liquidity_threshold)
 
+                    # Retrieve instruments based on the given criteria
                     subscriptions = [(index_subscribed, index), (volatility_index_subscribed, volatility_index)]
                     for subs, indexes in subscriptions:
                         if not subs:
                             instruments.insert(0, indexes)
                             subs = True
 
+                    # Manage the subscription of instruments
                     task = self.manage_instrument_subscribables(index=index,
                                                                 instruments=instruments,
                                                                 volatility_index=volatility_index)
@@ -74,17 +85,21 @@ class ServiceInstrumentsSubscriptionManager():
                                                       awaitable=task,  
                                                       origin=f"{self.__class__.__name__} manage_instruments")
 
+                    # Wait before refreshing the instrument list
                     await asyncio.sleep(self.__refresh_increment_mins)
                 except Exception as e:
                     logger.error(f"{self.__class__.__name__}: manage subscriptables error")
                     await asyncio.sleep(self.__refresh_increment_mins)
                     
+                    
     async def manage_instrument_subscribables(self,
                                               instruments: Optional[list[ModelSubscribableInstrument]], 
                                               index: Optional[ModelSubscribableIndex],
                                               volatility_index: Optional[ModelSubscribableVolatilityIndex]):
+        """
+        Handles the subscription and unsubscription of financial instruments.
+        """
         try:      
-
             instrument_names = self.__get_instrument_names(instruments=instruments)
 
         except Exception as e:
@@ -103,7 +118,8 @@ class ServiceInstrumentsSubscriptionManager():
                     [instrument for instrument in self.previous_instruments if instrument.name not in instrument_names]
         
         except Exception as e:
-            logger.error(f"{self.__class__.__name__}: {e}")
+            logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
+                                                      f"Stack trace: {traceback.format_exc()}")
         
         try:
             if len(instruments_subscribables) > 0:
@@ -124,7 +140,8 @@ class ServiceInstrumentsSubscriptionManager():
                                                                                     unsubscribables=instruments_unsubscribables),
                                                                                     logger=logger, origin="manager_observers")
         except Exception as e:
-                logger.error(f"{self.__class__.__name__}: {e}")
+            logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
+                                                      f"Stack trace: {traceback.format_exc()}")
                  
     def __get_instrument_names(self, instruments):
         return [instrument.name for instrument in instruments]

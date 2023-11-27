@@ -38,6 +38,7 @@ class ServiceDeribitGetOrderbookSummary:
                                params=self.params
                                         )
 
+
     async def get(self) -> dict[str, dict[str, ModelPosition]]:
         """
         Fetch the orderbook summary for the specified currency and kind through a websocket connection.

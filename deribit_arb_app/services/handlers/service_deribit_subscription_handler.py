@@ -32,6 +32,7 @@ class ServiceDeribitSubscriptionHandler():
         self.store_observable_index_prices = Stores.store_observable_index_prices
         self.store_observable_volatility_index = Stores.store_observable_volatility_index
 
+
     def handle(self, result: dict) -> None:
         """
         Handles and processes the subscriptions based on the provided result.

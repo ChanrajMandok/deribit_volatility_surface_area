@@ -23,6 +23,7 @@ class ServiceDeribitPositionsHandler():
     def __init__(self) -> None:
         self.store_deribit_positions = StoreDeribitPositions()
         self.positions = None
+       
         
     def set_positions(self, result: dict) -> dict[str, dict[str, ModelPosition]]:
         """

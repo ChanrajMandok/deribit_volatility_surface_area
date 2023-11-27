@@ -22,14 +22,17 @@ class StoreSubscribableInterface(Mapping[E, M]):
     def __iter__(self) -> Iterator[E]:
         return iter(self.d)
         
+        
     def set_subscribables(self, model_subscribable_instance_list: list[M]):
         for subscribable in model_subscribable_instance_list:
             if not subscribable.name in self.d:
                 self.d[subscribable.name] = None
             self.d[subscribable.name] = subscribable
 
+
     def get_subscribables(self) -> dict[E, M]:
         return self.d
+
 
     def get_subscribable_via_key(self, key: E) -> Optional[M]:
         return self.d[key]

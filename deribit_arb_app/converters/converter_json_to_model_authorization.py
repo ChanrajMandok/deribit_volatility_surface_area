@@ -1,4 +1,5 @@
 import json
+import traceback
 
 from deribit_arb_app.converters import logger
 from deribit_arb_app.model.model_authorization import ModelAuthorization
@@ -13,9 +14,10 @@ class ConverterJsonToModelAuthorization():
     into a `ModelAuthorization` instance.
     """
     
-    def __init__(self, json_string):
-
+    def __init__(self,
+                 json_string):
         self.json_obj = json.loads(json_string)
+
 
     def convert(self) -> ModelAuthorization:
         """
@@ -23,6 +25,7 @@ class ConverterJsonToModelAuthorization():
         If the necessary fields (`result`) are absent in the JSON, it returns 
         an empty `ModelAuthorization` instance.
         """
+        
         if 'result' not in self.json_obj:
             return ModelAuthorization()
 
@@ -39,6 +42,7 @@ class ConverterJsonToModelAuthorization():
                                     )
 
         except Exception as e:
-            logger.error(f"{self.__class__.__name__}: {e}")
+            logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
+                                                      f"Stack trace: {traceback.format_exc()}")
 
         return model_auth 

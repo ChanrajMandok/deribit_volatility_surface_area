@@ -1,4 +1,5 @@
 import json
+import traceback
 
 from typing import Optional
 
@@ -18,14 +19,14 @@ class ConverterJsonToModelPositions:
     of ModelPosition instances.
     """
     
-    def __init__(self, json_string: str):
-        """Initialize the converter with the given JSON string."""
-
+    def __init__(self,
+                 json_string: str):
         try:
             self.json_obj = json.loads(json_string)
         except json.JSONDecodeError:
             logger.error(f"Invalid JSON string provided to {self.__class__.__name__}.")
             self.json_obj = None
+
 
     def convert(self) -> Optional[list[ModelPosition]]:
         """
@@ -53,5 +54,6 @@ class ConverterJsonToModelPositions:
             return positions
 
         except Exception as e:
-            logger.error(f"An error occurred during conversion in {self.__class__.__name__}: {e}")
+            logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
+                                                      f"Stack trace: {traceback.format_exc()}")
             return None

@@ -48,6 +48,7 @@ class ServiceDeribitHeartbeat:
             params=self.params_test
         )
 
+
     async def set(self):
         """
         Set the heartbeat for the websocket connection to Deribit and 

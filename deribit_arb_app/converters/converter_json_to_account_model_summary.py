@@ -1,4 +1,5 @@
 import json
+import traceback
 
 from deribit_arb_app.converters import logger
 from deribit_arb_app.model.model_account_summary import ModelAccountSummary
@@ -13,9 +14,10 @@ class ConverterJsonToAccountModelSummary():
     into a ModelAccountSummary instance.
     """
 
-    def __init__(self, json_string):
-
+    def __init__(self,
+                 json_string):
         self.json_obj = json.loads(json_string)
+
 
     def convert(self) -> ModelAccountSummary:
         """Convert the JSON object into a ModelAccountSummary instance."""
@@ -52,28 +54,29 @@ class ConverterJsonToAccountModelSummary():
             projected_maintenance_margin  = json_obj_result['projected_maintenance_margin']
 
             account_summary = ModelAccountSummary(
-                                                available_funds              = available_funds, 
-                                                balance                      = balance, 
-                                                currency                     = currency, 
-                                                delta_total                  = delta_total, 
-                                                equity                       = equity, 
-                                                futures_pl                   = futures_pl, 
-                                                options_pl                   = options_pl, 
-                                                options_delta                = options_delta, 
-                                                options_gamma                = options_gamma, 
-                                                options_theta                = options_theta, 
-                                                options_session_rpl          = options_session_rpl, 
-                                                futures_session_rpl          = futures_session_rpl, 
-                                                futures_session_upl          = futures_session_upl, 
-                                                margin_balance               = margin_balance, 
-                                                projected_initial_margin     = projected_initial_margin, 
-                                                total_pl                     = total_pl, 
-                                                initial_margin               = initial_margin, 
-                                                maintenance_margin           = maintenance_margin, 
-                                                projected_delta_total        = projected_delta_total, 
-                                                projected_maintenance_margin = projected_maintenance_margin, 
-                                                )
+                                                  available_funds              = available_funds, 
+                                                  balance                      = balance, 
+                                                  currency                     = currency, 
+                                                  delta_total                  = delta_total, 
+                                                  equity                       = equity, 
+                                                  futures_pl                   = futures_pl, 
+                                                  options_pl                   = options_pl, 
+                                                  options_delta                = options_delta, 
+                                                  options_gamma                = options_gamma, 
+                                                  options_theta                = options_theta, 
+                                                  options_session_rpl          = options_session_rpl, 
+                                                  futures_session_rpl          = futures_session_rpl, 
+                                                  futures_session_upl          = futures_session_upl, 
+                                                  margin_balance               = margin_balance, 
+                                                  projected_initial_margin     = projected_initial_margin, 
+                                                  total_pl                     = total_pl, 
+                                                  initial_margin               = initial_margin, 
+                                                  maintenance_margin           = maintenance_margin, 
+                                                  projected_delta_total        = projected_delta_total, 
+                                                  projected_maintenance_margin = projected_maintenance_margin, 
+                                                  )
         except Exception as e:
-            logger.error(f"{self.__class__.__name__}: {e}")
+            logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
+                                                      f"Stack trace: {traceback.format_exc()}")
 
         return account_summary

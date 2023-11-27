@@ -1,3 +1,5 @@
+import traceback
+
 import numpy as np
 import matplotlib.cm as cm
 import matplotlib.pyplot as plt
@@ -16,6 +18,7 @@ class ServicePlotVolatilitySurfaceArea():
         self.iv_array = None
         self.ttm_array = None
         self.moneyness_array = None
+
 
     def create_plot(self,
                     iv_array: np.ndarray,
@@ -36,7 +39,9 @@ class ServicePlotVolatilitySurfaceArea():
             self.ax.view_init(elev=30, azim=120)
             
         except Exception as e:
-            logger.error(f"{self.__class__.__name__}: Error in create_plot: {e}")
+            logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
+                                                      f"Stack trace: {traceback.format_exc()}")
+
 
     def update_plot(self, 
                     iv_array: np.ndarray,
@@ -52,18 +57,23 @@ class ServicePlotVolatilitySurfaceArea():
             self.surface = self.ax.plot_surface(moneyness_array, ttm_array, iv_array, cmap=cm.inferno)
             return self.surface
         except Exception as e:
-            logger.error(f"{self.__class__.__name__}: Error in update_plot: {e}")
+            logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
+                                                      f"Stack trace: {traceback.format_exc()}")
+
 
     def animate(self, i):
         try:
             # Ensure these arrays are updated to the most recent before animation frame update
             return (self.update_plot(self.iv_array, self.ttm_array, self.moneyness_array), )
         except Exception as e:
-            logger.error(f"{self.__class__.__name__}: Error in animate: {e}")
+            logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
+                                                      f"Stack trace: {traceback.format_exc()}")
+
 
     def show(self):
         try:
             anim = FuncAnimation(self.fig, self.animate, interval=100, save_count=100, blit=True)
             plt.show(block=False)
         except Exception as e:
-            logger.error(f"{self.__class__.__name__}: Error in show: {e}")
+            logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
+                                                      f"Stack trace: {traceback.format_exc()}")

@@ -1,4 +1,5 @@
 import json
+import traceback
 
 from typing import Optional
 
@@ -15,11 +16,14 @@ from deribit_arb_app.converters.converter_json_object_to_model_order import \
 class ConverterJsonToModelOrder():
     """ Converter class to transform a JSON string into a ModelOrder instance."""
         
-    def __init__(self, json_string: str):
+    def __init__(self,
+                 json_string: str):
         self.json_obj = json.loads(json_string)
+
 
     def convert(self) -> Optional[ModelOrder]:
         """ Converts the internal JSON object into a ModelOrder instance."""
+        
         try:
             # Check if the 'RESULT' field is in the JSON object
             if EnumFieldName.RESULT.value not in self.json_obj:
@@ -38,4 +42,5 @@ class ConverterJsonToModelOrder():
             return x
 
         except Exception as e:
-            logger.error(f"{self.__class__.__name__}: {e}")
+            logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
+                                                      f"Stack trace: {traceback.format_exc()}")

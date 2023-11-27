@@ -21,7 +21,8 @@ class ServicePutCallParityAribtrageBuilder:
         self.store_observable_index_prices = Stores.store_observable_index_prices
         
 
-    def build(self, indicator_put_call_parity_arbtirage: ModelIndicatorPutCallVolArbitrage) -> Optional[ModelIndicatorPutCallVolArbitrage]:
+    def build(self, 
+              indicator_put_call_parity_arbtirage: ModelIndicatorPutCallVolArbitrage) -> Optional[ModelIndicatorPutCallVolArbitrage]:
         ## instruments will already be maturity & strike matched
 
         ## not completed

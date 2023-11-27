@@ -38,6 +38,7 @@ class ServiceDeribitInstruments:
                                 params=self.params
                                 )
 
+
     async def get(self) -> dict[str, ModelSubscribableInstrument]:
         """
         Fetch the instruments for the specified currency and kind using a websocket connection.

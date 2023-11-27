@@ -23,6 +23,7 @@ class ServiceDeribitStaticOrderbookHandler():
         self.store_observable_order_books = Stores.store_observable_orderbooks
         self.orderbook = None
 
+
     def set_orderbooks(self, result: dict) -> None:
         """
         Processes and sets the order books based on the provided result.

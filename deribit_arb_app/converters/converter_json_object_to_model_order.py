@@ -1,3 +1,5 @@
+import traceback
+
 from singleton_decorator import singleton
 
 from deribit_arb_app.converters import logger
@@ -15,8 +17,9 @@ class ConverterJsonObjectToModelOrder():
     A converter class that converts JSON objects representing orders to 
     ModelOrder instances.
     """
-
-    def convert(self, json_order) -> ModelOrder:
+    
+    def convert(self,
+                json_order) -> ModelOrder:
         """
         Converts the provided JSON object to a ModelOrder instance.
         """
@@ -77,7 +80,8 @@ class ConverterJsonObjectToModelOrder():
                     amount                 = amount)
 
             except Exception as e:
-                logger.error(f"{self.__class__.__name__}: {e}")
+                logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
+                                                        f"Stack trace: {traceback.format_exc()}")
 
             if EnumFieldName.TRADES.value in json_order:
                 for trade_data in json_order[EnumFieldName.TRADES.value]:
@@ -88,4 +92,5 @@ class ConverterJsonObjectToModelOrder():
             return order
         
         except Exception as e:
-                logger.error(f"{self.__class__.__name__}: {e}")
+            logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
+                                                      f"Stack trace: {traceback.format_exc()}")

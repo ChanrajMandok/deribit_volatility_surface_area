@@ -20,6 +20,7 @@ class ServiceDeribitAuthenticationHandler():
         self.store_authorization = Stores.store_model_authorization
         self.authorization = None
 
+
     def set_authorization(self, result):
         """
         Process and store the provided authorization data.

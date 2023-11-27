@@ -19,6 +19,7 @@ class ServiceDeribitTestHandler():
     def __init__(self) -> None:
         self.version = None
 
+
     def check_response(self, test_response: dict) -> None:
         """
         Checks and processes the provided test response to extract the version information.

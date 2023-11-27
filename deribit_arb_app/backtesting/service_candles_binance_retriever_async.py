@@ -15,8 +15,8 @@ class ServiceCandlesBinanceRetrieverAsync:
     """
     
     def __init__(self):
-        """Initializes the base_url from environment variable."""
         self.base_url = os.environ['BINANCE_BASE_URL']
+        
         
     def main(self, 
              symbol: str,
@@ -28,6 +28,7 @@ class ServiceCandlesBinanceRetrieverAsync:
         result = asyncio.run(self.fetch_all(timestamps=timestamps, symbol=symbol))
         return result     
     
+    
     async def fetch(self, 
                     symbol: str,
                     timestamp_end: int,
@@ -36,7 +37,6 @@ class ServiceCandlesBinanceRetrieverAsync:
         """
         Asynchronous function to fetch candle data between two timestamps.
         """
-        
         interval = BaseClient.KLINE_INTERVAL_1MINUTE
         retries = 0
         data = []
@@ -53,28 +53,33 @@ class ServiceCandlesBinanceRetrieverAsync:
                         retries += 1
         return data
             
+            
     async def fetch_all(self,
                         symbol: str,
                         timestamps: list ) -> list:
         """
         Asynchronous function to fetch candle data for multiple timestamps.
         """
-        
         tasks = []
         for i in range(1, len(timestamps), 1):
-            task = asyncio.create_task(self.fetch(timestamp_start=timestamps[i], timestamp_end=timestamps[i-1], symbol=symbol)) 
+            task = asyncio.create_task(
+                self.fetch(timestamp_start=timestamps[i],
+                           timestamp_end=timestamps[i-1],
+                           symbol=symbol)) 
             tasks.append(task)
         list_of_candle_list = await asyncio.gather(*tasks)
         result = [x for y in list_of_candle_list for x in y]
         return result
     
-    def ts_increments(self, lookback_period: int) -> list:
+    
+    def ts_increments(self,
+                      lookback_period: int) -> list:
         """
         Function to create timestamps increments.
         """
-        
         increment = 1000    
-        lookback_period = lookback_period + (increment - lookback_period % increment) if lookback_period % increment > 0 else lookback_period
+        lookback_period = lookback_period + (increment - lookback_period % increment) \
+                                            if lookback_period % increment > 0 else lookback_period
         end_time = datetime.now().replace(second=0, microsecond=0)
         
         start_date = end_time - timedelta(minutes=lookback_period + increment)

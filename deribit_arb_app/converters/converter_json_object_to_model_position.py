@@ -1,3 +1,5 @@
+import traceback
+
 from typing import Optional
 
 from deribit_arb_app.converters import logger
@@ -13,8 +15,10 @@ class ConverterJsonObjectToModelPosition():
     A converter class to transform a JSON object into a ModelPosition instance.
     """
 
-    def __init__(self, json_obj):
+    def __init__(self,
+                 json_obj):
         self.json_obj = json_obj
+
 
     def convert(self) -> Optional[ModelOrder]: 
         """
@@ -23,5 +27,8 @@ class ConverterJsonObjectToModelPosition():
         try:
             position = ModelPosition(**self.json_obj)
             return position
+        
         except Exception as e:
-            logger.error(f"{self.__class__.__name__}: {e}")
+            logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
+                                                      f"Stack trace: {traceback.format_exc()}")
+            

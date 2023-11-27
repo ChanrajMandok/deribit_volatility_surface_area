@@ -1,4 +1,6 @@
 import json
+import traceback
+
 from typing import Optional
 
 from deribit_arb_app.converters import logger
@@ -13,8 +15,10 @@ class ConverterJsonToModelObservableOrderBook():
     Converter class that transforms a JSON string  into a `ModelObservableOrderBook` instance.
     """
     
-    def __init__(self, json_string):
+    def __init__(self,
+                 json_string):
         self.json_obj = json.loads(json_string)
+
 
     def convert(self) -> Optional[ModelObservableOrderBook]:
         """
@@ -44,7 +48,8 @@ class ConverterJsonToModelObservableOrderBook():
             return orderbook
 
         except Exception as e:
-            logger.error(f"{self.__class__.__name__}: {e}")
+            logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
+                                                      f"Stack trace: {traceback.format_exc()}")
 
 
     def convert_request_data(self) -> Optional[ModelObservableOrderBook]:
@@ -65,6 +70,7 @@ class ConverterJsonToModelObservableOrderBook():
                                         )
                 
             return orderbook
-        
+            
         except Exception as e:
-            logger.error(f"{self.__class__.__name__}: {e}")
+            logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
+                                                      f"Stack trace: {traceback.format_exc()}")

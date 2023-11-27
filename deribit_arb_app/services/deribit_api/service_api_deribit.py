@@ -33,6 +33,7 @@ class ServiceApiDeribit(ServiceApiInterface):
         self._deribit_orders = ServiceDeribitOrders()
         self._deribit_subscribe = ServiceDeribitSubscribe()
 
+
     async def get_instruments(self, 
                               kind: str,
                               currency: str) -> dict[str, ModelSubscribableInstrument]:
@@ -40,10 +41,12 @@ class ServiceApiDeribit(ServiceApiInterface):
         deribit_instruments = ServiceDeribitInstruments(currency=currency, kind=kind)
         return await deribit_instruments.get()
 
+
     async def get_open_orders(self,
                                currency: str) -> dict[str, dict[str, list[ModelOrder]]]:
         """Retrieve open orders for a given currency"""
         return await self._deribit_orders.get_open_orders_by_currency(currency=currency)
+
 
     async def send_order(self,
                          price: float,
@@ -56,10 +59,12 @@ class ServiceApiDeribit(ServiceApiInterface):
         elif direction == EnumDirection.SELL:
             return await self._deribit_orders.sell_async(instrument_name=instrument.name, amount=amount, price=price)
 
+
     async def cancel_order(self,
                            order_id: str) -> ModelOrder:
         """Cancel an existing order. """
         return await self._deribit_orders.cancel(order_id=order_id)
+
 
     async def get_positions(self,
                             currency: str) -> dict[str, dict[str, ModelPosition]]:
@@ -67,11 +72,13 @@ class ServiceApiDeribit(ServiceApiInterface):
         deribit_positions = ServiceDeribitPositions(currency=currency)
         return await deribit_positions.get()
     
+    
     async def get_account_summary(self,
                                   currency: str) -> ServiceDeribitAccountSummary:
         """Retrieve account summary for a given currency."""
         deribit_account_summary = ServiceDeribitAccountSummary(currency=currency)
         return await deribit_account_summary.get()
+
 
     async def subscribe(self, 
                         subscribables: list[ModelSubscribable]):
@@ -80,11 +87,13 @@ class ServiceApiDeribit(ServiceApiInterface):
         task = self.my_loop.create_task(self._deribit_subscribe.subscribe(subscribables=subscribables, snapshot=False))
         await task
 
+
     async def unsubscribe(self,
                           unsubscribables: list[ModelSubscribable]):
         """Unsubscribe from a list of subscribables."""
         task = self.my_loop.create_task(self._deribit_subscribe.unsubscribe(unsubscribables=unsubscribables))
         await task
+
 
     async def get_orderbook_summary_via_currency(self, 
                                                  kind: str,

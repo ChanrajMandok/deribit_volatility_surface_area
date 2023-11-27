@@ -37,6 +37,7 @@ class ServiceDeribitAccountSummary:
                                params=self.params
                                )
         
+        
     async def get(self):
         """
         Retrieve the account summary from Deribit through websocket.        

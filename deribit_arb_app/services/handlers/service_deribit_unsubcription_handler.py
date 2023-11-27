@@ -18,6 +18,7 @@ class ServiceDeribitUnsubscriptionHandler():
         self.store_observable_order_books = Stores.store_observable_orderbooks
         self.store_observable_index_prices = Stores.store_observable_index_prices
 
+
     def handle(self, result: dict) -> None:
         """
         Processes the provided result to handle unsubscription and remove observables based on channel types.

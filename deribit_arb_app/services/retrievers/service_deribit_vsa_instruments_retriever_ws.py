@@ -18,8 +18,10 @@ class ServiceDeribitVsaInstrumentsRetrieverWs():
         self.service_api_deribit = ServiceApiDeribit()
         self.store_subscribable_instruments = Stores.store_subscribable_instruments
 
+
     async def async_setup(self, currency:str, kind:str):
         await TaskInstrumentsPull().run(currency=currency, kind=kind)
+
 
     async def main(self, currency:str, kind:str, 
                          minimum_liquidity_threshold:int) -> list[ModelSubscribableInstrument]:

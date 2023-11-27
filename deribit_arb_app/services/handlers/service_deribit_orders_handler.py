@@ -28,6 +28,7 @@ class ServiceDeribitOrdersHandler():
     def __init__(self) -> None:
         self.store_deribit_open_orders = StoreDeribitOpenOrders()
 
+
     def set_order(self, result: dict) -> ModelOrder:
         """
         Processes, converts, and sets the order based on the given result.
@@ -39,6 +40,7 @@ class ServiceDeribitOrdersHandler():
             self.store_deribit_open_orders.set_deribit_open_order(order)
         return order
 
+
     def set_cancelled_order(self, result: dict) -> ModelOrder:
         """
         Processes, converts, and removes the cancelled order from the store.
@@ -46,6 +48,7 @@ class ServiceDeribitOrdersHandler():
         order = ConverterJsonToCancelledOrder(json.dumps(result)).convert()
         self.store_deribit_open_orders.remove_deribit_open_order(order)
         return order
+
 
     def set_open_orders(self, result: dict) -> dict[str, dict[str, ModelOrder]]:
         """

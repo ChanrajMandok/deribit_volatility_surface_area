@@ -1,3 +1,5 @@
+import traceback
+
 from deribit_arb_app.converters import logger
 from deribit_arb_app.model.model_subscribable_instrument import \
                                       ModelSubscribableInstrument
@@ -18,7 +20,8 @@ class ConvertInstrumentsListToModelObservableInstrumentList:
     provided instruments list into a ModelObservableInstrumentList instance.
     """
     
-    def convert(self, instruments: list) -> ModelObservableInstrumentList:
+    def convert(self,
+                instruments: list) -> ModelObservableInstrumentList:
         """
         Converts a list of instruments to a ModelObservableInstrumentList.
         
@@ -29,6 +32,7 @@ class ConvertInstrumentsListToModelObservableInstrumentList:
         assigned. All other instruments of type ModelSubscribableInstrument will be
         appended to a list and assigned collectively.
         """
+        
         try:
             # Check the type of each instrument and categorize accordingly.
             list_model_subscribable_instruments = []
@@ -50,4 +54,5 @@ class ConvertInstrumentsListToModelObservableInstrumentList:
             return model_observable_instrument_list 
 
         except Exception as e:
-            logger.error(f"{self.__class__.__name__}: {e}")
+            logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
+                                                      f"Stack trace: {traceback.format_exc()}")

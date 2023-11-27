@@ -22,45 +22,64 @@ from deribit_arb_app.model.indicator_models.model_indicator_bsm_implied_volatili
 
 @singleton
 class ServiceImpliedVolatilityObserverManager:
+    """
+    Manages the observers for implied volatility. This service handles the attaching and detaching
+    of observers to model instruments for tracking their implied volatility.
+    """
+
     def __init__(self, implied_volatility_queue: asyncio.Queue):
         self.implied_volatility_queue = implied_volatility_queue
+        # Initialize the observer for BSM implied volatility
         self.observer_indicator_bsm_implied_volatility = \
-            ObserverIndicatorBsmImpliedVolatility(self.implied_volatility_queue)
+                            ObserverIndicatorBsmImpliedVolatility(self.implied_volatility_queue)
         
     async def manager_observers(self,
-                                index :ModelSubscribableIndex,
-                                volatility_index:ModelSubscribableVolatilityIndex,
+                                index: ModelSubscribableIndex,
+                                volatility_index: ModelSubscribableVolatilityIndex,
                                 subscribables: Optional[list[ModelSubscribableInstrument]],
                                 unsubscribables: Optional[list[ModelSubscribableInstrument]]):
-
-    # observers are internally generated & managed so no corountine is required
-        if subscribables is not None:
+        """
+        Manages the attachment and detachment of observers to and from instruments.
+        """
+        # Attach observers to new instruments
+        if subscribables  and len(subscribables) > 0:
             for instrument in subscribables:
-                if type(instrument) == ModelSubscribableInstrument:
+                # Check if the object is a subscribable instrument
+                if isinstance(instrument, ModelSubscribableInstrument):
                     object_name = f"BSM Implied Volatility-{instrument.name}"
-                    option_type = EnumOptionType.CALL if object_name.rstrip()[-1] == 'C' else EnumOptionType.PUT
+                    # Determine option type based on the instrument's name
+                    option_type = EnumOptionType.CALL if object_name.rstrip()[-1] == 'C' \
+                                                                            else EnumOptionType.PUT
                     try:
+                        # Create an indicator for the instrument and attach an observer
                         indicator = ModelIndicatorBsmImpliedVolatility(
-                            index=index,
-                            name=object_name,
-                            instrument=instrument,
-                            option_type=option_type,
-                            volatility_index=volatility_index
-                        )
+                                                                       index=index,
+                                                                       name=object_name,
+                                                                       instrument=instrument,
+                                                                       option_type=option_type,
+                                                                       volatility_index=volatility_index
+                                                                       )
                         self.observer_indicator_bsm_implied_volatility.attach_indicator(indicator)
-                        # print(f"{str(indicator.key)} observer attached")
                     except Exception as e:
-                        logger.error(f"{self.__class__.__name__}: Error: {str(e)}. Stack trace: {traceback.format_exc()}")
+                        logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
+                                                                f"Stack trace: {traceback.format_exc()}")
+                
+            logger.info(f"{self.__class__.__name__}: {len(subscribables)} Observers attached ")
                     
-        if unsubscribables is not None:
+        # Detach observers from unsubscribed instruments
+        if unsubscribables and len(unsubscribables) > 0:
+            logger.info(f"{self.__class__.__name__}: {len(unsubscribables)} Observers dettached")
             for instrument in unsubscribables:
                 try:
-                    # only detach index from unsubscribables if their are no live observers
+                    # Detach the index and volatility index if there are no active observers
                     if len(self.observer_indicator_bsm_implied_volatility) == 0:
                         unsubscribables.extend([index, volatility_index])
-                    if type(instrument) == ModelSubscribableInstrument:
+                    # Check if the object is a subscribable instrument
+                    if isinstance(instrument, ModelSubscribableInstrument):
+                        # Generate the key for the instrument and detach the observer
                         key = ModelIndicatorBsmImpliedVolatility.generate_key(instrument)
                         self.observer_indicator_bsm_implied_volatility.detach_indicator(key)
-                        # print(f"{str(indicator.key)} observer detached")
                 except Exception as e:
-                        logger.error(f"{self.__class__.__name__}: Error: {str(e)}. Stack trace: {traceback.format_exc()}")
+                    logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
+                                                            f"Stack trace: {traceback.format_exc()}")
+                
