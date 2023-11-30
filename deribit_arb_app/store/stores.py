@@ -28,7 +28,6 @@ from deribit_arb_app.model.indicator_models.model_indicator_put_call_parity_arbi
 class Stores:
     store_model_authorization                   = StoreSingleValueInterface()
     store_model_account_summary                 = StoreSingleValueInterface()
-    store_deribit_vol_index_last_updated        = StoreSingleValueInterface()
 
     store_subscribable_indexes                  = StoreSubscribableInterface[str, ModelSubscribableIndex]() 
     store_subscribable_instruments              = StoreSubscribableInterface[str, ModelSubscribableInstrument]()

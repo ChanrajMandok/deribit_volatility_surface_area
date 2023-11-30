@@ -15,8 +15,6 @@ from deribit_arb_app.converters.convert_json_to_model_observable_volatility_inde
     # Service Handles Deribit Subscriptions via Websocket #
     #######################################################
 
-from singleton_decorator import singleton
-
 @singleton
 class ServiceDeribitSubscriptionHandler():
     """
@@ -31,7 +29,6 @@ class ServiceDeribitSubscriptionHandler():
     def __init__(self) -> None:
         self.store_observable_order_books = Stores.store_observable_orderbooks
         self.store_observable_index_prices = Stores.store_observable_index_prices
-        self.store_vol_index_last_updated = Stores.store_deribit_vol_index_last_updated
         self.store_observable_volatility_index = Stores.store_observable_volatility_index
 
 
@@ -52,8 +49,6 @@ class ServiceDeribitSubscriptionHandler():
 
         if '.' not in channel:
             return None
-        
-        now = int(datetime.now().timestamp()) * 1000
 
         if channel.split('.')[0] == "quote":
             order_book = ConverterJsonToModelObservableOrderBook(json.dumps(result)).convert()
@@ -65,5 +60,4 @@ class ServiceDeribitSubscriptionHandler():
 
         elif channel.split('.')[0] == "deribit_volatility_index":
             volatility_index_value = ConverterJsonToModelObservableVolatilityIndex(json.dumps(result)).convert()
-            self.store_vol_index_last_updated.
             self.store_observable_volatility_index.update_observable(volatility_index_value)

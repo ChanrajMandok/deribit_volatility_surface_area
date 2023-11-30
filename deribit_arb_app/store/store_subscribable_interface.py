@@ -36,7 +36,3 @@ class StoreSubscribableInterface(Mapping[E, M]):
 
     def get_subscribable_via_key(self, key: E) -> Optional[M]:
         return self.d[key]
-    
-    
-
-
