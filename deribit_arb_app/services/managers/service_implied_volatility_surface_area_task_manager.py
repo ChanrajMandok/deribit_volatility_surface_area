@@ -33,7 +33,6 @@ class ServiceImpliedVolatilitySurfaceAreaTaskManager():
 
     def __init__(self):
         self.implied_volatility_queue = asyncio.Queue()
-        self.minimum_liquidity_threshold = int(os.environ.get('VSA_MINIMUM_LIQUIDITY_THRESHOLD', 2500))
         self.service_iv_queue_manager = ServiceImpliedVolatilityQueueManager(self.implied_volatility_queue)
         self.service_instruments_subscription_manager = ServiceInstrumentsSubscriptionManager(self.implied_volatility_queue)
 
@@ -115,8 +114,8 @@ class ServiceImpliedVolatilitySurfaceAreaTaskManager():
                                                                                index=index,
                                                                                currency=currency,
                                                                                volatility_index = volatility_index,
-                                                                               minimum_liquidity_threshold=self.minimum_liquidity_threshold
                                                                                )
+
 
     async def consumer_task(self,
                             plot: bool):

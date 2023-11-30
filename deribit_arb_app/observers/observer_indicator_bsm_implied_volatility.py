@@ -84,6 +84,7 @@ class ObserverIndicatorBsmImpliedVolatility(ObserverInterface):
                     if existing_iv is None or existing_iv != result.implied_volatility:
                         self.implied_volatility_dict[result.name] = result.implied_volatility
                         self.implied_volatility_queue.put_nowait(result)
+                        print(f"{self.implied_volatility_dict[result.name], result.implied_volatility}")
             except Exception as e:
                 logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
                                                         f"Stack trace: {traceback.format_exc()}")

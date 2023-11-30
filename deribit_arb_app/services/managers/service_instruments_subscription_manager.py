@@ -46,7 +46,6 @@ class ServiceInstrumentsSubscriptionManager():
     async def manage_instruments(self, 
                                   kind: str,
                                   currency: str,
-                                  minimum_liquidity_threshold: int,
                                   index: Optional[ModelSubscribableIndex],
                                   volatility_index: Optional[ModelSubscribableVolatilityIndex]):
             """
@@ -65,9 +64,8 @@ class ServiceInstrumentsSubscriptionManager():
 
                     # Retrieve instruments based on the given criteria
                     instruments = \
-                        await self.vsa_instruments_retriever.main(kind=kind,
-                                                                  currency=currency,
-                                                                  minimum_liquidity_threshold=minimum_liquidity_threshold)
+                        await self.vsa_instruments_retriever.retrieve_liquid_instruments(kind=kind,
+                                                                                         currency=currency)
 
                     # Retrieve instruments based on the given criteria
                     subscriptions = [(index_subscribed, index), (volatility_index_subscribed, volatility_index)]

@@ -37,12 +37,12 @@ Observers are employed to observe real-time instrument pricing on the Deribit Ex
 |DATABASE_PASSWORD|
 |DATABASE_PORT|
 |MAX_WORKER|6|
-|VSA_MINIMUM_LIQUIDITY_THRESHOLD|2500
+|VSA_MAX_NUMBER_OF_SUBSCRIPTIONS|=25
 |INSTRUMENTS_REFRESH_SECONDS|3600|
 |INSTRUMENTS_REFRESH|43200
 |MINIMUM_LIQUIDITY_THRESHOLD|10000
-|BASE_WS_URL|wss://www.test.deribit.com/ws/api/v2 |
-|BASE_HTTP_URL|https://test.deribit.com/api/v2/public |
+|BASE_WS_URL|wss://www.test.deribit.com/ws/api/v2|
+|BASE_HTTP_URL|https://test.deribit.com/api/v2/public|
 
 # Design Patterns
 

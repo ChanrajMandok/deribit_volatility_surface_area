@@ -81,98 +81,97 @@ class ServiceImpliedVolatiltySurfaceAreaObjectManager():
                                     model_iv_objects: list[ModelIndicatorBsmImpliedVolatility]) -> None:
         """
         Updates the volatilities in the dictionary with new data from the list of model implied volatility
-        objects.It uses an incremental average calculation for implied volatilities to update existing data points.
+        objects. It always replaces the old volatility value with the new one, storing the implied volatility,
+        moneyness, days to expiration, and current timestamp.
         """
         try:
+            current_time = datetime.now()
             for model_iv_object in model_iv_objects:
-                # Calculate the moneyness (strike price divided by spot price) and round it to maintain precision.
+                # Calculating moneyness and days to expiration
                 reciprocal_spot = 1.0 / model_iv_object.spot
                 moneyness = round(model_iv_object.strike * reciprocal_spot, 5)
+                dte = round(model_iv_object.time_to_maturity * 365, 2)
                 
-                # Calculate days to expiration and convert it to an integer for consistency.
-                dte = int(round(model_iv_object.time_to_maturity * 365))
+                # Using instrument name as the key
+                key = model_iv_object.instrument.name
                 
-                # Form a unique key based on moneyness and days to expiration.
-                key = (moneyness, dte)
-                current_time = datetime.now()
-                old_vol, old_time = self.vol_dict[key]
-                
-                # Update the implied volatility using an incremental average if the data is not stale.
-                # If the data is stale, reset with the new implied volatility.
-                updated_vol = (old_vol * self.counts[key] + model_iv_object.implied_volatility) / \
-                    (self.counts[key] + 1) if old_time > current_time - timedelta(
-                    seconds=self.max_vsa_object_life_seconds) else model_iv_object.implied_volatility
-                    
-                self.vol_dict[key] = (updated_vol, current_time)
-                
-                self.counts[key] = self.counts[key] + 1 if old_time > current_time - timedelta(
-                    seconds=self.max_vsa_object_life_seconds) else 1
-                
+                # Updating the dictionary with the new values
+                self.vol_dict[key] = {
+                    'dte': dte,
+                    'moneyness': moneyness,
+                    'timestamp': current_time,
+                    'implied_volatility': model_iv_object.implied_volatility
+                }
+
+                # Incrementing the count for this instrument
+                self.counts[key] = self.counts.get(key, 0) + 1
+
         except Exception as e:
             logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
-                                                      f"Stack trace: {traceback.format_exc()}")
+                        f"Stack trace: {traceback.format_exc()}")
 
 
     def _remove_stale_entries(self) -> None:
         """
         Removes entries from the volatility dictionary that are older than the defined maximum object life.
-        This helps to ensure that the data remains relevant and up-to-date.
+        This ensures the data remains relevant and up-to-date.
         """
         try:
             current_time = datetime.now()
-            # Identify keys for entries that are older than the max object life threshold.
-            to_remove = [key for key, (vol, timestamp) in self.vol_dict.items() if
-                         timestamp <= current_time - timedelta(seconds=self.max_vsa_object_life_seconds)]
+            max_age = timedelta(seconds=self.max_vsa_object_life_seconds)
             
-            # Remove these stale entries from both the volatility dictionary and the counts.
-            for key in to_remove:
-                del self.vol_dict[key]
-                del self.counts[key]
-                
+            # Identifying keys for entries older than the maximum object life and deleting
+            for key, value in list(self.vol_dict.items()):
+                if current_time - value['timestamp'] > max_age:
+                    del self.vol_dict[key]
+                    del self.counts[key]
+
         except Exception as e:
             logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
-                                                      f"Stack trace: {traceback.format_exc()}")
+                        f"Stack trace: {traceback.format_exc()}")
 
 
     def _update_surface(self) -> None:
         """
         Updates the implied volatility surface using the data in the volatility dictionary.
-        It uses grid interpolation for creating a continuous surface and prepares the data for plotting if required.
+        Utilizes grid interpolation to create a continuous surface and prepares the data for plotting if required.
         """
         try:
-            # Extract moneyness, maturities, and volatilities from the dictionary for surface creation.
-            all_moneyness, all_maturities, all_vols = zip(*[(moneyness, dte, vol) for
-                                                            (moneyness, dte), (vol, timestamp) in self.vol_dict.items()])
+            if len(self.vol_dict) > 0:
+                # Extracting moneyness, maturities, and volatilities from the dictionary
+                all_moneyness, all_maturities, all_vols = zip(*[
+                    (value['moneyness'], value['dte'], value['implied_volatility']) 
+                    for value in self.vol_dict.values() ])
 
-            # Create linearly spaced arrays for moneyness and days to expiration.
-            moneyness_values = np.linspace(min(all_moneyness), max(all_moneyness), 200)
-            days_to_expiry = np.linspace(min(all_maturities), max(all_maturities), 200)
+                grid_size = min(len(self.vol_dict), 200)*2
+                # Creating linearly spaced arrays for moneyness and days to expiration
+                moneyness_values = np.linspace(min(all_moneyness), max(all_moneyness), grid_size)
+                days_to_expiry = np.linspace(min(all_maturities), max(all_maturities), grid_size)
 
-            # Create a meshgrid for moneyness and time-to-maturity.
-            self.moneyness_array, self.ttm_array = np.meshgrid(moneyness_values, days_to_expiry)
+                # Creating a meshgrid for moneyness and time-to-maturity
+                self.moneyness_array, self.ttm_array = np.meshgrid(moneyness_values, days_to_expiry)
 
-            # Use grid interpolation to create a continuous implied volatility surface.
-            self.iv_array = griddata((all_moneyness, all_maturities),
-                                     all_vols, (self.moneyness_array, self.ttm_array), method='linear') 
+                # Using grid interpolation for the implied volatility surface
+                self.iv_array = griddata((all_moneyness, all_maturities),
+                                        all_vols, (self.moneyness_array, self.ttm_array), method='linear') 
 
-            # Adjust the surface to ensure it is arbitrage-free.
-            self.arbitrage_free_adjustment()
+                # Ensuring the surface is arbitrage-free
+                self.arbitrage_free_adjustment()
 
-            # Update or create the plot if plotting is enabled.
-            if self.create_plot:
-                if self.service_plot_volatility_surface_area.surface:
-                    self.service_plot_volatility_surface_area.update_plot(iv_array=self.iv_array,
-                                                                          ttm_array=self.ttm_array,
-                                                                          moneyness_array=self.moneyness_array)
-                
-                else:
-                    self.service_plot_volatility_surface_area.create_plot(iv_array=self.iv_array,
-                                                                        ttm_array=self.ttm_array,
-                                                                        moneyness_array=self.moneyness_array)
+                # Plotting the surface if enabled
+                if self.create_plot:
+                    if self.service_plot_volatility_surface_area.surface:
+                        self.service_plot_volatility_surface_area.update_plot(iv_array=self.iv_array,
+                                                                              ttm_array=self.ttm_array,
+                                                                              moneyness_array=self.moneyness_array)
+                    else:
+                        self.service_plot_volatility_surface_area.create_plot(iv_array=self.iv_array,
+                                                                              ttm_array=self.ttm_array,
+                                                                              moneyness_array=self.moneyness_array)
                     
         except Exception as e:
             logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
-                                                      f"Stack trace: {traceback.format_exc()}")
+                        f"Stack trace: {traceback.format_exc()}")
 
 
     def arbitrage_free_adjustment(self):

@@ -1,4 +1,5 @@
 import json
+import datetime
 
 from singleton_decorator import singleton
 
@@ -30,10 +31,12 @@ class ServiceDeribitSubscriptionHandler():
     def __init__(self) -> None:
         self.store_observable_order_books = Stores.store_observable_orderbooks
         self.store_observable_index_prices = Stores.store_observable_index_prices
+        self.store_vol_index_last_updated = Stores.store_deribit_vol_index_last_updated
         self.store_observable_volatility_index = Stores.store_observable_volatility_index
 
 
-    def handle(self, result: dict) -> None:
+    def handle(self, 
+               result: dict) -> None:
         """
         Handles and processes the subscriptions based on the provided result.
         """
@@ -49,15 +52,18 @@ class ServiceDeribitSubscriptionHandler():
 
         if '.' not in channel:
             return None
+        
+        now = int(datetime.now().timestamp()) * 1000
 
         if channel.split('.')[0] == "quote":
-            self.order_book = ConverterJsonToModelObservableOrderBook(json.dumps(result)).convert()
-            self.store_observable_order_books.update_observable(self.order_book)
+            order_book = ConverterJsonToModelObservableOrderBook(json.dumps(result)).convert()
+            self.store_observable_order_books.update_observable(order_book)
 
         elif channel.split('.')[0] == "deribit_price_index":
-            self.index_index_price = ConverterJsonToModelObservableIndexPrice(json.dumps(result)).convert()
-            self.store_observable_index_prices.update_observable(self.index_index_price)
+            index_index_price = ConverterJsonToModelObservableIndexPrice(json.dumps(result)).convert()
+            self.store_observable_index_prices.update_observable(index_index_price)
 
         elif channel.split('.')[0] == "deribit_volatility_index":
-            self.volatility_index_value = ConverterJsonToModelObservableVolatilityIndex(json.dumps(result)).convert()
-            self.store_observable_volatility_index.update_observable(self.volatility_index_value)
+            volatility_index_value = ConverterJsonToModelObservableVolatilityIndex(json.dumps(result)).convert()
+            self.store_vol_index_last_updated.
+            self.store_observable_volatility_index.update_observable(volatility_index_value)

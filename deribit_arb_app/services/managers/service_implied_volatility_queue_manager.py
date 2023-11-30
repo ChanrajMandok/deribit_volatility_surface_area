@@ -1,3 +1,4 @@
+import os
 import asyncio
 import traceback
 
@@ -25,9 +26,12 @@ class ServiceImpliedVolatilityQueueManager():
     def __init__(self, 
                  implied_volatility_queue:asyncio.Queue) -> None:
         self.vsa_created                 = False
+        self.implied_volatility_set      = set() 
         self.implied_volatility_cache    = deque()
         self.implied_volatility_queue    = implied_volatility_queue
         self.service_vsa_object_manager  = ServiceImpliedVolatiltySurfaceAreaObjectManager()
+        self.__vsa_max_num_subscriptions = int(os.environ.get('VSA_MAX_NUMBER_OF_SUBSCRIPTIONS', 25))
+        self.__vsa_update_increment_max  = int(self.__vsa_max_num_subscriptions/2.25)
         
         
     async def manage_implied_volatility_queue(self,
@@ -42,6 +46,7 @@ class ServiceImpliedVolatilityQueueManager():
                 # Process items in the queue if it's not empty
                 if self.implied_volatility_queue.qsize() > 0:
                     model_iv_object = self.implied_volatility_queue.get_nowait()
+                    instrument_name = model_iv_object.instrument.name 
                     
                     required_fields = ['strike', 'time_to_maturity', 'implied_volatility', 'option_type']
                     # Required fields for a valid implied volatility object
@@ -51,27 +56,31 @@ class ServiceImpliedVolatilityQueueManager():
                             f"Incorrect object or missing fields received in implied_volatility_queue")
                         continue
                     
-                    ## if all checks pass add to cache
-                    self.implied_volatility_cache.append(model_iv_object)
+                    ## check for collision to ensure most recent instrument object is in the queue
+                    if instrument_name not in self.implied_volatility_set:
+                        self.implied_volatility_set.add(instrument_name)
+                        self.implied_volatility_cache.append(model_iv_object)
                     
+                    
+                    print(len(self.implied_volatility_cache))
                     # if not vsa_created and cache is of adequete size, trigger initial creation of vsa object
-                    if len(self.implied_volatility_cache) >= 50 and not self.vsa_created:
+                    if len(self.implied_volatility_cache) >= int(self.__vsa_update_increment_max) and not self.vsa_created:
                         # Assign current cache to a local variable
                         current_cache = self.implied_volatility_cache
                         # Clear the cache
-                        self.implied_volatility_cache = deque()
+                        self.implied_volatility_cache.clear()
+                        self.implied_volatility_set.clear()
 
                         # Use the local variable for task deployment
                         task = self.service_vsa_object_manager.create_vsa_surface(plot=plot,
                                                                                   model_iv_objects=current_cache)
-                        asyncio_create_task_log_exception(
-                            logger=logger,
-                            awaitable=task,
-                            origin=f"{self.__class__.__name__} manage_iv_queue")
+                        asyncio_create_task_log_exception(logger=logger,
+                                                          awaitable=task,
+                                                          origin=f"{self.__class__.__name__} manage_iv_queue")
                         self.vsa_created = True
                     
-                    # if  vsa_created and cache is of adequete size, trigger update of vsa object
-                    if self.vsa_created and len(self.implied_volatility_cache) >= 10:
+                    # if vsa_created and cache is of adequete size, trigger update of vsa object
+                    if self.vsa_created and len(self.implied_volatility_cache) >= self.__vsa_update_increment_max:
                         # Assign current cache to a local variable
                         current_cache = self.implied_volatility_cache
                         # Clear the cache
@@ -79,8 +88,7 @@ class ServiceImpliedVolatilityQueueManager():
 
                         # Use the local variable for task deployment
                         task = self.service_vsa_object_manager.update_vsa_surface(model_iv_objects=current_cache)
-                        asyncio_create_task_log_exception(
-                                                          logger=logger,
+                        asyncio_create_task_log_exception(logger=logger,
                                                           awaitable=task,
                                                           origin=f"{self.__class__.__name__} manage_iv_queue")
                     

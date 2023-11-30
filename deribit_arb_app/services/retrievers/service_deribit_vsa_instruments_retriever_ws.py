@@ -1,4 +1,5 @@
-from decimal import Decimal
+import os
+import heapq
 
 from deribit_arb_app.services import logger
 from deribit_arb_app.store.stores import Stores
@@ -13,26 +14,66 @@ from deribit_arb_app.tasks.task_instruments_pull import TaskInstrumentsPull
     #################################################################
 
 class ServiceDeribitVsaInstrumentsRetrieverWs():
+    """
+    This class retrieves the most liquid instruments from Deribit's API based on volume.
+    It maintains a list of subscribable instruments and uses the Deribit API service for fetching orderbook summaries.
+    """
 
     def __init__(self):        
         self.service_api_deribit = ServiceApiDeribit()
         self.store_subscribable_instruments = Stores.store_subscribable_instruments
+        self.__vsa_max_num_subscriptions = int(os.environ.get(
+                                                'VSA_MAX_NUMBER_OF_SUBSCRIPTIONS', 25))
 
 
-    async def async_setup(self, currency:str, kind:str):
+    async def async_setup(self,
+                          kind: str,
+                          currency: str):
+        """
+        Performs initial setup by pulling instruments based on currency and kind.
+
+        Args:
+            kind (str): The type of instrument (e.g., futures, options).
+            currency (str): The currency for the instruments (e.g., BTC, ETH).
+        """
         await TaskInstrumentsPull().run(currency=currency, kind=kind)
 
 
-    async def main(self, currency:str, kind:str, 
-                         minimum_liquidity_threshold:int) -> list[ModelSubscribableInstrument]:
-        
+    async def retrieve_liquid_instruments(self,
+                                          kind: str,
+                                          currency: str) -> list[ModelSubscribableInstrument]:
+        """
+        Retrieves the most liquid instruments based on orderbook volumes.
+
+        Args:
+            kind (str): The type of instrument (e.g., futures, options).
+            currency (str): The currency for the instruments (e.g., BTC, ETH).
+
+        Returns:
+            list[ModelSubscribableInstrument]: A list of the most liquid instruments.
+        """
         store_subscribable_instruments = self.store_subscribable_instruments.get_subscribables()
         if not store_subscribable_instruments: 
             await self.async_setup(currency=currency, kind=kind)
-        instruments = list(filter(lambda x: x.kind == kind and x.base_currency == currency, store_subscribable_instruments.values()))
-        orderbook_summaries = await self.service_api_deribit.get_orderbook_summary_via_currency(currency=currency, kind=kind)
-        liquid_instrument_names = [x.instrument_name for x in orderbook_summaries if \
-                          x.volume_usd is not None and x.volume_usd > Decimal(str(minimum_liquidity_threshold))]
-        result = [x for x in instruments if x.name in liquid_instrument_names]
-        logger.info(f"{self.__class__.__name__}: Liquid Instruments Retrieved")
+
+        orderbook_summaries = await self.service_api_deribit.get_orderbook_summary_via_currency(
+            kind=kind, currency=currency)
+
+        # Find the top instruments by volume using a heap for efficiency
+        top_instruments_heap = heapq.nlargest(
+            self.__vsa_max_num_subscriptions,
+            ((summary.volume_usd, summary.instrument_name) for summary in orderbook_summaries \
+                                                                if summary.volume_usd is not None),
+            key=lambda x: x[0]
+        )
+
+        # Extract instrument names from the top of the heap
+        top_liquid_instrument_names = {name for _, name in top_instruments_heap}
+
+        # Compile the list of top liquid instruments
+        result = [instr for instr in store_subscribable_instruments.values()
+                  if instr.kind == kind and instr.base_currency == currency and \
+                                                        instr.name in top_liquid_instrument_names]
+
+        logger.info(f"{self.__class__.__name__}: {self.__vsa_max_num_subscriptions} Liquid Instruments Retrieved")
         return result

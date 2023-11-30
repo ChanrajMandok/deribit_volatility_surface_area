@@ -14,7 +14,7 @@ from deribit_arb_app.model.model_observable_volatility_index import \
                                        ModelObservableVolatilityIndex
 from deribit_arb_app.store.store_observable_indicator_interface import \
                                        StoreObservableIndicatorInterface
-from deribit_arb_app.store.store_deribit_interface import StoreDeribitInterface
+from deribit_arb_app.store.store_deribit_interface import StoreSingleValueInterface
 from deribit_arb_app.model.model_subscribable_index import ModelSubscribableIndex
 from deribit_arb_app.model.indicator_models.model_indicator_annualised_return_spread import \
                                                          ModelIndicatorAnnualisedReturnSpread
@@ -26,8 +26,9 @@ from deribit_arb_app.model.indicator_models.model_indicator_put_call_parity_arbi
     ############################################################################
 
 class Stores:
-    store_model_authorization                   = StoreDeribitInterface()
-    store_model_account_summary                 = StoreDeribitInterface()
+    store_model_authorization                   = StoreSingleValueInterface()
+    store_model_account_summary                 = StoreSingleValueInterface()
+    store_deribit_vol_index_last_updated        = StoreSingleValueInterface()
 
     store_subscribable_indexes                  = StoreSubscribableInterface[str, ModelSubscribableIndex]() 
     store_subscribable_instruments              = StoreSubscribableInterface[str, ModelSubscribableInstrument]()
