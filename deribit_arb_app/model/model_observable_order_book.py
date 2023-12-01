@@ -5,7 +5,7 @@ from deribit_arb_app.model.model_observable import ModelObservable
     # Model for Orderbook (Observable) Objects #
     #############################################
 
-class ModelObservableOrderBook(ModelObservable , models.Model):
+class ModelObservableOrderBook(ModelObservable, models.Model):
 
     name                  = models.CharField(null=False, max_length=100)
     best_bid_price        = models.DecimalField(max_digits=20, decimal_places=8, null=True)
@@ -19,4 +19,3 @@ class ModelObservableOrderBook(ModelObservable , models.Model):
         
     class Meta:
         managed = False 
-        

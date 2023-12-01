@@ -41,4 +41,4 @@ class ObservableInterface(ABC, Generic[T]):
 
     def notify(self) -> None:
         for observer in self.observers:
-            observer.update()
+            observer.update(observable=self.instance)

@@ -24,15 +24,22 @@ class ModelIndicatorBsmImpliedVolatility(ModelObservable, models.Model):
     timestamp           = models.IntegerField(null=True)
     
     def __init__(self, *args, **kwargs):
-        instrument_name = kwargs['name'] if 'name' in kwargs else None
-        key = f"BSM Implied Volatility-{instrument_name}"
+        instrument_name = kwargs.get('name', None)
+        if instrument_name is not None and 'BSM Implied Volatility-' not in instrument_name:
+            key = f"BSM Implied Volatility-{instrument_name}"
+        else:
+            key = instrument_name
         super().__init__(key=key, *args, **kwargs)
 
     class Meta:
         managed = False 
         
-    def generate_key(self, instrument):
+    def generate_key_from_instrument(self, instrument: ModelSubscribableInstrument):
         key = f"BSM Implied Volatility-{instrument.name}"
+        return key
+    
+    def generate_key_from_str(self, instrument: str):
+        key = f"BSM Implied Volatility-{instrument}"
         return key
     
     def __repr__(self):

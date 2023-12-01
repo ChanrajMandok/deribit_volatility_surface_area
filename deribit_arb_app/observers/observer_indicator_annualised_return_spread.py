@@ -1,6 +1,7 @@
 import traceback
 
 from singleton_decorator import singleton
+from deribit_arb_app.model.model_observable import ModelObservable
 
 from deribit_arb_app.observers import logger
 from deribit_arb_app.store.stores import Stores
@@ -41,18 +42,20 @@ class ObserverIndicatorAnnualisedReturnSpread(ObserverInterface):
         self.store_observable_index_prices.get_observable(instance.index).attach(self)
 
 
-    def update(self):
+    def update(self, 
+               observable: ModelObservable):
         """
         Update method called when observed subjects change. It recalculates the annualised return spreads.
         """
-        for key, instance in self.indicators.items():
-            try:
+        
+        try:
+            for key, instance in self.indicators.items():
                 indicator = self.service_builder.build(instance)
                 if indicator is not None:
                     self.store_observable_indicator_annualised_spread.update_observable(indicator)
-            except Exception as e:
-                logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
-                                                        f"Stack trace: {traceback.format_exc()}")
+        except Exception as e:
+            logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
+                                                    f"Stack trace: {traceback.format_exc()}")
 
 
     def get(self, key) -> ModelIndicatorAnnualisedReturnSpread:

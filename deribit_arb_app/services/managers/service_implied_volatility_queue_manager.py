@@ -61,8 +61,6 @@ class ServiceImpliedVolatilityQueueManager():
                         self.implied_volatility_set.add(instrument_name)
                         self.implied_volatility_cache.append(model_iv_object)
                     
-                    
-                    print(len(self.implied_volatility_cache))
                     # if not vsa_created and cache is of adequete size, trigger initial creation of vsa object
                     if len(self.implied_volatility_cache) >= int(self.__vsa_update_increment_max) and not self.vsa_created:
                         # Assign current cache to a local variable

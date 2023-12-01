@@ -77,7 +77,7 @@ class ServiceImpliedVolatilityObserverManager:
                     # Check if the object is a subscribable instrument
                     if isinstance(instrument, ModelSubscribableInstrument):
                         # Generate the key for the instrument and detach the observer
-                        key = ModelIndicatorBsmImpliedVolatility.generate_key(instrument)
+                        key = ModelIndicatorBsmImpliedVolatility.generate_key_from_instrument(instrument)
                         self.observer_indicator_bsm_implied_volatility.detach_indicator(key)
                 except Exception as e:
                     logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
