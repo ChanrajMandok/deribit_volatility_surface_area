@@ -138,12 +138,23 @@ class ServiceImpliedVolatiltySurfaceAreaObjectManager():
         """
         try:
             if len(self.vol_dict) > 0:
-                # Extracting moneyness, maturities, and volatilities from the dictionary
-                all_moneyness, all_maturities, all_vols = zip(*[
-                    (value['moneyness'], value['dte'], value['implied_volatility']) 
-                    for value in self.vol_dict.values() ])
+            # Extracting and filtering in one pass
+                valid_entries = [
+                    (self.vol_dict[key]['moneyness'], self.vol_dict[key]['dte'], self.vol_dict[key]['implied_volatility'])
+                    for key in self.vol_dict
+                    if not (
+                        np.isnan([self.vol_dict[key]['moneyness'], self.vol_dict[key]['dte'], self.vol_dict[key]['implied_volatility']]).any() or
+                        np.isinf([self.vol_dict[key]['moneyness'], self.vol_dict[key]['dte'], self.vol_dict[key]['implied_volatility']]).any()
+                    )
+                ]
 
-                grid_size = min(len(self.vol_dict), 200)*2
+                if not valid_entries:
+                    raise ValueError("Input data contains NaN or infinite values.")
+                    return
+
+                all_moneyness, all_maturities, all_vols = zip(*valid_entries)
+
+                grid_size = min(len(valid_entries), 200) * 2
                 # Creating linearly spaced arrays for moneyness and days to expiration
                 moneyness_values = np.linspace(min(all_moneyness), max(all_moneyness), grid_size)
                 days_to_expiry = np.linspace(min(all_maturities), max(all_maturities), grid_size)
@@ -153,7 +164,7 @@ class ServiceImpliedVolatiltySurfaceAreaObjectManager():
 
                 # Using grid interpolation for the implied volatility surface
                 self.iv_array = griddata((all_moneyness, all_maturities),
-                                        all_vols, (self.moneyness_array, self.ttm_array), method='linear') 
+                                        all_vols, (self.moneyness_array, self.ttm_array), method='cubic')
 
                 # Ensuring the surface is arbitrage-free
                 self.arbitrage_free_adjustment()
@@ -162,16 +173,16 @@ class ServiceImpliedVolatiltySurfaceAreaObjectManager():
                 if self.create_plot:
                     if self.service_plot_volatility_surface_area.surface:
                         self.service_plot_volatility_surface_area.update_plot(iv_array=self.iv_array,
-                                                                              ttm_array=self.ttm_array,
-                                                                              moneyness_array=self.moneyness_array)
+                                                                            ttm_array=self.ttm_array,
+                                                                            moneyness_array=self.moneyness_array)
                     else:
                         self.service_plot_volatility_surface_area.create_plot(iv_array=self.iv_array,
-                                                                              ttm_array=self.ttm_array,
-                                                                              moneyness_array=self.moneyness_array)
-                    
+                                                                            ttm_array=self.ttm_array,
+                                                                            moneyness_array=self.moneyness_array)
+                            
         except Exception as e:
             logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
-                        f"Stack trace: {traceback.format_exc()}")
+                                                    f"Stack trace: {traceback.format_exc()}")
 
 
     def arbitrage_free_adjustment(self):
