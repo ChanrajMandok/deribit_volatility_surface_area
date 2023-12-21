@@ -3,45 +3,46 @@ import json
 from singleton_decorator import singleton
 
 from deribit_arb_app.model.model_message import ModelMessage
-from deribit_arb_app.model.model_position import ModelPosition
+from deribit_arb_app.model.model_subscribable_instrument import \
+                                      ModelSubscribableInstrument
 from deribit_arb_app.services.deribit_api.service_deribit_messaging import \
                                                      ServiceDeribitMessaging
+from deribit_arb_app.model.model_orderbook_summary import ModelOrderbookSummary
 from deribit_arb_app.services.deribit_api.service_deribit_authentication import \
                                                      ServiceDeribitAuthentication
 from deribit_arb_app.services.deribit_api.service_deribit_websocket_connector import \
                                                       ServiceDeribitWebsocketConnector
-
     ################################################################################
     # Service Retrieves Deribit Orderbook Summary by Currency & Kind via Websocket #
     ################################################################################
 
 @singleton
-class ServiceDeribitGetOrderbookSummary:
+class ServiceDeribitOrderbookStoreUpdaterByInstrument:
     """
-    Service class to fetch the orderbook summary for a specified currency and kind from Deribit.
+    Service class to fetch the orderbook summary for a specified instrument from Deribit.
     """
     
-    def __init__(self, currency: str, kind: str):
+    def __init__(self, 
+                 instrument: str):
         self.deribit_messaging = ServiceDeribitMessaging()
 
         self.params = {
-            "currency": currency,
-            "kind": kind
+            "instrument_name" : instrument
         }
 
-        self.method = "public/get_book_summary_by_currency"
+        self.method = "public/get_book_summary_by_instrument"
 
         self.msg_id = self.deribit_messaging.generate_id(self.method)
 
         self.msg = ModelMessage(msg_id=self.msg_id,
-                               method=self.method,
-                               params=self.params
-                                        )
+                                method=self.method,
+                                params=self.params
+                                )
 
 
-    async def get(self) -> dict[str, dict[str, ModelPosition]]:
+    async def get(self) -> dict[str, dict[str, ModelOrderbookSummary]]:
         """
-        Fetch the orderbook summary for the specified currency and kind through a websocket connection.
+        Fetch the orderbook summary for the specified instrument via a websocket connection.
         """
         async with ServiceDeribitWebsocketConnector() as websocket:
             await ServiceDeribitAuthentication().authenticate(websocket)

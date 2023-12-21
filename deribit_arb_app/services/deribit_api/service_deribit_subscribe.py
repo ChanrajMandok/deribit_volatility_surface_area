@@ -86,10 +86,13 @@ class ServiceDeribitSubscribe(ModelSubscribable):
             if unsubscribable in self.subscriptions:
                 self.subscriptions.remove(unsubscribable)
             params["channels"].append(unsubscribable.channel_name)
-            
-        await self.send_instructions(method, params)
-        
-        
+
+        try:
+            await self.send_instructions(method, params)
+        except Exception as e:
+            logger.error(f"{self.__class__.__name__}: Error: {str(e)}. Stack trace: {traceback.format_exc()}")
+
+
     def get_subscriptions(self):
         subscriptions = self.subscriptions
         return subscriptions

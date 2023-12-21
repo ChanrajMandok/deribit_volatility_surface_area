@@ -10,8 +10,6 @@ from deribit_arb_app.converters.converter_json_to_model_observable_order_book im
     # Service handles Deribit orderbook instances retrived via aiohttp #
     ####################################################################
 
-from singleton_decorator import singleton
-
 @singleton
 class ServiceDeribitStaticOrderbookHandler():
     """

@@ -1,11 +1,13 @@
+import traceback
+
 from typing import Optional
 
+from deribit_arb_app.services import logger
 from deribit_arb_app.model.model_order import ModelOrder
 from deribit_arb_app.model.model_position import ModelPosition
 from deribit_arb_app.enums.enum_direction import EnumDirection
 from deribit_arb_app.model.model_subscribable_instrument import \
                                       ModelSubscribableInstrument
-from deribit_arb_app.model.model_subscribable import ModelSubscribable
 from deribit_arb_app.services.deribit_api.service_api_interface import \
                                                      ServiceApiInterface
 from deribit_arb_app.services.deribit_api.service_deribit_orders import \
@@ -18,8 +20,10 @@ from deribit_arb_app.services.deribit_api.service_deribit_instruments import \
                                                      ServiceDeribitInstruments
 from deribit_arb_app.services.deribit_api.service_deribit_account_summary import \
                                                       ServiceDeribitAccountSummary
-from deribit_arb_app.services.deribit_api.service_deribit_get_orderbook_summary import \
-                                                       ServiceDeribitGetOrderbookSummary
+from deribit_arb_app.services.deribit_api.service_deribit_get_orderbook_summary_by_currency import \
+                                                         ServiceDeribitGetOrderbookSummaryByCurrency
+from deribit_arb_app.services.deribit_api.service_deribit_orderbook_store_updater_by_instrument import \
+                                                         ServiceDeribitOrderbookStoreUpdaterByInstrument
                                                        
     ################################################################################
     # Service Implements Deribit API to provide Framework to trade via Deribit API #
@@ -80,24 +84,28 @@ class ServiceApiDeribit(ServiceApiInterface):
         return await deribit_account_summary.get()
 
 
-    async def subscribe(self, 
-                        subscribables: list[ModelSubscribable]):
-        """Subscribe to a list of subscribables."""
+    async def get_orderbook_summary_via_instruments(self, 
+                                                    instruments : list[ModelSubscribableInstrument]): 
+        """Retrieve orderbook summary for a specific instrument """
+
+        try:    
+            instrument_orderbooks = []
+            for instrument in instruments:
+                service_deribit_get_orderbook_summary = \
+                                ServiceDeribitOrderbookStoreUpdaterByInstrument(instrument.name)        
+                instrument_orderbook =  await service_deribit_get_orderbook_summary.get()
+                instrument_orderbooks.append(instrument_orderbook)
+            return instrument_orderbooks
+
+        except Exception as e:
+            logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
+                                                    f"Stack trace: {traceback.format_exc()}")
+            return instrument_orderbooks
         
-        task = self.my_loop.create_task(self._deribit_subscribe.subscribe(subscribables=subscribables, snapshot=False))
-        await task
-
-
-    async def unsubscribe(self,
-                          unsubscribables: list[ModelSubscribable]):
-        """Unsubscribe from a list of subscribables."""
-        task = self.my_loop.create_task(self._deribit_subscribe.unsubscribe(unsubscribables=unsubscribables))
-        await task
-
-
+        
     async def get_orderbook_summary_via_currency(self, 
                                                  kind: str,
                                                  currency: str): 
         """Retrieve orderbook summary for a specific currency and kind."""
-        service_deribit_get_orderbook_summary = ServiceDeribitGetOrderbookSummary(currency=currency, kind=kind)        
+        service_deribit_get_orderbook_summary = ServiceDeribitGetOrderbookSummaryByCurrency(currency=currency, kind=kind)        
         return await service_deribit_get_orderbook_summary.get()

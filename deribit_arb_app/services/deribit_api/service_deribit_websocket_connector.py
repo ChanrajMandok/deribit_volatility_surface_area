@@ -1,4 +1,6 @@
 import os
+import ssl
+import certifi
 import websockets
 
 from singleton_decorator import singleton
@@ -24,7 +26,9 @@ class ServiceDeribitWebsocketConnector():
         Returns:
         - WebSocketClientProtocol: An established websocket connection.
         """
-        self.websocket = await websockets.connect(self.base_ws)
+
+        ssl_context = ssl.create_default_context(cafile=certifi.where())
+        self.websocket = await websockets.connect(self.base_ws, ssl=ssl_context)
         return self.websocket
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):

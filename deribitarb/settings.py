@@ -135,6 +135,7 @@ SHELL_PLUS_IMPORTS = [
     'from deribit_arb_app.services.retrievers.service_deribit_vsa_instruments_retriever_ws import ServiceDeribitVsaInstrumentsRetrieverWs',
     'from deribit_arb_app.backtesting.deribit_retrieve_historical_funding_rates_async import ServiceDeribitRetrieveHistoricalFundingRatesAsync',
     'from deribit_arb_app.services.managers.service_implied_volatility_surface_area_task_manager import ServiceImpliedVolatilitySurfaceAreaTaskManager',
+    'from deribit_arb_app.services.deribit_api.service_deribit_orderbook_store_updater_by_instrument import ServiceDeribitOrderbookStoreUpdaterByInstrument'
 ]
 
 ASYNCIO_DEBUG = False

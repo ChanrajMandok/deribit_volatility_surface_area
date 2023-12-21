@@ -8,7 +8,7 @@ from deribit_arb_app.converters.converter_json_to_model_observable_order_book im
                                                ConverterJsonToModelObservableOrderBook
 from deribit_arb_app.converters.converter_json_to_model_observable_index_price import \
                                                ConverterJsonToModelObservableIndexPrice
-from deribit_arb_app.converters.convert_json_to_model_observable_volatility_index import \
+from deribit_arb_app.converters.converter_json_to_model_observable_volatility_index import \
                                              ConverterJsonToModelObservableVolatilityIndex
 
     #######################################################

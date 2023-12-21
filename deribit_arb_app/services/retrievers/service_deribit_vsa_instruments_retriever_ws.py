@@ -75,5 +75,5 @@ class ServiceDeribitVsaInstrumentsRetrieverWs():
                   if instr.kind == kind and instr.base_currency == currency and \
                                                         instr.name in top_liquid_instrument_names]
 
-        logger.info(f"{self.__class__.__name__}: {self.__vsa_max_num_subscriptions} Liquid Instruments Retrieved")
+        # logger.info(f"{self.__class__.__name__}: {self.__vsa_max_num_subscriptions} Liquid Instruments Retrieved")
         return result
