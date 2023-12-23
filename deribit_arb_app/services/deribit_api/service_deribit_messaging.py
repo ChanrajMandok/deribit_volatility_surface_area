@@ -94,7 +94,8 @@ class ServiceDeribitMessaging():
                 return None, None
 
         except Exception as e:
-            logger.error(f"{self.__class__.__name__}: Error: {str(e)}. Stack trace: {traceback.format_exc()}")
+            logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
+                         f"Stack trace: {traceback.format_exc()}")
 
 
     def generate_id(self, method) -> int:
@@ -125,7 +126,8 @@ class ServiceDeribitMessaging():
             msg_id = 1000000 + msg_id
         elif method == "private/cancel_all":
             msg_id = 1100000 + msg_id
-        elif method == "public/get_book_summary_by_currency":
+        elif (method == "public/get_book_summary_by_currency") or \
+                    (method=="public/get_book_summary_by_instrument"):
             msg_id = 1200000 + msg_id
 
         return msg_id

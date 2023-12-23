@@ -45,7 +45,8 @@ class ServiceDeribitSubscribe(ModelSubscribable):
                     if snapshot and id_or_method == "subscription":
                         break
                 except Exception as e:
-                    logger.error(f"{self.__class__.__name__}: Error: {str(e)}. Stack trace: {traceback.format_exc()}")
+                    logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
+                                f"Stack trace: {traceback.format_exc()}")
 
 
     async def subscribe(self, 
@@ -61,7 +62,8 @@ class ServiceDeribitSubscribe(ModelSubscribable):
         }
         
         if len(subscribables) > 1: 
-            logger.info(f"{self.__class__.__name__}: {len(subscribables)} Ws Instrument Streams Subscribed")
+            logger.info(f"{self.__class__.__name__}: {len(subscribables)}" \
+                        f"Ws Instrument Streams Subscribed")
         for subscribable in subscribables:
             params["channels"].append(subscribable.channel_name)
             if snapshot==False:
@@ -70,7 +72,8 @@ class ServiceDeribitSubscribe(ModelSubscribable):
         try:
             await self.send_instructions(method, params, snapshot)
         except Exception as e:
-            logger.error(f"{self.__class__.__name__}: Error: {str(e)}. Stack trace: {traceback.format_exc()}")
+            logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
+                         f"Stack trace: {traceback.format_exc()}")
 
 
     async def unsubscribe(self, unsubscribables: list[ModelSubscribable]):
@@ -81,7 +84,8 @@ class ServiceDeribitSubscribe(ModelSubscribable):
             "channels": []
         }
         if len(unsubscribables) > 1: 
-            logger.info(f"{self.__class__.__name__}: {len(unsubscribables)} Ws Instrument Streams Unsubscribed")
+            logger.info(f"{self.__class__.__name__}: {len(unsubscribables)}"\
+                        f"Ws Instrument Streams Unsubscribed")
         for unsubscribable in unsubscribables:
             if unsubscribable in self.subscriptions:
                 self.subscriptions.remove(unsubscribable)
@@ -90,7 +94,8 @@ class ServiceDeribitSubscribe(ModelSubscribable):
         try:
             await self.send_instructions(method, params)
         except Exception as e:
-            logger.error(f"{self.__class__.__name__}: Error: {str(e)}. Stack trace: {traceback.format_exc()}")
+            logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
+                         f"Stack trace: {traceback.format_exc()}")
 
 
     def get_subscriptions(self):

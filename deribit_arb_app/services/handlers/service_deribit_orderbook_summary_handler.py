@@ -3,8 +3,8 @@ import json
 from singleton_decorator import singleton
 
 from deribit_arb_app.store.stores import Stores
-from deribit_arb_app.converters.converter_json_to_orderbook_summary_dict import \
-                                              ConverterJsonToOrderbookSummaryDict
+from deribit_arb_app.converters.converter_json_to_model_orderbook_summary import \
+                                              ConverterJsonToModelOrderbookSummary
     
     #############################################
     # Service handles Deribit orderbook summary #
@@ -24,5 +24,5 @@ class ServiceDeribitOrderbookSummaryHandler():
         """
         Processes and converts the orderbook summary based on the given result.
         """
-        orderbook_summary = ConverterJsonToOrderbookSummaryDict(json.dumps(result)).convert()  
+        orderbook_summary = ConverterJsonToModelOrderbookSummary(json.dumps(result)).convert()  
         return orderbook_summary

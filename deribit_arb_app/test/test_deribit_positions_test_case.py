@@ -15,7 +15,7 @@ class TestDeribitPositionsTestCase(unittest.IsolatedAsyncioTestCase):
 
     async def asyncSetUp(self):
         super().setUp()
-        self.deribit_positions = ServiceDeribitPositions(currency="BTC")
+        self.deribit_positions = ServiceDeribitPositions(currency="BTC", kind='Option')
         self.store_deribit_positions = StoreDeribitPositions()
 
     async def positions_coroutine(self):

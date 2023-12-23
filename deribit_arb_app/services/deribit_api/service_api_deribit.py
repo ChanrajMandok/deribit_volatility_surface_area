@@ -1,8 +1,5 @@
-import traceback
-
 from typing import Optional
 
-from deribit_arb_app.services import logger
 from deribit_arb_app.model.model_order import ModelOrder
 from deribit_arb_app.model.model_position import ModelPosition
 from deribit_arb_app.enums.enum_direction import EnumDirection
@@ -22,8 +19,6 @@ from deribit_arb_app.services.deribit_api.service_deribit_account_summary import
                                                       ServiceDeribitAccountSummary
 from deribit_arb_app.services.deribit_api.service_deribit_get_orderbook_summary_by_currency import \
                                                          ServiceDeribitGetOrderbookSummaryByCurrency
-from deribit_arb_app.services.deribit_api.service_deribit_orderbook_store_updater_by_instrument import \
-                                                         ServiceDeribitOrderbookStoreUpdaterByInstrument
                                                        
     ################################################################################
     # Service Implements Deribit API to provide Framework to trade via Deribit API #
@@ -59,9 +54,11 @@ class ServiceApiDeribit(ServiceApiInterface):
                          instrument: ModelSubscribableInstrument) -> Optional[ModelOrder]:
         """Send an order to buy/sell."""
         if direction == EnumDirection.BUY:
-            return await self._deribit_orders.buy_async(instrument_name=instrument.name, amount=amount, price=price)
+            return await self._deribit_orders.buy_async(instrument_name=instrument.name,
+                                                        amount=amount, price=price)
         elif direction == EnumDirection.SELL:
-            return await self._deribit_orders.sell_async(instrument_name=instrument.name, amount=amount, price=price)
+            return await self._deribit_orders.sell_async(instrument_name=instrument.name,
+                                                         amount=amount,price=price)
 
 
     async def cancel_order(self,
@@ -71,9 +68,10 @@ class ServiceApiDeribit(ServiceApiInterface):
 
 
     async def get_positions(self,
+                            kind: str,
                             currency: str) -> dict[str, dict[str, ModelPosition]]:
         """Retrieve positions for a given currency."""
-        deribit_positions = ServiceDeribitPositions(currency=currency)
+        deribit_positions = ServiceDeribitPositions(currency=currency, kind=kind)
         return await deribit_positions.get()
     
     
@@ -82,30 +80,12 @@ class ServiceApiDeribit(ServiceApiInterface):
         """Retrieve account summary for a given currency."""
         deribit_account_summary = ServiceDeribitAccountSummary(currency=currency)
         return await deribit_account_summary.get()
-
-
-    async def get_orderbook_summary_via_instruments(self, 
-                                                    instruments : list[ModelSubscribableInstrument]): 
-        """Retrieve orderbook summary for a specific instrument """
-
-        try:    
-            instrument_orderbooks = []
-            for instrument in instruments:
-                service_deribit_get_orderbook_summary = \
-                                ServiceDeribitOrderbookStoreUpdaterByInstrument(instrument.name)        
-                instrument_orderbook =  await service_deribit_get_orderbook_summary.get()
-                instrument_orderbooks.append(instrument_orderbook)
-            return instrument_orderbooks
-
-        except Exception as e:
-            logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
-                                                    f"Stack trace: {traceback.format_exc()}")
-            return instrument_orderbooks
         
         
     async def get_orderbook_summary_via_currency(self, 
                                                  kind: str,
                                                  currency: str): 
         """Retrieve orderbook summary for a specific currency and kind."""
-        service_deribit_get_orderbook_summary = ServiceDeribitGetOrderbookSummaryByCurrency(currency=currency, kind=kind)        
+        service_deribit_get_orderbook_summary = \
+            ServiceDeribitGetOrderbookSummaryByCurrency(currency=currency, kind=kind)        
         return await service_deribit_get_orderbook_summary.get()

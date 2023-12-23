@@ -10,7 +10,7 @@ from deribit_arb_app.model.model_orderbook_summary import ModelOrderbookSummary
     # Converter Converts Json object to Orderbook Summary Dict #
     ############################################################
 
-class ConverterJsonToOrderbookSummaryDict:
+class ConverterJsonToModelOrderbookSummary:
     """
     Converter class for transforming a JSON string representing order book summaries into 
     a list of ModelOrderbookSummary instances.

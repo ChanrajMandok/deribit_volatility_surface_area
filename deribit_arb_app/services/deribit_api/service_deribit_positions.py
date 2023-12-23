@@ -1,60 +1,46 @@
-import json
-
 from singleton_decorator import singleton
 
-from deribit_arb_app.model.model_message import ModelMessage
-from deribit_arb_app.model.model_position import ModelPosition
+from deribit_arb_app.services import logger
+
 from deribit_arb_app.services.deribit_api.service_deribit_messaging import \
                                                      ServiceDeribitMessaging
-from deribit_arb_app.services.deribit_api.service_deribit_authentication import \
-                                                     ServiceDeribitAuthentication
-from deribit_arb_app.services.deribit_api.service_deribit_websocket_connector import \
-                                                      ServiceDeribitWebsocketConnector
+from deribit_arb_app.services.deribit_api.service_deribit_get_interface import \
+                                                      ServiceDeribitGetInterface
 
     #####################################################
     # Service Retrieves Deribit Positions via Websocket #
     #####################################################
 
 @singleton
-class ServiceDeribitPositions():
+class ServiceDeribitPositions(ServiceDeribitGetInterface):
     """
     Service for retrieving positions from Deribit via Websocket.
     """
 
-    def __init__(self, currency: str):
+    def __init__(self, 
+                 kind: str,
+                 currency: str):
+        self.kind = kind
+        self.currency = currency
+        self._logger_instance = logger
         self.deribit_messaging = ServiceDeribitMessaging()
-
-        self.params = {
-                    "currency": currency,
-                    "kind": "future"
+        
+    @property
+    def class_name(self) -> str:
+        return f"{self.__class__.__name__}"
+    
+    @property
+    def logger_instance(self):
+        return self._logger_instance
+    
+    @property
+    def params(self):
+        params ={"kind": self.kind,
+                 "currency": self.currency
                 }
-
-        self.method = "private/get_positions"
-
-        self.msg_id = self.deribit_messaging.generate_id(self.method)
-
-        self.msg = ModelMessage(msg_id=self.msg_id,
-                                method=self.method,
-                                params=self.params
-                                )
-
-
-    async def get(self) -> dict[str, dict[str, ModelPosition]]:
-        """
-        Retrieve positions from Deribit for the specified currency.
-        """
-
-        async with ServiceDeribitWebsocketConnector() as websocket:
-
-            await ServiceDeribitAuthentication().authenticate(websocket)
-            await websocket.send(json.dumps(self.msg.build_message()))
-
-            while websocket.open:
-                response = await websocket.recv()
-                
-                # handle the message and get the id
-                id, positions = self.deribit_messaging.message_handle(response)
-
-                # if the id matches the initial msg id, we can break the loop
-                if id == self.msg_id:
-                    return positions
+        return params
+        
+    @property
+    def method(self):
+        method = "private/get_positions"
+        return method
