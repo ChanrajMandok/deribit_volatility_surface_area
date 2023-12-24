@@ -26,10 +26,12 @@ class ServiceDeribitStaticIndexHandler():
         self.orderbook = None
 
 
-    def set_orderbooks(self, result: dict) -> None:
+    def set(self, result: dict) -> None:
         """
         Processes and sets the order books based on the provided result.
         """
-
-        self.index_object = ConverterJsonToModelObservableIndexPrice(json.dumps(result)).convert_request_data()
-        self.store_observable_index_prices.update_observable(self.orderbook)
+        if result['method'] == '':
+            self.index_object = ConverterJsonToModelObservableIndexPrice(json.dumps(result)).convert_request_data()
+            self.store_observable_index_prices.update(self.orderbook)
+        if result['method'] == '':
+            pass

@@ -18,4 +18,4 @@ class TestTasksTestCase(unittest.IsolatedAsyncioTestCase):
         await TaskInstrumentsPull().run(currency=self.currency, kind=self.instrument_kind)
         
     async def test_subscribables_length(self):
-        self.assertTrue(len(self.store_subscribable_instrument.get_subscribables()) > 0)
+        self.assertTrue(len(self.store_subscribable_instrument.get()) > 0)

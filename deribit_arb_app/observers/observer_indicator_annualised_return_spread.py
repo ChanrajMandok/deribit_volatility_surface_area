@@ -38,8 +38,8 @@ class ObserverIndicatorAnnualisedReturnSpread(ObserverInterface):
 
         # Attach this observer to the relevant observable: the order book and the index price
         for instrument in [instance.instrument_1, instance.instrument_2]:
-            self.store_observable_order_books.get_observable(instrument).attach(self)
-        self.store_observable_index_prices.get_observable(instance.index).attach(self)
+            self.store_observable_order_books.get(instrument).attach(self)
+        self.store_observable_index_prices.get(instance.index).attach(self)
 
 
     def update(self, 
@@ -52,7 +52,7 @@ class ObserverIndicatorAnnualisedReturnSpread(ObserverInterface):
             for key, instance in self.indicators.items():
                 indicator = self.service_builder.build(instance)
                 if indicator is not None:
-                    self.store_observable_indicator_annualised_spread.update_observable(indicator)
+                    self.store_observable_indicator_annualised_spread.update(indicator)
         except Exception as e:
             logger.error(f"{self.__class__.__name__}: Error: {str(e)}. " \
                                                     f"Stack trace: {traceback.format_exc()}")
@@ -71,8 +71,8 @@ class ObserverIndicatorAnnualisedReturnSpread(ObserverInterface):
         """
         instance = self.indicators[key]
         for instrument in [instance.instrument_1, instance.instrument_2]:
-            self.store_observable_order_books.get_observable(instrument).detach(self)
-        self.store_observable_index_prices.get_observable(instance.index).detach(self)
+            self.store_observable_order_books.get(instrument).detach(self)
+        self.store_observable_index_prices.get(instance.index).detach(self)
 
 
     def detach_all(self):

@@ -52,7 +52,7 @@ class ServiceDeribitVsaInstrumentsRetrieverWs():
         Returns:
             list[ModelSubscribableInstrument]: A list of the most liquid instruments.
         """
-        store_subscribable_instruments = self.store_subscribable_instruments.get_subscribables()
+        store_subscribable_instruments = self.store_subscribable_instruments.get()
         if not store_subscribable_instruments: 
             await self.async_setup(currency=currency, kind=kind)
 

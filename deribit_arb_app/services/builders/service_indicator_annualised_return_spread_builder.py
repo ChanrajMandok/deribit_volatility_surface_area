@@ -31,10 +31,10 @@ class ServiceIndicatorAnnualisedReturnSpreadBuilder:
         index = indicator_annualised_return_spread.index
 
         # Getting the order book instances for both instruments.
-        book1 = self.store_observable_order_books.get_observable(instrument_1).get_instance()
-        book2 = self.store_observable_order_books.get_observable(instrument_2).get_instance()
+        book1 = self.store_observable_order_books.get(instrument_1).get_instance()
+        book2 = self.store_observable_order_books.get(instrument_2).get_instance()
         # Getting the index price instance.
-        index_price = self.store_observable_index_prices.get_observable(index).get_instance()
+        index_price = self.store_observable_index_prices.get(index).get_instance()
 
         # Retrieving best ask price for instrument 1 and best bid price for instrument 2.
         # If they don't exist, default to None.

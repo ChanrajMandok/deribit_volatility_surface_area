@@ -27,11 +27,11 @@ class TestDeribitApiTestCase(unittest.IsolatedAsyncioTestCase):
             currency=self.currency, 
             kind=self.instrument_kind)
         
-        self.assertIsNotNone(self.store_subscribable_instruments.get_subscribables)
+        self.assertIsNotNone(self.store_subscribable_instruments.get)
         
         #Check price is below the market price, else order will be instantly filled
         order = await self.api_deribit.send_order(
-                        instrument=self.store_subscribable_instruments.get_subscribable_via_key(self.instrument), 
+                        instrument=self.store_subscribable_instruments.get_via_key(self.instrument), 
                         direction=EnumDirection.BUY, 
                         amount=50.0, 
                         price=25000)

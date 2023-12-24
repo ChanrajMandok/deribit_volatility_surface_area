@@ -1,5 +1,4 @@
 import json
-import datetime
 
 from singleton_decorator import singleton
 
@@ -52,12 +51,12 @@ class ServiceDeribitSubscriptionHandler():
 
         if channel.split('.')[0] == "quote":
             order_book = ConverterJsonToModelObservableOrderBook(json.dumps(result)).convert()
-            self.store_observable_order_books.update_observable(order_book)
+            self.store_observable_order_books.update(order_book)
 
         elif channel.split('.')[0] == "deribit_price_index":
             index_index_price = ConverterJsonToModelObservableIndexPrice(json.dumps(result)).convert()
-            self.store_observable_index_prices.update_observable(index_index_price)
+            self.store_observable_index_prices.update(index_index_price)
 
         elif channel.split('.')[0] == "deribit_volatility_index":
             volatility_index_value = ConverterJsonToModelObservableVolatilityIndex(json.dumps(result)).convert()
-            self.store_observable_volatility_index.update_observable(volatility_index_value)
+            self.store_observable_volatility_index.update(volatility_index_value)

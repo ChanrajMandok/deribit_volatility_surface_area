@@ -15,9 +15,9 @@ from deribit_arb_app.services.deribit_api.service_deribit_websocket_connector im
 # Generic type for the output model
 M = TypeVar('M')
                                                       
-    #############################################################
-    # Interface for Retrieving infomation via Deribit Websocket #
-    #############################################################
+    #######################################################
+    # Interface for Retrieving data via Deribit Websocket #
+    #######################################################
                                                       
 class ServiceDeribitGetInterface(Generic[M],
                                  metaclass=abc.ABCMeta):

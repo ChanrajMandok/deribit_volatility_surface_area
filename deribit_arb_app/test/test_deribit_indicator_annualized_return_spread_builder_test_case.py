@@ -26,8 +26,8 @@ class TestDeribitIndicatorAnnualizedReturnSpreadBuilderTestCase(unittest.Isolate
         self.instrument_kind = EnumInstrumentKind.FUTURE.value
         await TaskInstrumentsPull().run(currency=self.currency, kind=self.instrument_kind)
         self.store_instrument = Stores.store_subscribable_instruments
-        self.instrument_1 = self.store_instrument.get_subscribable_via_key('BTC-29SEP23')
-        self.instrument_2 = self.store_instrument.get_subscribable_via_key('BTC-29DEC23')
+        self.instrument_1 = self.store_instrument.get_via_key('BTC-29SEP23')
+        self.instrument_2 = self.store_instrument.get_via_key('BTC-29DEC23')
         
         self.index = ModelSubscribableIndex(name=EnumIndexCurrency.BTC.value)
         

@@ -38,15 +38,15 @@ class ServiceImpliedVolatilityBsmBuilder:
         hvol_instrument = indicator_implied_volatility.volatility_index
         
         # Get the current price of the index instrument
-        index = self.store_observable_index_prices.get_observable(index_instrument).get_instance()
+        index = self.store_observable_index_prices.get(index_instrument).get_instance()
         index_price = index.price if hasattr(index, 'price') else None
         
         # Get the current volatility index value
-        volatility_index = self.store_observable_volatility_index.get_observable(hvol_instrument).get_instance()
+        volatility_index = self.store_observable_volatility_index.get(hvol_instrument).get_instance()
         dvol_value = volatility_index.volatility if hasattr(volatility_index, 'volatility') else None
         
         # Get details from the order book for the instrument
-        book = self.store_observable_order_books.get_observable(instrument).get_instance()
+        book = self.store_observable_order_books.get(instrument).get_instance()
         instrument_name = instrument.name if hasattr(instrument, 'name') else None
         instrument_ask = book.best_ask_price if hasattr(book, 'best_ask_price') else None
         instrument_bid = book.best_bid_price if hasattr(book, 'best_bid_price') else None

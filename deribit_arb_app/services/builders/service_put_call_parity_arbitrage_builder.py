@@ -31,15 +31,15 @@ class ServicePutCallParityAribtrageBuilder:
         put_instrument        = indicator_put_call_parity_arbtirage.put_instrument
         index_instrument      = indicator_put_call_parity_arbtirage.index
         
-        index                 = self.store_observable_index_prices.get_observable(index_instrument).get_instance()
+        index                 = self.store_observable_index_prices.get(index_instrument).get_instance()
         index_price           = index.price
 
-        call_instrument_book  = self.store_observable_order_books.get_observable(call_instrument).get_instance()
+        call_instrument_book  = self.store_observable_order_books.get(call_instrument).get_instance()
         call_instrument_name  = call_instrument.name
         call_instrument_ask   = call_instrument_book.best_ask_price
         call_instrument_bid   = call_instrument_book.best_bid_price
 
-        put_instrument_book   = self.store_observable_order_books.get_observable(put_instrument).get_instance()
+        put_instrument_book   = self.store_observable_order_books.get(put_instrument).get_instance()
         put_instrument_name   = put_instrument.name
         put_instrument_ask    = put_instrument_book.best_ask_price
         put_instrument_bid    = put_instrument_book.best_bid_price

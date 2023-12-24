@@ -31,7 +31,7 @@ class StoreObservableIndicatorInterface(Mapping[E, M]):
             return iter(self.d)
 
 
-        def update_observable(self, observable_indicator_instance: M):
+        def update(self, observable_indicator_instance: M):
             if observable_indicator_instance is None:
                 return 
 
@@ -43,13 +43,13 @@ class StoreObservableIndicatorInterface(Mapping[E, M]):
                         logger.error(f"{self.__class__.__name__}: Error: {str(e)}. Stack trace: {traceback.format_exc()}")
                 
 
-        def get_observable(self, observable_indicator_instance: M):
+        def get(self, observable_indicator_instance: M):
             if not observable_indicator_instance.key in self.d:
                 self.d[observable_indicator_instance.key] = ObservableIndicator(observable_indicator_instance)
             return self.d[observable_indicator_instance.key]
         
         
-        def remove_observable(self, observable_indicator_instance: M):
+        def remove(self, observable_indicator_instance: M):
             if observable_indicator_instance is None:
                 return
 

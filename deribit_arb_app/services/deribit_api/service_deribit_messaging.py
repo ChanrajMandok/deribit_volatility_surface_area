@@ -13,6 +13,8 @@ from deribit_arb_app.services.handlers.service_deribit_positions_handler import 
                                                    ServiceDeribitPositionsHandler
 from deribit_arb_app.services.handlers.service_deribit_instruments_handler import \
                                                    ServiceDeribitInstrumentsHandler
+from deribit_arb_app.services.handlers.service_deribit_static_index_handler import \
+                                                    ServiceDeribitStaticIndexHandler
 from deribit_arb_app.services.handlers.service_deribit_subscription_handler import \
                                                    ServiceDeribitSubscriptionHandler
 from deribit_arb_app.services.handlers.service_deribit_unsubcription_handler import \
@@ -25,7 +27,7 @@ from deribit_arb_app.services.handlers.service_deribit_orderbook_summary_handler
                                                     ServiceDeribitOrderbookSummaryHandler
 from deribit_arb_app.services.handlers.service_deribit_cancel_all_positions_handler import \
                                                      ServiceDeribitCancelAllPositionsHandler
-
+                                                     
     ###################################################
     # Service provides Interface for Deribit messages #
     ###################################################
@@ -58,17 +60,17 @@ class ServiceDeribitMessaging():
             data = None
 
             if message_type == 0:
-                data = ServiceDeribitPositionsHandler().set_positions(response_json)
+                data = ServiceDeribitPositionsHandler().set(response_json)
             elif message_type == 1:
-                ServiceDeribitAuthenticationHandler().set_authorization(response_json)
+                ServiceDeribitAuthenticationHandler().set(response_json)
             elif message_type == 2:
                 ServiceDeribitSubscriptionHandler().handle(response_json)
             elif message_type == 3:
                 ServiceDeribitUnsubscriptionHandler().handle(response_json)
             elif message_type == 4:
-                data = ServiceDeribitInstrumentsHandler().set_instruments(response_json)
+                data = ServiceDeribitInstrumentsHandler().set(response_json)
             elif message_type == 5:
-                data = ServiceDeribitAccountSummaryHandler().set_account_summary(response_json)
+                data = ServiceDeribitAccountSummaryHandler().set(response_json)
             elif message_type == 6:
                 data = ServiceDeribitOrdersHandler().set_order(response_json)
             elif message_type == 7:
@@ -81,6 +83,8 @@ class ServiceDeribitMessaging():
                 data = ServiceDeribitCancelAllPositionsHandler().cancel_all(response_json)
             elif message_type == 12:
                 data = ServiceDeribitOrderbookSummaryHandler().handle(response_json)
+            elif message_type == 13:
+                data = ServiceDeribitStaticIndexHandler().handle(response_json)
             elif method == "subscription":
                 ServiceDeribitSubscriptionHandler().handle(response_json)    
             else:
@@ -129,5 +133,6 @@ class ServiceDeribitMessaging():
         elif (method == "public/get_book_summary_by_currency") or \
                     (method=="public/get_book_summary_by_instrument"):
             msg_id = 1200000 + msg_id
-
+        elif method == 'public/get_index_price':
+            msg_id = 1300000 + msg_id
         return msg_id

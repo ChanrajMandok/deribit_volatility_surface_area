@@ -6,8 +6,6 @@ from deribit_arb_app.store.stores import Stores
     # Service Handles Deribit Unsubscriptions via Websocket #
     #########################################################
 
-from singleton_decorator import singleton
-
 @singleton
 class ServiceDeribitUnsubscriptionHandler():
     """
@@ -36,7 +34,7 @@ class ServiceDeribitUnsubscriptionHandler():
             key = unsub_channel.split('.')[1]
 
             if channel_type == "quote":
-                self.store_observable_order_books.remove_observable_by_key(key)
+                self.store_observable_order_books.remove_by_key(key)
 
             elif channel_type == "deribit_price_index":
-                self.store_observable_index_prices.remove_observable_by_key(key)
+                self.store_observable_index_prices.remove_by_key(key)

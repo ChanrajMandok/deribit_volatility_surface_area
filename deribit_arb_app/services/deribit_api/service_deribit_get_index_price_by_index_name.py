@@ -1,25 +1,26 @@
 from singleton_decorator import singleton
 
 from deribit_arb_app.services import logger
+from deribit_arb_app.enums.enum_index_currency import EnumIndexCurrency
 from deribit_arb_app.services.deribit_api.service_deribit_messaging import \
                                                      ServiceDeribitMessaging
 from deribit_arb_app.services.deribit_api.service_deribit_get_interface import \
                                                       ServiceDeribitGetInterface
                                                       
-    ################################################################################
-    # Service Retrieves Deribit Orderbook Summary by instrument name via Websocket #
-    ################################################################################
+    #####################################################################
+    # Service Retrieves Deribit index price by index name via Websocket #
+    #####################################################################
 
 @singleton
-class ServiceDeribitOrderbookStoreUpdaterByInstrument(ServiceDeribitGetInterface):
+class ServiceDeribitGetIndexPriceByIndexName(ServiceDeribitGetInterface):
     """
-    Service class to fetch the orderbook summary for a instrument name from Deribit.
+    Service class to fetch the index price by index name from Deribit.
     """
     
     def __init__(self,
-                 instrument: str) -> None:
-        self.instrument = instrument
+                 index_currency: EnumIndexCurrency) -> None:
         self._logger_instance = logger
+        self.index_currency = index_currency
         self.deribit_messaging = ServiceDeribitMessaging()
     
     @property
@@ -32,10 +33,10 @@ class ServiceDeribitOrderbookStoreUpdaterByInstrument(ServiceDeribitGetInterface
     
     @property
     def params(self):
-        params = {"instrument_name" : self.instrument}
+        params = {"index_name": self.index_currency.value}
         return params
         
     @property
     def method(self):
-        method = "public/get_book_summary_by_instrument"
+        method = "public/get_index_price"
         return method

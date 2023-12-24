@@ -28,7 +28,7 @@ class TestDeribitSubscribeInstrumentsTestCase(unittest.IsolatedAsyncioTestCase):
         self.instrument_kind = EnumInstrumentKind.FUTURE.value
         await TaskInstrumentsPull().run(currency=self.currency, kind=self.instrument_kind)
         self.store_subscribable_instrument = Stores.store_subscribable_instruments
-        self.instrument = self.store_subscribable_instrument.get_subscribable_via_key('BTC-PERPETUAL')
+        self.instrument = self.store_subscribable_instrument.get_via_key('BTC-PERPETUAL')
         self.index = ModelSubscribableIndex(name=EnumIndexCurrency.BTC.value)
         self.vol = ModelSubscribableVolatilityIndex(name=EnumVolatilityIndexCurrency.BTC.value)
         self.deribit_subscribe = ServiceDeribitSubscribe()

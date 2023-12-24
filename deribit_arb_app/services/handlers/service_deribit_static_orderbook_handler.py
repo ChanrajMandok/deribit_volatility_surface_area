@@ -27,4 +27,4 @@ class ServiceDeribitStaticOrderbookHandler():
         Processes and sets the order books based on the provided result.
         """
         self.orderbook = ConverterJsonToModelObservableOrderBook(json.dumps(result)).convert_request_data()
-        self.store_observable_order_books.update_observable(self.orderbook)
+        self.store_observable_order_books.update(self.orderbook)

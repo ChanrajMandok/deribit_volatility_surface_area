@@ -59,9 +59,9 @@ class ObserverIndicatorBsmImpliedVolatility(ObserverInterface):
         key = instance.key  # Unique key for the indicator
         # Attach this observer to the relevant order books and indices
         self.indicators[key] = instance
-        self.store_observable_order_books.get_observable(instance.instrument).attach(self)
-        self.store_observable_index_prices.get_observable(instance.index).attach(self)
-        self.store_observable_volatility_index.get_observable(instance.volatility_index).attach(self)
+        self.store_observable_order_books.get(instance.instrument).attach(self)
+        self.store_observable_index_prices.get(instance.index).attach(self)
+        self.store_observable_volatility_index.get(instance.volatility_index).attach(self)
 
 
     def detach_indicator(self, key):
@@ -71,9 +71,9 @@ class ObserverIndicatorBsmImpliedVolatility(ObserverInterface):
         instance = self.indicators.get(key)
         if instance:
             # Detach this observer from the relevant order books and indices
-            self.store_observable_order_books.get_observable(instance.instrument).detach(self)
-            self.store_observable_index_prices.get_observable(instance.index).detach(self)
-            self.store_observable_volatility_index.get_observable(instance.volatility_index).detach(self)
+            self.store_observable_order_books.get(instance.instrument).detach(self)
+            self.store_observable_index_prices.get(instance.index).detach(self)
+            self.store_observable_volatility_index.get(instance.volatility_index).detach(self)
             del self.indicators[key]  # Remove the indicator from tracking
 
 

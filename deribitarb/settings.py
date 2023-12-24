@@ -136,9 +136,10 @@ SHELL_PLUS_IMPORTS = [
     'from deribit_arb_app.backtesting.deribit_retrieve_historical_funding_rates_async import ServiceDeribitRetrieveHistoricalFundingRatesAsync',
     'from deribit_arb_app.services.managers.service_implied_volatility_surface_area_task_manager import ServiceImpliedVolatilitySurfaceAreaTaskManager',
     'from deribit_arb_app.services.deribit_api.service_deribit_get_orderbook_summary_by_currency import ServiceDeribitGetOrderbookSummaryByCurrency',
-    'from deribit_arb_app.services.deribit_api.service_deribit_orderbook_store_updater_by_instrument import ServiceDeribitOrderbookStoreUpdaterByInstrument',
     'from deribit_arb_app.services.deribit_api.service_deribit_account_summary import ServiceDeribitAccountSummary',
     'from deribit_arb_app.services.deribit_api.service_deribit_instruments import ServiceDeribitInstruments',
+    'from deribit_arb_app.services.deribit_api.service_deribit_get_hvol_by_currency import ServiceDeribitGetHvolByCurrency',
+    'from deribit_arb_app.services.deribit_api.service_deribit_get_index_price_by_index_name import ServiceDeribitGetIndexPriceByIndexName'
     
 ]
 
