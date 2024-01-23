@@ -1,12 +1,12 @@
 from singleton_decorator import singleton
 
 from deribit_arb_app.services import logger
-
 from deribit_arb_app.converters.converter_json_to_positions import \
                                        ConverterJsonToModelPositions
 from deribit_arb_app.store.store_deribit_positions import StoreDeribitPositions
-from deribit_arb_app.services.handlers.service_deribit_handler_interface import ServiceDeribitHanderInterface
-
+from deribit_arb_app.services.handlers.service_deribit_handler_interface import \
+                                                    ServiceDeribitHanderInterface
+                                                    
     ######################################
     # Service handles Deribit Positions  #
     ######################################
